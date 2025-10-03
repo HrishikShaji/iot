@@ -16,7 +16,7 @@ import {
 	CLIENT_CERT_URL,
 	UNIVERSE_DOMAIN,
 	DATABASE_URL
-} from './lib/variables';
+} from './lib/variables.js';
 
 const aedesInstance = new aedes();
 const server = createServer(aedesInstance.handle);
