@@ -1,4 +1,3 @@
-
 # Use official Node.js LTS image
 FROM node:20-alpine AS base
 
@@ -16,17 +15,19 @@ COPY turbo.json ./
 
 # Copy all workspace package.json files
 COPY apps/broker/package*.json ./apps/broker/
+
 # If you have shared packages, copy their package.json files too
 # COPY packages/*/package.json ./packages/
 
-# Install dependencies
+# Install dependencies (including devDependencies for build)
 RUN npm install
 
 # Copy source code
 COPY . .
 
-# Build the mqtt-broker app (and its dependencies) if needed
-# RUN turbo run build --filter=mqtt-broker...
+# Build the TypeScript code
+WORKDIR /app/apps/broker
+RUN npm run build
 
 FROM base AS runner
 
@@ -36,13 +37,19 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 mqttuser
 
-# Copy the entire built workspace
-COPY --from=builder --chown=mqttuser:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=mqttuser:nodejs /app/package*.json ./
-COPY --from=builder --chown=mqttuser:nodejs /app/apps/broker ./apps/broker
+# Copy production dependencies only
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/apps/broker/package*.json ./apps/broker/
 
-# Set working directory to the app
+# Install only production dependencies
 WORKDIR /app/apps/broker
+RUN npm install --omit=dev
+
+# Copy the compiled JavaScript from dist folder
+COPY --from=builder --chown=mqttuser:nodejs /app/apps/broker/dist ./dist
+
+# Copy .env file if it exists (optional)
+COPY --from=builder --chown=mqttuser:nodejs /app/apps/broker/.env* ./ 2>/dev/null || true
 
 USER mqttuser
 
@@ -52,5 +59,5 @@ EXPOSE 1883 8883
 # Set environment to production
 ENV NODE_ENV=production
 
-# Start the application
-CMD ["node", "index.js"]
+# Start the application using the compiled JavaScript
+CMD ["node", "dist/index.js"]

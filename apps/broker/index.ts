@@ -18,7 +18,7 @@ import {
 	DATABASE_URL
 } from './lib/variables.js';
 
-const aedesInstance = aedes();
+const aedesInstance = new aedes();
 const server = createServer(aedesInstance.handle);
 const httpServer = http.createServer();
 
