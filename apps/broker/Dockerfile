@@ -48,9 +48,6 @@ RUN npm install --omit=dev
 # Copy the compiled JavaScript from dist folder
 COPY --from=builder --chown=mqttuser:nodejs /app/apps/broker/dist ./dist
 
-# Copy .env file if it exists (optional)
-COPY --from=builder --chown=mqttuser:nodejs /app/apps/broker/.env* ./ 2>/dev/null || true
-
 USER mqttuser
 
 # Expose MQTT ports
