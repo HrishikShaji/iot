@@ -11,7 +11,8 @@
         "dist/**",
 	"lib/**",
 	"build/**"
-      ]
+      ],
+      "env": ["DATABASE_URL"]
     },
     "lint": {
       "dependsOn": ["^lint"]
