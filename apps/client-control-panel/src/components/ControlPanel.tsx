@@ -14,6 +14,7 @@ import SwitchCard from "@/features/switch/components/SwitchCard"
 import TemperatureCard from "@/features/temperature/components/TemperatureCard"
 import WaterCard from "@/features/water/components/WaterCard"
 import PowerCard from "@/features/power/components/PowerCard"
+import UserProfile from "./common/UserProfile"
 
 export default function ControlPanel() {
 	const [client, setClient] = useState<MqttClient | null>(null)
@@ -78,7 +79,10 @@ export default function ControlPanel() {
 					<p className="text-muted-foreground text-lg">Interactive sensor control with sliders and toggles</p>
 
 				</div>
-				{isConnected ? <Wifi className="h-5 w-5 text-green-600" /> : <WifiOff className="h-5 w-5 text-red-600" />}
+				<div className="flex gap-2 items-center">
+					{isConnected ? <Wifi className="h-5 w-5 text-green-600" /> : <WifiOff className="h-5 w-5 text-red-600" />}
+					<UserProfile />
+				</div>
 			</div>
 			{/* Header */}
 
