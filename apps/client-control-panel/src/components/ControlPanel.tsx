@@ -80,7 +80,7 @@ export default function ControlPanel() {
 	}
 
 	// Don't render anything if not authenticated (redirect will happen)
-	if (status !== "authenticated") {
+	if (status !== "authenticated" || !session.user?.id) {
 		return null
 	}
 
@@ -93,6 +93,7 @@ export default function ControlPanel() {
 		)
 	}
 
+	console.log(session)
 	return (
 		<div className="h-screen p-4 md:p-6 lg:p-8 relative"
 			style={{
@@ -117,18 +118,22 @@ export default function ControlPanel() {
 
 			<div className="grid grid-cols-1 absolute top-40 right-10 w-[40%] lg:grid-cols-2 gap-6">
 				<SwitchCard
+					userId={session.user.id}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<TemperatureCard
+					userId={session.user.id}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<WaterCard
+					userId={session.user.id}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<PowerCard
+					userId={session.user.id}
 					isConnected={isConnected}
 					client={client}
 				/>

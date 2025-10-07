@@ -9,12 +9,13 @@ import TemperatureModal from "./TemperatureModal"
 import useTemperatureSensor from "@/features/temperature/hooks/useTemperatureSensor"
 
 interface Props {
-	client: MqttClient
-	isConnected: boolean
+	client: MqttClient;
+	isConnected: boolean;
+	userId: string;
 }
 
-export default function TemperatureCard({ client, isConnected }: Props) {
-	const { handleTemperatureChange, temperatureData } = useTemperatureSensor({ client, isConnected })
+export default function TemperatureCard({ client, isConnected, userId }: Props) {
+	const { handleTemperatureChange, temperatureData } = useTemperatureSensor({ userId, client, isConnected })
 
 	return (
 		<Card className="relative rounded-4xl overflow-hidden bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">

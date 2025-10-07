@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button"
 import useSwitchSensor from "@/features/switch/hooks/useSwitchSensor"
 
 interface Props {
-	client: MqttClient
-	isConnected: boolean
+	client: MqttClient;
+	isConnected: boolean;
+	userId: string;
 }
 
-export default function SwitchCard({ client, isConnected }: Props) {
-	const { switchState, toggleSwitch } = useSwitchSensor({ client, isConnected })
+export default function SwitchCard({ userId, client, isConnected }: Props) {
+	const { switchState, toggleSwitch } = useSwitchSensor({ client, isConnected, userId })
 	return (
 		<Card className="relative rounded-4xl  bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">
 			<div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />

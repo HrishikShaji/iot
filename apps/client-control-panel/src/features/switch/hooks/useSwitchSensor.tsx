@@ -5,9 +5,10 @@ import { useEffect, useState } from "react"
 interface Props {
 	client: MqttClient;
 	isConnected: boolean;
+	userId: string;
 }
 
-export default function useSwitchSensor({ client, isConnected }: Props) {
+export default function useSwitchSensor({ client, isConnected, userId }: Props) {
 	const [switchState, setSwitchState] = useState(false)
 
 	const toggleSwitch = () => {
@@ -28,6 +29,7 @@ export default function useSwitchSensor({ client, isConnected }: Props) {
 		if (client && isConnected) {
 
 			const message: SwitchSensorType = {
+				userId,
 				state: newState,
 				timestamp: new Date().toISOString(),
 				device: "main-switch",

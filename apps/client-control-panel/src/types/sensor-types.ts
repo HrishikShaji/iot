@@ -2,6 +2,7 @@ export interface SwitchSensorType {
 	state: boolean;
 	timestamp: string;
 	device: string;
+	userId: string;
 }
 
 export interface PowerSensorType {
@@ -14,6 +15,7 @@ export interface PowerSensorType {
 	phase: string;
 	enabled: boolean;
 	monitoring: boolean;
+	userId: string;
 
 }
 
@@ -25,6 +27,7 @@ export interface WaterSensorType {
 	location: string;
 	enabled: boolean;
 	alertsEnabled: boolean;
+	userId: string;
 }
 
 export interface TemperatureSensorType {
@@ -33,4 +36,5 @@ export interface TemperatureSensorType {
 	sensor: string;
 	location: string;
 	enabled: boolean;
+	userId: string;
 }

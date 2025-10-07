@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 interface Props {
 	client: MqttClient;
 	isConnected: boolean;
+	userId: string;
 }
 
-export default function usePowerSensor({ client, isConnected }: Props) {
+export default function usePowerSensor({ client, isConnected, userId }: Props) {
 	const [powerData, setPowerData] = useState<PowerSensorType>({
 		voltage: 220.0,
 		current: 5.5,
@@ -17,7 +18,8 @@ export default function usePowerSensor({ client, isConnected }: Props) {
 		sensor: "Power Meter",
 		phase: "Single",
 		enabled: true,
-		monitoring: true
+		monitoring: true,
+		userId
 	})
 
 	useEffect(() => {

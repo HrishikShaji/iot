@@ -9,12 +9,13 @@ import WaterModal from "./WaterModal"
 import useWaterSensor from "@/features/water/hooks/useWaterSensor"
 
 interface Props {
-	client: MqttClient
-	isConnected: boolean
+	client: MqttClient;
+	isConnected: boolean;
+	userId: string;
 }
 
-export default function WaterCard({ client, isConnected }: Props) {
-	const { waterLevelData, handleWaterLevelChange } = useWaterSensor({ client, isConnected })
+export default function WaterCard({ userId, client, isConnected }: Props) {
+	const { waterLevelData, handleWaterLevelChange } = useWaterSensor({ userId, client, isConnected })
 	return (
 		<Card className="relative rounded-4xl bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">
 			<div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />

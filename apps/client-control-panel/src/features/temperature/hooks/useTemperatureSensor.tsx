@@ -5,15 +5,17 @@ import { useEffect, useState } from "react";
 interface Props {
 	client: MqttClient;
 	isConnected: boolean;
+	userId: string;
 }
 
-export default function useTemperatureSensor({ client, isConnected }: Props) {
+export default function useTemperatureSensor({ userId, client, isConnected }: Props) {
 	const [temperatureData, setTemperatureData] = useState<TemperatureSensorType>({
 		temperature: 25.0,
 		humidity: 60.0,
 		sensor: "DHT22",
 		location: "Living Room",
-		enabled: true
+		enabled: true,
+		userId
 	})
 	const handleTemperatureChange = (field: string, value: any) => {
 		const newData = { ...temperatureData, [field]: value }
