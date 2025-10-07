@@ -1,13 +1,17 @@
 "use client"
-
 import { useSession, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { User, LogOut, Loader2, ChevronDown } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export default function UserProfile() {
 	const { data: session, status } = useSession()
 	const router = useRouter()
 	const [isLoggingOut, setIsLoggingOut] = useState(false)
+	const [isExpanded, setIsExpanded] = useState(false)
 
 	const handleLogout = async () => {
 		setIsLoggingOut(true)
@@ -16,47 +20,83 @@ export default function UserProfile() {
 	}
 
 	if (status === "loading") {
-		return <div>Loading...</div>
+		return (
+			<div className="flex items-center justify-center">
+				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+			</div>
+		)
 	}
 
 	if (status === "unauthenticated" || !session) {
 		return null
 	}
 
-	return (
-		<div style={{
-			padding: "1rem",
-			border: "1px solid #ddd",
-			borderRadius: "8px",
-			display: "flex",
-			alignItems: "center",
-			justifyContent: "space-between",
-			gap: "1rem"
-		}}>
-			<div>
-				<p style={{ margin: 0, fontWeight: "bold" }}>
-					Welcome, {session.user?.email}
-				</p>
-				<p style={{ margin: 0, fontSize: "0.875rem", color: "#666" }}>
-					Logged in
-				</p>
-			</div>
+	const initials = session.user?.email
+		? session.user.email
+			.split("@")[0]
+			.substring(0, 2)
+			.toUpperCase()
+		: "U"
 
+	return (
+		<div className="relative">
+			{/* Collapsed State - Just Avatar */}
 			<button
-				onClick={handleLogout}
-				disabled={isLoggingOut}
-				style={{
-					padding: "0.5rem 1rem",
-					backgroundColor: "#dc2626",
-					color: "white",
-					border: "none",
-					borderRadius: "4px",
-					cursor: isLoggingOut ? "not-allowed" : "pointer",
-					opacity: isLoggingOut ? 0.6 : 1
-				}}
+				onClick={() => setIsExpanded(!isExpanded)}
+				className="group"
 			>
-				{isLoggingOut ? "Logging out..." : "Logout"}
+				<Avatar className="h-10 w-10 border-2 border-primary/10 bg-white cursor-pointer transition-all hover:border-primary/30 hover:scale-105">
+					<AvatarFallback className="bg-primary/5  font-semibold group-hover:bg-primary/10">
+						{initials}
+					</AvatarFallback>
+				</Avatar>
 			</button>
+
+			{/* Expanded State - Full Details */}
+			{isExpanded && (
+				<>
+					{/* Backdrop */}
+					<div
+						className="fixed inset-0 z-40"
+						onClick={() => setIsExpanded(false)}
+					/>
+
+					{/* Dropdown Card */}
+					<div className="absolute bg-white rounded-2xl right-0 top-12 z-[9999]  shadow-lg animate-in slide-in-from-top-2 duration-200">
+						<div className="p-4">
+							<div className="flex items-center gap-3 pb-3 border-b">
+								<div className="min-w-0 flex-1">
+									<p className="font-semibold text-foreground truncate text-sm">
+										{session.user?.email}
+									</p>
+								</div>
+							</div>
+
+							<div className="pt-3">
+								<Button
+									onClick={handleLogout}
+									disabled={isLoggingOut}
+									variant="ghost"
+									size="sm"
+									className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+								>
+									{isLoggingOut ? (
+										<>
+											<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+											Logging out...
+										</>
+									) : (
+										<>
+											<LogOut className="mr-2 h-4 w-4" />
+											Logout
+										</>
+									)}
+								</Button>
+							</div>
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	)
 }
