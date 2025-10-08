@@ -1,4 +1,4 @@
-import { WaterSensorType } from "@/types/sensor-types";
+import { WaterSensorType } from "@repo/types";
 import { MqttClient } from "mqtt"
 import { useEffect, useState } from "react";
 
@@ -19,7 +19,8 @@ export default function useWaterSensor({ email, userId, client, isConnected }: P
 		enabled: true,
 		alertsEnabled: true,
 		userId,
-		email
+		email,
+		timestamp: new Date().toISOString()
 	})
 
 	useEffect(() => {
@@ -28,16 +29,12 @@ export default function useWaterSensor({ email, userId, client, isConnected }: P
 
 	const publishSensorData = (data: WaterSensorType) => {
 		if (client && isConnected && data.enabled) {
-			const message = {
-				...data,
-				timestamp: new Date().toISOString()
-			}
 
-			client.publish("sensors/waterlevel", JSON.stringify(message), { qos: 0, retain: true }, (err) => {
+			client.publish("sensors/waterlevel", JSON.stringify(data), { qos: 0, retain: true }, (err) => {
 				if (err) {
 					console.error(`Publish error for water:`, err)
 				} else {
-					console.log(`water data published:`, message)
+					console.log(`water data published:`, data)
 				}
 			})
 		}

@@ -1,4 +1,4 @@
-import { TemperatureSensorType } from "@/types/sensor-types";
+import { TemperatureSensorType } from "@repo/types";
 import { MqttClient } from "mqtt"
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,8 @@ export default function useTemperatureSensor({ email, userId, client, isConnecte
 		location: "Living Room",
 		enabled: true,
 		userId,
-		email
+		email,
+		timestamp: new Date().toISOString()
 	})
 	const handleTemperatureChange = (field: string, value: any) => {
 		const newData = { ...temperatureData, [field]: value }
@@ -32,18 +33,13 @@ export default function useTemperatureSensor({ email, userId, client, isConnecte
 
 	const publishSensorData = (data: TemperatureSensorType) => {
 		if (client && isConnected && data.enabled) {
-			const message = {
-				...data,
-				timestamp: new Date().toISOString()
-			}
 
-			console.log("SENDING", message)
 
-			client.publish("sensors/temperature", JSON.stringify(message), { qos: 0, retain: true }, (err) => {
+			client.publish("sensors/temperature", JSON.stringify(data), { qos: 0, retain: true }, (err) => {
 				if (err) {
 					console.error(`Publish error for Temperature:`, err)
 				} else {
-					console.log(`Temperature data published:`, message)
+					console.log(`Temperature data published:`, data)
 				}
 			})
 		}

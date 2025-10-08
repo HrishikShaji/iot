@@ -1,4 +1,4 @@
-import { PowerSensorType } from "@/types/sensor-types";
+import { PowerSensorType } from "@repo/types";
 import { MqttClient } from "mqtt"
 import { useEffect, useState } from "react";
 
@@ -21,7 +21,8 @@ export default function usePowerSensor({ email, client, isConnected, userId }: P
 		enabled: true,
 		monitoring: true,
 		userId,
-		email
+		email,
+		timestamp: new Date().toISOString()
 	})
 
 	useEffect(() => {
@@ -30,16 +31,11 @@ export default function usePowerSensor({ email, client, isConnected, userId }: P
 
 	const publishSensorData = (data: PowerSensorType) => {
 		if (client && isConnected && data.enabled) {
-			const message = {
-				...data,
-				timestamp: new Date().toISOString()
-			}
-
-			client.publish("sensors/power", JSON.stringify(message), { qos: 0, retain: true }, (err) => {
+			client.publish("sensors/power", JSON.stringify(data), { qos: 0, retain: true }, (err) => {
 				if (err) {
 					console.error(`Publish error for power:`, err)
 				} else {
-					console.log(`power data published:`, message)
+					console.log(`power data published:`, data)
 				}
 			})
 		}

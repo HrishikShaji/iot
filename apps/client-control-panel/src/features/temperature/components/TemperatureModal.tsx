@@ -6,12 +6,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { TemperatureSensorType } from "@/types/sensor-types"
 import { Droplets, MapPin, Send, Settings2, Thermometer } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from "@/components/ui/select"
 import { formatValue } from "@/lib/utils"
+import { TemperatureSensorType } from "@repo/types"
 
 interface Props {
 	temperatureData: TemperatureSensorType;

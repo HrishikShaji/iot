@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@repo/types": "*",
     "@auth/prisma-adapter": "^2.10.0",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/nextjs-monorepo-workaround-plugin": "^6.16.3",

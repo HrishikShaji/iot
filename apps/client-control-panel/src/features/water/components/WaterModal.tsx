@@ -6,12 +6,12 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { WaterSensorType } from "@/types/sensor-types"
 import { Droplets, Gauge, MapPin, Send, Settings2 } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { WaterSensorType } from "@repo/types"
 
 interface Props {
 	waterData: WaterSensorType;
