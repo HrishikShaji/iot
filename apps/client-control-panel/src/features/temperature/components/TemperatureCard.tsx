@@ -12,10 +12,12 @@ interface Props {
 	client: MqttClient;
 	isConnected: boolean;
 	userId: string;
+	email: string;
 }
 
-export default function TemperatureCard({ client, isConnected, userId }: Props) {
-	const { handleTemperatureChange, temperatureData } = useTemperatureSensor({ userId, client, isConnected })
+export default function TemperatureCard({ email, client, isConnected, userId }: Props) {
+	console.log(email)
+	const { handleTemperatureChange, temperatureData } = useTemperatureSensor({ email, userId, client, isConnected })
 
 	return (
 		<Card className="relative rounded-4xl overflow-hidden bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">

@@ -6,9 +6,10 @@ interface Props {
 	client: MqttClient;
 	isConnected: boolean;
 	userId: string;
+	email: string;
 }
 
-export default function useWaterSensor({ userId, client, isConnected }: Props) {
+export default function useWaterSensor({ email, userId, client, isConnected }: Props) {
 	const [waterLevelData, setWaterLevelData] = useState<WaterSensorType>({
 		level: 75,
 		capacity: 1000,
@@ -17,7 +18,8 @@ export default function useWaterSensor({ userId, client, isConnected }: Props) {
 		location: "Main Tank",
 		enabled: true,
 		alertsEnabled: true,
-		userId
+		userId,
+		email
 	})
 
 	useEffect(() => {

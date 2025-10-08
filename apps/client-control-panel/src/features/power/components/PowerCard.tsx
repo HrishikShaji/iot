@@ -12,10 +12,11 @@ interface Props {
 	client: MqttClient;
 	isConnected: boolean;
 	userId: string;
+	email: string;
 }
 
-export default function PowerCard({ client, isConnected, userId }: Props) {
-	const { powerData, handlePowerChange } = usePowerSensor({ userId, client, isConnected })
+export default function PowerCard({ email, client, isConnected, userId }: Props) {
+	const { powerData, handlePowerChange } = usePowerSensor({ email, userId, client, isConnected })
 
 	return (
 		<Card className="relative rounded-4xl bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">

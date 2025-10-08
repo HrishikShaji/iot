@@ -80,7 +80,7 @@ export default function ControlPanel() {
 	}
 
 	// Don't render anything if not authenticated (redirect will happen)
-	if (status !== "authenticated" || !session.user?.id) {
+	if (status !== "authenticated" || !session.user?.id || !session.user.email) {
 		return null
 	}
 
@@ -119,20 +119,24 @@ export default function ControlPanel() {
 			<div className="grid grid-cols-1 absolute top-40 right-10 w-[40%] lg:grid-cols-2 gap-6">
 				<SwitchCard
 					userId={session.user.id}
+					email={session.user.email}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<TemperatureCard
+					email={session.user.email}
 					userId={session.user.id}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<WaterCard
+					email={session.user.email}
 					userId={session.user.id}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<PowerCard
+					email={session.user.email}
 					userId={session.user.id}
 					isConnected={isConnected}
 					client={client}

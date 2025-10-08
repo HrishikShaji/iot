@@ -10,10 +10,11 @@ interface Props {
 	client: MqttClient;
 	isConnected: boolean;
 	userId: string;
+	email: string;
 }
 
-export default function SwitchCard({ userId, client, isConnected }: Props) {
-	const { switchState, toggleSwitch } = useSwitchSensor({ client, isConnected, userId })
+export default function SwitchCard({ email, userId, client, isConnected }: Props) {
+	const { switchState, toggleSwitch } = useSwitchSensor({ email, client, isConnected, userId })
 	return (
 		<Card className="relative rounded-4xl  bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">
 			<div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />

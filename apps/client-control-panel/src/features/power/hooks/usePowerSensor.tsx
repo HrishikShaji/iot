@@ -6,9 +6,10 @@ interface Props {
 	client: MqttClient;
 	isConnected: boolean;
 	userId: string;
+	email: string;
 }
 
-export default function usePowerSensor({ client, isConnected, userId }: Props) {
+export default function usePowerSensor({ email, client, isConnected, userId }: Props) {
 	const [powerData, setPowerData] = useState<PowerSensorType>({
 		voltage: 220.0,
 		current: 5.5,
@@ -19,7 +20,8 @@ export default function usePowerSensor({ client, isConnected, userId }: Props) {
 		phase: "Single",
 		enabled: true,
 		monitoring: true,
-		userId
+		userId,
+		email
 	})
 
 	useEffect(() => {

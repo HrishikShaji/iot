@@ -6,16 +6,19 @@ interface Props {
 	client: MqttClient;
 	isConnected: boolean;
 	userId: string;
+	email: string;
 }
 
-export default function useTemperatureSensor({ userId, client, isConnected }: Props) {
+export default function useTemperatureSensor({ email, userId, client, isConnected }: Props) {
+	console.log(email)
 	const [temperatureData, setTemperatureData] = useState<TemperatureSensorType>({
 		temperature: 25.0,
 		humidity: 60.0,
 		sensor: "DHT22",
 		location: "Living Room",
 		enabled: true,
-		userId
+		userId,
+		email
 	})
 	const handleTemperatureChange = (field: string, value: any) => {
 		const newData = { ...temperatureData, [field]: value }
@@ -33,6 +36,8 @@ export default function useTemperatureSensor({ userId, client, isConnected }: Pr
 				...data,
 				timestamp: new Date().toISOString()
 			}
+
+			console.log("SENDING", message)
 
 			client.publish("sensors/temperature", JSON.stringify(message), { qos: 0, retain: true }, (err) => {
 				if (err) {

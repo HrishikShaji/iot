@@ -7,12 +7,15 @@ import { Activity, Thermometer, Droplets, Zap, Power, Wifi, WifiOff } from "luci
 import { PowerSensorType, SwitchSensorType, TemperatureSensorType, WaterSensorType } from "@/types/sensor-types"
 import { SERVER_URL } from "@/lib/variables"
 import SwitchMonitoring from "./SwitchMonitoring"
+import TemperatureDashboard from "./TemperatureDashboard"
+import TemperatureMonitoring from "@/features/temperature/components/TemperatureMonitoring"
 
 export default function B2BDashboard() {
 	return (
 		<div
 		>
 			<SwitchMonitoring />
+			<TemperatureMonitoring />
 		</div>
 	)
 }
