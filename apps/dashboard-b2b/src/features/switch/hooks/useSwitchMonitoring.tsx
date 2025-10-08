@@ -1,7 +1,7 @@
-import { SwitchSensorType } from "@/types/sensor-types";
 import { useEffect, useState } from "react";
 import { equalTo, getDatabase, off, limitToLast, onValue, orderByChild, query, ref } from "firebase/database";
 import app from "@/lib/firebase";
+import { SwitchSensorType } from "@repo/types";
 
 
 export default function useSwitchMonitoring() {

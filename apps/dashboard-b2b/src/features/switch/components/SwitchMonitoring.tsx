@@ -1,5 +1,5 @@
-import useSwitchMonitoring from "@/hooks/useSwitchMonitoring"
 import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import useSwitchMonitoring from '../hooks/useSwitchMonitoring';
 
 interface TimelineData {
 	time: string;
