@@ -25,7 +25,6 @@ export default function Dashboard() {
 	const [waterLevelData, setWaterLevelData] = useState<WaterSensorType | null>(null)
 	const [powerData, setPowerData] = useState<PowerSensorType | null>(null)
 
-	console.log(connectionStatus)
 	useEffect(() => {
 		const mqttClient = mqtt.connect(SERVER_URL, {
 			clientId: `switch-client-${Math.random().toString(16).substr(2, 8)}`,
