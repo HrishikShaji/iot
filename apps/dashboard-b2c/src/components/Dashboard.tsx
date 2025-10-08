@@ -4,7 +4,6 @@ import mqtt, { type MqttClient } from "mqtt"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Activity, Thermometer, Droplets, Zap, Power, Wifi, WifiOff } from "lucide-react"
-import { PowerSensorType, SwitchSensorType, TemperatureSensorType, WaterSensorType } from "@/types/sensor-types"
 import SensorCard from "./SensorCard"
 import PowerMonitoring from "@/features/power/components/PowerMonitoring"
 import PowerInfo from "@/features/power/components/PowerInfo"
@@ -15,6 +14,7 @@ import TemperatureInfo from "@/features/temperature/components/TemperatureInfo"
 import SwitchMonitoring from "@/features/switch/components/SwitchMonitoring"
 import SwitchInfo from "@/features/switch/components/SwitchInfo"
 import { SERVER_URL } from "@/lib/variables"
+import { PowerSensorType, SwitchSensorType, TemperatureSensorType, WaterSensorType } from "@repo/types"
 
 export default function Dashboard() {
 	const [isConnected, setIsConnected] = useState(false)

@@ -1,6 +1,6 @@
 
+import { SwitchSensorType } from "@repo/types"
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, ReferenceLine } from "recharts"
-import type { SwitchSensorType } from "@/types/sensor-types"
 
 interface Props {
 	messages: SwitchSensorType[]

@@ -1,7 +1,5 @@
-import { Area, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, Line, LineChart, Legend } from "recharts"
 import { Thermometer, Droplets, BarChartIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import type { TemperatureSensorType } from "@/types/sensor-types"
 import useTemperatureMonitoring from "../hooks/useTemperatureMonitoring"
 import TemperatureChart1 from "./TemperatureChart1"
 import { TemperatureStatsTable } from "./TemperatureStatsTable"

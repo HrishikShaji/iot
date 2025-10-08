@@ -1,5 +1,5 @@
+import { WaterSensorType } from "@repo/types"
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, ReferenceLine, Legend } from "recharts"
-import type { WaterSensorType } from "@/types/sensor-types"
 
 interface Props {
 	messages: WaterSensorType[]

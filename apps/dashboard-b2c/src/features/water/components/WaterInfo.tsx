@@ -1,9 +1,9 @@
 import { Activity, Droplets } from "lucide-react"
-import type { WaterSensorType } from "@/types/sensor-types"
 import { formatTime, getStatusColor, getWaterLevelStatus } from "@/lib/utils"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
+import { WaterSensorType } from "@repo/types"
 
 interface Props {
 	waterLevelData: WaterSensorType | null

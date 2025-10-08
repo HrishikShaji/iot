@@ -1,5 +1,5 @@
+import { TemperatureSensorType } from "@repo/types"
 import { Area, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, Line, LineChart, Legend } from "recharts"
-import type { TemperatureSensorType } from "@/types/sensor-types"
 
 interface Props {
 	messages: TemperatureSensorType[]

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircle, AlertTriangle, XCircle, Gauge } from "lucide-react";
-import type { WaterSensorType } from "@/types/sensor-types";
+import { WaterSensorType } from '@repo/types';
 
 interface WaterStats {
 	level: {

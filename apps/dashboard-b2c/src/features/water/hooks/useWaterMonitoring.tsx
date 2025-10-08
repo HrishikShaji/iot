@@ -1,7 +1,7 @@
-import { WaterSensorType } from "@/types/sensor-types";
 import { useEffect, useState } from "react";
 import { equalTo, getDatabase, limitToLast, onValue, off, orderByChild, query, ref } from "firebase/database";
 import app from "@/lib/firebase";
+import { WaterSensorType } from "@repo/types";
 
 
 export default function useWaterMonitoring() {

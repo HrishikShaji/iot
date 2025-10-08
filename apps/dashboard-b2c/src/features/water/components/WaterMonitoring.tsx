@@ -1,7 +1,5 @@
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, ReferenceLine, Legend } from "recharts"
 import { Gauge, BarChartIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import type { WaterSensorType } from "@/types/sensor-types"
 import { WaterStatsTable } from "@/features/water/components/WaterStatsTable"
 import WaterChart1 from "@/features/water/components/WaterChart1"
 import useWaterMonitoring from "../hooks/useWaterMonitoring"

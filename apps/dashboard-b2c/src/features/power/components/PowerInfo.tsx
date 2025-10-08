@@ -1,7 +1,7 @@
 import { Activity, Zap } from "lucide-react"
-import type { PowerSensorType } from "@/types/sensor-types"
 import { formatTime, getStatusColor } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
+import { PowerSensorType } from "@repo/types"
 
 interface Props {
 	powerData: PowerSensorType | null

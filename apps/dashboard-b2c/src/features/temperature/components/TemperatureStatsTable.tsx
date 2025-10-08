@@ -1,6 +1,6 @@
 import React from 'react';
 import { CheckCircle, AlertTriangle, XCircle, Thermometer, Droplets } from "lucide-react";
-import type { TemperatureSensorType } from "@/types/sensor-types";
+import { TemperatureSensorType } from '@repo/types';
 
 interface TemperatureStats {
 	temperature: {

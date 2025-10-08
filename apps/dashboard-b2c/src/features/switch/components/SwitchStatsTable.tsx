@@ -1,4 +1,4 @@
-import { SwitchSensorType } from "@/types/sensor-types"
+import { SwitchSensorType } from "@repo/types";
 
 interface Props {
 	messages: SwitchSensorType[];
