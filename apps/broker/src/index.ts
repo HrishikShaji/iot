@@ -59,15 +59,37 @@ httpServer.listen(process.env.PORT || 8080, function() {
 
 // Store published messages in Firebase
 aedesInstance.on('publish', async function(packet, client) {
-	console.log("Publishing...", packet.payload.toString())
+	console.log("Publishing...", packet.payload.toString());
+
 	if (client) {
 		try {
-			await db.ref('messages').push({
-				clientId: client.id,
-				topic: packet.topic,
-				payload: packet.payload.toString(),
-				timestamp: admin.database.ServerValue.TIMESTAMP
-			});
+			const topic = packet.topic;
+			const payload = packet.payload.toString();
+
+			// Handle location data differently - store by userId to avoid duplication
+			if (topic.startsWith('location/user/')) {
+				const userId = topic.split('/')[2];
+				const locationData = JSON.parse(payload);
+
+				// Store/update the latest location for this user
+				await db.ref(`locations/${userId}`).set({
+					...locationData,
+					updatedAt: admin.database.ServerValue.TIMESTAMP
+				});
+
+				console.log(`Updated location for user: ${userId}`);
+			}
+			// Keep other messages in the messages collection (like switch states)
+			else {
+				await db.ref('messages').push({
+					clientId: client.id,
+					topic: topic,
+					payload: payload,
+					timestamp: admin.database.ServerValue.TIMESTAMP
+				});
+
+				console.log(`Stored message for topic: ${topic}`);
+			}
 		} catch (error) {
 			console.error('Error storing message:', error);
 		}

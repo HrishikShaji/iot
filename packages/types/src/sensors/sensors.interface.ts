@@ -1,3 +1,12 @@
+export interface LocationSensorType {
+	userId: string;
+	email: string;
+	latitude: number;
+	longitude: number;
+	timestamp: string;
+	device: string;
+}
+
 export interface SwitchSensorType {
 	state: boolean;
 	timestamp: string;

@@ -10,6 +10,8 @@ import PowerCard from "@/features/power/components/PowerCard"
 import UserProfile from "./common/UserProfile"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import useLocationSensor from "@/features/location/hooks/useLocationSensor"
+import LocationCard from "@/features/location/components/LocationCard"
 
 export default function ControlPanel() {
 	const [client, setClient] = useState<MqttClient | null>(null)
@@ -69,7 +71,6 @@ export default function ControlPanel() {
 			}
 		}
 	}, [status])
-
 	// Show loading state while checking authentication
 	if (status === "loading") {
 		return (
@@ -110,6 +111,12 @@ export default function ControlPanel() {
 				</div>
 				<div className="flex gap-2 items-center">
 					{isConnected ? <Wifi className="h-5 w-5 text-green-600" /> : <WifiOff className="h-5 w-5 text-red-600" />}
+					<LocationCard
+						client={client}
+						isConnected={isConnected}
+						userId={session.user.id}
+						email={session.user.email}
+					/>
 					<UserProfile />
 				</div>
 			</div>
