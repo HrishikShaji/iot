@@ -1,4 +1,4 @@
-import { SwitchSensorType, TemperatureSensorType } from "@/types/sensor-types";
+import { TemperatureSensorType } from "@repo/types"
 import { useEffect, useState } from "react";
 import { equalTo, getDatabase, limitToLast, onValue, off, orderByChild, query, ref } from "firebase/database";
 import app from "@/lib/firebase";
