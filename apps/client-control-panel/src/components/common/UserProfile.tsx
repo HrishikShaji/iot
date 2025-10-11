@@ -1,10 +1,14 @@
 "use client"
-import { useSession, signOut } from "next-auth/react"
+import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import UserProfileMenu from "./UserProfileMenu"
 
-export default function UserProfile() {
-	const { data: session, status } = useSession()
+interface Props {
+	email: string;
+	status: "authenticated" | "unauthenticated" | "loading";
+}
+
+export default function UserProfile({ email, status }: Props) {
 	const router = useRouter()
 
 	const handleLogout = async () => {
@@ -15,7 +19,7 @@ export default function UserProfile() {
 
 	return (
 		<UserProfileMenu
-			email={session?.user?.email}
+			email={email}
 			signOut={handleLogout}
 			status={status}
 		/>

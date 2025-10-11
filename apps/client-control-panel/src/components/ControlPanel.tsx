@@ -8,34 +8,24 @@ import TemperatureCard from "@/features/temperature/components/TemperatureCard"
 import WaterCard from "@/features/water/components/WaterCard"
 import PowerCard from "@/features/power/components/PowerCard"
 import UserProfile from "./common/UserProfile"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import useLocationSensor from "@/features/location/hooks/useLocationSensor"
 import LocationCard from "@/features/location/components/LocationCard"
-import { prisma } from "@repo/db"
-import { Button } from "@repo/ui/components/ui/button"
 
-export default function ControlPanel() {
+interface Props {
+	userId: string;
+	email: string;
+	status: "authenticated" | "unauthenticated" | "loading"
+}
+
+export default function ControlPanel({ userId, email, status }: Props) {
 	const [client, setClient] = useState<MqttClient | null>(null)
 	const [isConnected, setIsConnected] = useState(false)
 	const [connectionStatus, setConnectionStatus] = useState("Disconnected")
-	const router = useRouter()
-	const { data: session, status } = useSession()
-
-	// Handle authentication redirect
-	useEffect(() => {
-		if (status === "unauthenticated") {
-			router.push("/auth/login")
-		}
-	}, [status, router])
 
 	// Connect to MQTT broker
 	useEffect(() => {
-		// Don't connect if not authenticated
 		if (status !== "authenticated") {
 			return
 		}
-
 		const mqttClient = mqtt.connect(SERVER_URL, {
 			clientId: `switch-client-${Math.random().toString(16).substr(2, 8)}`,
 			clean: true,
@@ -73,21 +63,7 @@ export default function ControlPanel() {
 			}
 		}
 	}, [status])
-	// Show loading state while checking authentication
-	if (status === "loading") {
-		return (
-			<div className="h-screen flex items-center justify-center">
-				<p className="text-lg">Loading...</p>
-			</div>
-		)
-	}
 
-	// Don't render anything if not authenticated (redirect will happen)
-	if (status !== "authenticated" || !session.user?.id || !session.user.email) {
-		return null
-	}
-
-	// Don't render controls until MQTT client is connected
 	if (!client) {
 		return (
 			<div className="h-screen flex items-center justify-center">
@@ -96,7 +72,6 @@ export default function ControlPanel() {
 		)
 	}
 
-	console.log(session)
 	return (
 		<div className="h-screen p-4 md:p-6 lg:p-8 relative"
 			style={{
@@ -116,10 +91,13 @@ export default function ControlPanel() {
 					<LocationCard
 						client={client}
 						isConnected={isConnected}
-						userId={session.user.id}
-						email={session.user.email}
+						userId={userId}
+						email={email}
 					/>
-					<UserProfile />
+					<UserProfile
+						email={email}
+						status={status}
+					/>
 				</div>
 			</div>
 
@@ -127,26 +105,26 @@ export default function ControlPanel() {
 
 			<div className="grid grid-cols-1 absolute top-40 right-10 w-[40%] lg:grid-cols-2 gap-6">
 				<SwitchCard
-					userId={session.user.id}
-					email={session.user.email}
+					userId={userId}
+					email={email}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<TemperatureCard
-					email={session.user.email}
-					userId={session.user.id}
+					email={email}
+					userId={userId}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<WaterCard
-					email={session.user.email}
-					userId={session.user.id}
+					email={email}
+					userId={userId}
 					isConnected={isConnected}
 					client={client}
 				/>
 				<PowerCard
-					email={session.user.email}
-					userId={session.user.id}
+					email={email}
+					userId={userId}
 					isConnected={isConnected}
 					client={client}
 				/>
