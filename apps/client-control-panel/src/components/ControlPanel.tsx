@@ -12,8 +12,8 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import useLocationSensor from "@/features/location/hooks/useLocationSensor"
 import LocationCard from "@/features/location/components/LocationCard"
-import { Button } from "@repo/ui/ui/button"
 import { prisma } from "@repo/db"
+import { Button } from "@repo/ui/components/ui/button"
 
 export default function ControlPanel() {
 	const [client, setClient] = useState<MqttClient | null>(null)
