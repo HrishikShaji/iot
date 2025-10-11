@@ -16,6 +16,7 @@ import SwitchInfo from "@/features/switch/components/SwitchInfo"
 import { SERVER_URL } from "@/lib/variables"
 import { PowerSensorType, SwitchSensorType, TemperatureSensorType, WaterSensorType } from "@repo/types"
 
+
 export default function Dashboard() {
 	const [isConnected, setIsConnected] = useState(false)
 	const [connectionStatus, setConnectionStatus] = useState("Disconnected")
