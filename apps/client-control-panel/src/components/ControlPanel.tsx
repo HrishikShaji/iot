@@ -120,7 +120,6 @@ export default function ControlPanel() {
 						email={session.user.email}
 					/>
 					<UserProfile />
-					<Button variant="outline">SAMPLE</Button>
 				</div>
 			</div>
 
