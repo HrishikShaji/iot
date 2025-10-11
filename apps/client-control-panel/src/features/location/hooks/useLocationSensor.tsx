@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 	intervalMs?: number;
@@ -13,7 +12,6 @@ interface Props {
 export default function useLocationSensor({
 	email,
 	client,
-	isConnected,
 	userId,
 	intervalMs = 30000
 }: Props) {
@@ -23,7 +21,7 @@ export default function useLocationSensor({
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
 	const publishLocationData = (lat: number, lon: number) => {
-		if (client && isConnected) {
+		if (client) {
 			const message: LocationSensorType = {
 				userId,
 				email,
@@ -36,7 +34,7 @@ export default function useLocationSensor({
 			// Publish to a user-specific topic so it can be stored per-user
 			client.publish(`location/user/${userId}`, JSON.stringify(message), { qos: 0, retain: true }, (err) => {
 				if (err) {
-					console.error("Publish error:", err);
+					console.log("Publish error:", err);
 				} else {
 					console.log("Location published:", { lat, lon });
 				}
@@ -82,16 +80,13 @@ export default function useLocationSensor({
 	};
 
 	useEffect(() => {
-		if (isConnected) {
-			startTracking();
-		}
-
+		startTracking();
 		return () => {
 			if (intervalRef.current) {
 				clearInterval(intervalRef.current);
 			}
 		};
-	}, [isConnected]);
+	}, []);
 
 	return {
 		location,

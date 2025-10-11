@@ -16,12 +16,11 @@ import { TemperatureSensorType } from "@repo/types"
 interface Props {
 	temperatureData: TemperatureSensorType;
 	onChange: (field: string, value: any) => void;
-	isConnected: boolean
 }
 
 const locations = ["Living Room", "Kitchen", "Bedroom", "Bathroom", "Garage", "Basement", "Attic", "Outdoor"]
 
-export default function TemperatureModal({ isConnected, temperatureData, onChange }: Props) {
+export default function TemperatureModal({ temperatureData, onChange }: Props) {
 	return (
 		<Dialog>
 			<DialogTrigger className="cursor-pointer text-white hover:text-blue-500">
@@ -45,7 +44,7 @@ export default function TemperatureModal({ isConnected, temperatureData, onChang
 						max={45}
 						min={-10}
 						step={0.1}
-						disabled={!isConnected || !temperatureData.enabled}
+						disabled={!temperatureData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">
@@ -69,7 +68,7 @@ export default function TemperatureModal({ isConnected, temperatureData, onChang
 						max={100}
 						min={0}
 						step={0.1}
-						disabled={!isConnected || !temperatureData.enabled}
+						disabled={!temperatureData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">
@@ -87,7 +86,7 @@ export default function TemperatureModal({ isConnected, temperatureData, onChang
 					<Select
 						value={temperatureData.location}
 						onValueChange={(value: string) => onChange("location", value)}
-						disabled={!isConnected || !temperatureData.enabled}
+						disabled={!temperatureData.enabled}
 					>
 						<SelectTrigger className="w-full">
 							<SelectValue />

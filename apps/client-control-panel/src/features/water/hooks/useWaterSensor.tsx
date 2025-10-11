@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function useWaterSensor({ email, userId, client, isConnected }: Props) {
+export default function useWaterSensor({ email, userId, client }: Props) {
 	const [waterLevelData, setWaterLevelData] = useState<WaterSensorType>({
 		level: 75,
 		capacity: 1000,
@@ -28,11 +27,11 @@ export default function useWaterSensor({ email, userId, client, isConnected }: P
 	}, [])
 
 	const publishSensorData = (data: WaterSensorType) => {
-		if (client && isConnected && data.enabled) {
+		if (client && data.enabled) {
 
 			client.publish("sensors/waterlevel", JSON.stringify(data), { qos: 0, retain: true }, (err) => {
 				if (err) {
-					console.error(`Publish error for water:`, err)
+					console.log(`Publish error for water:`, err)
 				} else {
 					console.log(`water data published:`, data)
 				}

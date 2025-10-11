@@ -4,18 +4,17 @@ import { useEffect, useState } from "react"
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function useSwitchSensor({ email, client, isConnected, userId }: Props) {
+export default function useSwitchSensor({ email, client, userId }: Props) {
 	const [switchState, setSwitchState] = useState(false)
 
 	const toggleSwitch = () => {
 		const newState = !switchState
 		setSwitchState(newState)
-		if (client && isConnected) {
+		if (client) {
 			const newState = !switchState
 			setSwitchState(newState)
 			publishSensorData(newState)
@@ -27,7 +26,7 @@ export default function useSwitchSensor({ email, client, isConnected, userId }: 
 	}, [])
 
 	const publishSensorData = (newState: boolean) => {
-		if (client && isConnected) {
+		if (client) {
 
 			const message: SwitchSensorType = {
 				userId,
@@ -39,7 +38,7 @@ export default function useSwitchSensor({ email, client, isConnected, userId }: 
 
 			client.publish("switch/state", JSON.stringify(message), { qos: 0, retain: true }, (err) => {
 				if (err) {
-					console.error("Publish error:", err)
+					console.log("Publish error:", err)
 				} else {
 					console.log("Switch state published:", message.state)
 				}

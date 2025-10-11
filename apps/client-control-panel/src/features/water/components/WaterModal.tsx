@@ -16,13 +16,12 @@ import { WaterSensorType } from "@repo/types"
 interface Props {
 	waterData: WaterSensorType;
 	onChange: (field: string, value: any) => void;
-	isConnected: boolean
 }
 
 const tankLocations = ["Main Tank", "Backup Tank", "Storage Tank", "Emergency Tank", "Roof Tank"]
 const tankCapacities = [500, 750, 1000, 1500, 2000, 2500, 3000, 5000]
 
-export default function WaterModal({ isConnected, waterData, onChange }: Props) {
+export default function WaterModal({ waterData, onChange }: Props) {
 	return (
 		<Dialog>
 			<DialogTrigger className="cursor-pointer text-white hover:text-blue-500">
@@ -47,7 +46,7 @@ export default function WaterModal({ isConnected, waterData, onChange }: Props) 
 						max={100}
 						min={0}
 						step={1}
-						disabled={!isConnected || !waterData.enabled}
+						disabled={!waterData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">
@@ -62,7 +61,7 @@ export default function WaterModal({ isConnected, waterData, onChange }: Props) 
 					<Select
 						value={waterData.capacity.toString()}
 						onValueChange={(value) => onChange("capacity", parseInt(value))}
-						disabled={!isConnected || !waterData.enabled}
+						disabled={!waterData.enabled}
 					>
 						<SelectTrigger className="w-full">
 							<SelectValue />
@@ -81,7 +80,7 @@ export default function WaterModal({ isConnected, waterData, onChange }: Props) 
 					<Select
 						value={waterData.status}
 						onValueChange={(value) => onChange("status", value)}
-						disabled={!isConnected || !waterData.enabled}
+						disabled={!waterData.enabled}
 					>
 						<SelectTrigger className="w-full">
 							<SelectValue />
@@ -105,7 +104,7 @@ export default function WaterModal({ isConnected, waterData, onChange }: Props) 
 					<Select
 						value={waterData.location}
 						onValueChange={(value) => onChange("location", value)}
-						disabled={!isConnected || !waterData.enabled}
+						disabled={!waterData.enabled}
 					>
 						<SelectTrigger className="w-full">
 							<SelectValue />

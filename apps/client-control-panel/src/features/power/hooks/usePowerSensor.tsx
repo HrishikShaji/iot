@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function usePowerSensor({ email, client, isConnected, userId }: Props) {
+export default function usePowerSensor({ email, client, userId }: Props) {
 	const [powerData, setPowerData] = useState<PowerSensorType>({
 		voltage: 220.0,
 		current: 5.5,
@@ -30,10 +29,10 @@ export default function usePowerSensor({ email, client, isConnected, userId }: P
 	}, [])
 
 	const publishSensorData = (data: PowerSensorType) => {
-		if (client && isConnected && data.enabled) {
+		if (client && data.enabled) {
 			client.publish("sensors/power", JSON.stringify(data), { qos: 0, retain: true }, (err) => {
 				if (err) {
-					console.error(`Publish error for power:`, err)
+					console.log(`Publish error for power:`, err)
 				} else {
 					console.log(`power data published:`, data)
 				}

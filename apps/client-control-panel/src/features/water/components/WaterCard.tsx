@@ -10,13 +10,12 @@ import useWaterSensor from "@/features/water/hooks/useWaterSensor"
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function WaterCard({ email, userId, client, isConnected }: Props) {
-	const { waterLevelData, handleWaterLevelChange } = useWaterSensor({ email, userId, client, isConnected })
+export default function WaterCard({ email, userId, client }: Props) {
+	const { waterLevelData, handleWaterLevelChange } = useWaterSensor({ email, userId, client })
 	return (
 		<Card className="relative rounded-4xl bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">
 			<div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
@@ -35,9 +34,8 @@ export default function WaterCard({ email, userId, client, isConnected }: Props)
 							className="cursor-pointer data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-200 [&>span]:bg-white [&>span]:data-[state=checked]:bg-white [&>span]:data-[state=unchecked]:bg-black"
 							checked={waterLevelData.enabled}
 							onCheckedChange={(checked) => handleWaterLevelChange("enabled", checked)}
-							disabled={!isConnected}
 						/>
-						<WaterModal onChange={handleWaterLevelChange} isConnected={isConnected} waterData={waterLevelData} />
+						<WaterModal onChange={handleWaterLevelChange} waterData={waterLevelData} />
 					</div>
 				</div>
 			</CardHeader>

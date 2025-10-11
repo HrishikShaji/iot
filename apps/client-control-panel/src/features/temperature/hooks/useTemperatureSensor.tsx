@@ -4,13 +4,11 @@ import { useEffect, useState } from "react";
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function useTemperatureSensor({ email, userId, client, isConnected }: Props) {
-	console.log(email)
+export default function useTemperatureSensor({ email, userId, client }: Props) {
 	const [temperatureData, setTemperatureData] = useState<TemperatureSensorType>({
 		temperature: 25.0,
 		humidity: 60.0,
@@ -32,12 +30,12 @@ export default function useTemperatureSensor({ email, userId, client, isConnecte
 	}, [])
 
 	const publishSensorData = (data: TemperatureSensorType) => {
-		if (client && isConnected && data.enabled) {
+		if (client && data.enabled) {
 
 
 			client.publish("sensors/temperature", JSON.stringify(data), { qos: 0, retain: true }, (err) => {
 				if (err) {
-					console.error(`Publish error for Temperature:`, err)
+					console.log(`Publish error for Temperature:`, err)
 				} else {
 					console.log(`Temperature data published:`, data)
 				}

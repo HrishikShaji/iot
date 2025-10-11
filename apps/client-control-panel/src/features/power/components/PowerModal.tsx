@@ -17,10 +17,9 @@ import { PowerSensorType } from "@repo/types"
 interface Props {
 	powerData: PowerSensorType;
 	onChange: (field: string, value: any) => void;
-	isConnected: boolean
 }
 
-export default function PowerModal({ isConnected, powerData, onChange }: Props) {
+export default function PowerModal({ powerData, onChange }: Props) {
 	return (
 		<Dialog>
 			<DialogTrigger className="cursor-pointer text-white hover:text-blue-500">
@@ -45,7 +44,7 @@ export default function PowerModal({ isConnected, powerData, onChange }: Props) 
 						max={300}
 						min={100}
 						step={0.1}
-						disabled={!isConnected || !powerData.enabled}
+						disabled={!powerData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">
@@ -66,7 +65,7 @@ export default function PowerModal({ isConnected, powerData, onChange }: Props) 
 						max={50}
 						min={0}
 						step={0.01}
-						disabled={!isConnected || !powerData.enabled}
+						disabled={!powerData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">
@@ -87,7 +86,7 @@ export default function PowerModal({ isConnected, powerData, onChange }: Props) 
 						max={10000}
 						min={0}
 						step={1}
-						disabled={!isConnected || !powerData.enabled}
+						disabled={!powerData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">
@@ -108,7 +107,7 @@ export default function PowerModal({ isConnected, powerData, onChange }: Props) 
 						max={65}
 						min={45}
 						step={0.01}
-						disabled={!isConnected || !powerData.enabled}
+						disabled={!powerData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">
@@ -129,7 +128,7 @@ export default function PowerModal({ isConnected, powerData, onChange }: Props) 
 						max={1}
 						min={0}
 						step={0.001}
-						disabled={!isConnected || !powerData.enabled}
+						disabled={!powerData.enabled}
 						className="w-full [&_[data-orientation=horizontal]]:bg-gray-700 [&_[role=slider]]:bg-blue-500 [&_[role=slider]]:border-blue-500 [&_.absolute.h-full]:bg-gray-500 cursor-pointer"
 					/>
 					<div className="flex justify-between text-xs text-muted-foreground">

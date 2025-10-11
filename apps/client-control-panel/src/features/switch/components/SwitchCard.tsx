@@ -8,13 +8,12 @@ import useSwitchSensor from "@/features/switch/hooks/useSwitchSensor"
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function SwitchCard({ email, userId, client, isConnected }: Props) {
-	const { switchState, toggleSwitch } = useSwitchSensor({ email, client, isConnected, userId })
+export default function SwitchCard({ email, userId, client }: Props) {
+	const { switchState, toggleSwitch } = useSwitchSensor({ email, client, userId })
 	return (
 		<Card className="relative rounded-4xl  bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">
 			<div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
@@ -35,7 +34,6 @@ export default function SwitchCard({ email, userId, client, isConnected }: Props
 					<div className="relative">
 						<Button
 							onClick={toggleSwitch}
-							disabled={!isConnected}
 							className={`size-24 rounded-full flex cursor-pointer items-center justify-center transition-all duration-300 backdrop-blur-sm border-2 shadow-2xl
 								${switchState
 									? "bg-green-400 border-green-400/50 text-black shadow-green-500/20"

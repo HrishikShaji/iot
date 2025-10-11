@@ -10,14 +10,12 @@ import useTemperatureSensor from "@/features/temperature/hooks/useTemperatureSen
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function TemperatureCard({ email, client, isConnected, userId }: Props) {
-	console.log(email)
-	const { handleTemperatureChange, temperatureData } = useTemperatureSensor({ email, userId, client, isConnected })
+export default function TemperatureCard({ email, client, userId }: Props) {
+	const { handleTemperatureChange, temperatureData } = useTemperatureSensor({ email, userId, client })
 
 	return (
 		<Card className="relative rounded-4xl overflow-hidden bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">
@@ -37,11 +35,9 @@ export default function TemperatureCard({ email, client, isConnected, userId }: 
 							className="cursor-pointer data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-200 [&>span]:bg-white [&>span]:data-[state=checked]:bg-white [&>span]:data-[state=unchecked]:bg-black"
 							checked={temperatureData.enabled}
 							onCheckedChange={(checked) => handleTemperatureChange("enabled", checked)}
-							disabled={!isConnected}
 						/>
 						<TemperatureModal
 							onChange={handleTemperatureChange}
-							isConnected={isConnected}
 							temperatureData={temperatureData}
 						/>
 					</div>

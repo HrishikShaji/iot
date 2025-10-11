@@ -10,13 +10,12 @@ import usePowerSensor from "@/features/power/hooks/usePowerSensor"
 
 interface Props {
 	client: MqttClient;
-	isConnected: boolean;
 	userId: string;
 	email: string;
 }
 
-export default function PowerCard({ email, client, isConnected, userId }: Props) {
-	const { powerData, handlePowerChange } = usePowerSensor({ email, userId, client, isConnected })
+export default function PowerCard({ email, client, userId }: Props) {
+	const { powerData, handlePowerChange } = usePowerSensor({ email, userId, client })
 
 	return (
 		<Card className="relative rounded-4xl bg-black/20 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/30">
@@ -36,9 +35,8 @@ export default function PowerCard({ email, client, isConnected, userId }: Props)
 							className="cursor-pointer data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-200 [&>span]:bg-white [&>span]:data-[state=checked]:bg-white [&>span]:data-[state=unchecked]:bg-black"
 							checked={powerData.enabled}
 							onCheckedChange={(checked) => handlePowerChange("enabled", checked)}
-							disabled={!isConnected}
 						/>
-						<PowerModal onChange={handlePowerChange} isConnected={isConnected} powerData={powerData} />
+						<PowerModal onChange={handlePowerChange} powerData={powerData} />
 					</div>
 				</div>
 			</CardHeader>
