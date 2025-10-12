@@ -1,7 +1,8 @@
 "use client"
 import ControlPanel from "./ControlPanel"
-import Header from "./Header"
 import useMqtt from "@/hooks/useMqtt"
+import Header from "@repo/ui/components/elements/Header"
+import UserProfile from "./common/UserProfile";
 
 interface Props {
 	email: string;
@@ -22,11 +23,21 @@ export default function HomePage({ email, userId, status }: Props) {
 
 	return (
 		<>
+			{/* <Header */}
+			{/* 	isConnected={isConnected} */}
+			{/* 	email={email} */}
+			{/* 	status={status} */}
+			{/* /> */}
 			<Header
+				title="Trailer Control Panel"
+				subtitle="Interactive sensor control with sliders and toggles"
 				isConnected={isConnected}
-				email={email}
-				status={status}
-			/>
+			>
+				<UserProfile
+					email={email}
+					status={status}
+				/>
+			</Header>
 			<ControlPanel
 				client={client}
 				email={email}
