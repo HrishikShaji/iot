@@ -1,23 +1,18 @@
 "use client"
-import { useState, useEffect } from "react"
-import mqtt, { type MqttClient } from "mqtt"
-import { Power, Wifi, WifiOff } from "lucide-react"
-import { SERVER_URL } from "@/lib/variables"
 import SwitchCard from "@/features/switch/components/SwitchCard"
 import TemperatureCard from "@/features/temperature/components/TemperatureCard"
 import WaterCard from "@/features/water/components/WaterCard"
 import PowerCard from "@/features/power/components/PowerCard"
-import UserProfile from "./common/UserProfile"
 import LocationCard from "@/features/location/components/LocationCard"
+import { MqttClient } from "mqtt"
 
 interface Props {
 	userId: string;
 	email: string;
-	status: "authenticated" | "unauthenticated" | "loading";
 	client: MqttClient;
 }
 
-export default function ControlPanel({ userId, email, status, client }: Props) {
+export default function ControlPanel({ userId, email, client }: Props) {
 
 	return (
 		<div className="h-screen p-4 md:p-6 lg:p-8 relative"
