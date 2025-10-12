@@ -28,10 +28,11 @@ export default function HomePage({ email, userId, status }: Props) {
 				subtitle="Interactive sensor control with sliders and toggles"
 				isConnected={isConnected}
 			>
-				<UserProfile
-					email={email}
-					status={status}
-				/>
+				<div>nothing</div>
+				{/* <UserProfile */}
+				{/* 	email={email} */}
+				{/* 	status={status} */}
+				{/* /> */}
 			</Header>
 			<ControlPanel
 				client={client}
