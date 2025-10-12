@@ -33,8 +33,7 @@ export default function UserProfileMenu({ email, status, signOut }: Props) {
 	}
 
 	const initials = email
-		? email
-			.split("@")[0]
+		? email.split("@")[0]
 			.substring(0, 2)
 			.toUpperCase()
 		: "U"

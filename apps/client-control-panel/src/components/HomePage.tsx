@@ -23,11 +23,6 @@ export default function HomePage({ email, userId, status }: Props) {
 
 	return (
 		<>
-			{/* <Header */}
-			{/* 	isConnected={isConnected} */}
-			{/* 	email={email} */}
-			{/* 	status={status} */}
-			{/* /> */}
 			<Header
 				title="Trailer Control Panel"
 				subtitle="Interactive sensor control with sliders and toggles"

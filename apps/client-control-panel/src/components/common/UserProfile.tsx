@@ -1,7 +1,7 @@
 "use client"
 import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import UserProfileMenu from "./UserProfileMenu"
+import UserProfileMenu from "@repo/ui/components/elements/UserProfileMenu"
 
 interface Props {
 	email: string;
