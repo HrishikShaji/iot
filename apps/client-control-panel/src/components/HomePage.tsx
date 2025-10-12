@@ -29,10 +29,10 @@ export default function HomePage({ email, userId, status }: Props) {
 				isConnected={isConnected}
 			>
 				<div>nothing</div>
-				{/* <UserProfile */}
-				{/* 	email={email} */}
-				{/* 	status={status} */}
-				{/* /> */}
+				<UserProfile
+					email={email}
+					status={status}
+				/>
 			</Header>
 			<ControlPanel
 				client={client}
