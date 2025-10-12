@@ -1,8 +1,9 @@
+
 "use client"
-import ControlPanel from "./ControlPanel"
 import useMqtt from "@/hooks/useMqtt"
 import Header from "@repo/ui/components/elements/Header"
 import UserProfile from "./common/UserProfile";
+import Dashboard from "./Dashboard";
 
 interface Props {
 	email: string;
@@ -11,9 +12,9 @@ interface Props {
 }
 
 export default function HomePage({ email, userId, status }: Props) {
-	const { client, isConnected, connectionStatus } = useMqtt()
+	const { client, isConnected, switchData, temperatureData, waterLevelData, powerData } = useMqtt()
 
-	if (!client) {
+	if (!client || !switchData || !temperatureData || !waterLevelData || !powerData) {
 		return (
 			<div className="h-screen flex items-center justify-center">
 				<p className="text-lg">Connecting to broker...</p>
@@ -24,8 +25,8 @@ export default function HomePage({ email, userId, status }: Props) {
 	return (
 		<>
 			<Header
-				title="Trailer Control Panel"
-				subtitle="Interactive sensor control with sliders and toggles"
+				title="Trailer Dashboard"
+				subtitle="View Trailer metrics"
 				isConnected={isConnected}
 			>
 				<UserProfile
@@ -33,12 +34,12 @@ export default function HomePage({ email, userId, status }: Props) {
 					status={status}
 				/>
 			</Header>
-			<ControlPanel
-				client={client}
-				email={email}
-				userId={userId}
+			<Dashboard
+				switchData={switchData}
+				powerData={powerData}
+				waterLevelData={waterLevelData}
+				temperatureData={temperatureData}
 			/>
-
 		</>
 	)
 }

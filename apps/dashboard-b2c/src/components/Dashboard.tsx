@@ -15,90 +15,18 @@ import SwitchMonitoring from "@/features/switch/components/SwitchMonitoring"
 import SwitchInfo from "@/features/switch/components/SwitchInfo"
 import { SERVER_URL } from "@/lib/variables"
 import { PowerSensorType, SwitchSensorType, TemperatureSensorType, WaterSensorType } from "@repo/types"
+import useMqtt from "@/hooks/useMqtt"
+
+interface Props {
+	switchData: SwitchSensorType;
+	powerData: PowerSensorType;
+	temperatureData: TemperatureSensorType;
+	waterLevelData: WaterSensorType;
+}
 
 
-export default function Dashboard() {
-	const [isConnected, setIsConnected] = useState(false)
-	const [connectionStatus, setConnectionStatus] = useState("Disconnected")
+export default function Dashboard({ waterLevelData, powerData, switchData, temperatureData }: Props) {
 
-	const [switchData, setSwitchData] = useState<SwitchSensorType | null>(null)
-	const [temperatureData, setTemperatureData] = useState<TemperatureSensorType | null>(null)
-	const [waterLevelData, setWaterLevelData] = useState<WaterSensorType | null>(null)
-	const [powerData, setPowerData] = useState<PowerSensorType | null>(null)
-
-	useEffect(() => {
-		const mqttClient = mqtt.connect(SERVER_URL, {
-			clientId: `switch-client-${Math.random().toString(16).substr(2, 8)}`,
-			clean: true,
-			keepalive: 60,
-			reconnectPeriod: 1000,
-			connectTimeout: 30000,
-			protocolVersion: 4, // MQTT 3.1.1
-			queueQoSZero: false, // Don't queue QoS 0 messages when offline
-		})
-
-		mqttClient.on("connect", () => {
-			console.log("Dashboard connected to MQTT broker")
-			setIsConnected(true)
-			setConnectionStatus("Connected")
-
-			const topics = ["switch/state", "sensors/temperature", "sensors/waterlevel", "sensors/power"]
-			topics.forEach((topic) => {
-				mqttClient.subscribe(topic, (err) => {
-					if (err) {
-						console.error(`Subscription error for ${topic}:`, err)
-					} else {
-						console.log(`Subscribed to ${topic} topic`)
-					}
-				})
-			})
-		})
-
-		mqttClient.on("message", (topic, message) => {
-			try {
-				const data = JSON.parse(message.toString())
-				console.log("Received message:", { topic, data })
-
-				switch (topic) {
-					case "switch/state":
-						setSwitchData(data)
-						break
-					case "sensors/temperature":
-						setTemperatureData(data)
-						break
-					case "sensors/waterlevel":
-						setWaterLevelData(data)
-						break
-					case "sensors/power":
-						setPowerData(data)
-						break
-				}
-
-			} catch (error) {
-				console.error("Error parsing message:", error)
-			}
-		})
-
-		mqttClient.on("error", (err) => {
-			console.error("MQTT connection error:", err)
-			setConnectionStatus(`Error: ${err.message}`)
-		})
-
-		mqttClient.on("offline", () => {
-			setIsConnected(false)
-			setConnectionStatus("Offline")
-		})
-
-		mqttClient.on("reconnect", () => {
-			setConnectionStatus("Reconnecting...")
-		})
-
-		return () => {
-			if (mqttClient) {
-				mqttClient.end()
-			}
-		}
-	}, [])
 
 	return (
 		<div className="h-screen p-4 md:p-6 lg:p-8 relative"
@@ -109,16 +37,6 @@ export default function Dashboard() {
 				backgroundPosition: 'center'
 			}}
 		>
-			<div className="text-center space-y-2 px-10  py-5  w-full flex left-0 top-0 justify-between absolute z-10 items-center">
-				<div className="text-left">
-					<h1 className="text-4xl font-bold  text-white">Trailer Dashboard</h1>
-					<p className="text-muted-foreground text-lg">View Trailer metrics</p>
-
-				</div>
-				{isConnected ? <Wifi className="h-5 w-5 text-green-600" /> : <WifiOff className="h-5 w-5 text-red-600" />}
-			</div>
-			{/* Header */}
-
 			{/* Sensor Controls Grid */}
 			<div className="absolute top-0 left-0  bg-gradient-to-r from-black/50 to-black h-full w-full"></div>
 

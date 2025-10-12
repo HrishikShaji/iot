@@ -27,7 +27,7 @@ export default function useMqtt() {
 		})
 
 		mqttClient.on("error", (err) => {
-			console.error("MQTT connection error:", err)
+			console.log("MQTT connection error:", err)
 			setConnectionStatus(`Error: ${err.message}`)
 		})
 
