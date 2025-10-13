@@ -113,15 +113,15 @@ export default function LocationMonitoring() {
 
 	if (!isClient) {
 		return (
-			<div className='p-10 h-[500px] w-full flex items-center justify-center'>
+			<div className='p-10 h-[600px] w-full flex items-center justify-center'>
 				<div className="text-gray-500">Loading map...</div>
 			</div>
 		);
 	}
 
 	return (
-		<div className='p-10 h-[500px] w-full'>
-			<div ref={mapRef} className="w-full h-full" />
+		<div className='p-10 z-30 absolute rounded-3xl overflow-hidden h-[600px] w-full'>
+			<div ref={mapRef} className="w-full h-full rounded-3xl" />
 		</div>
 	);
 }
