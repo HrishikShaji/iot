@@ -14,7 +14,7 @@ interface Props {
 export default function HomePage({ email, userId, status }: Props) {
 	const { client, isConnected, switchData, temperatureData, waterLevelData, powerData } = useMqtt()
 
-	if (!client || !switchData || !temperatureData || !waterLevelData || !powerData) {
+	if (!client) {
 		return (
 			<div className="h-screen flex items-center justify-center">
 				<p className="text-lg">Connecting to broker...</p>

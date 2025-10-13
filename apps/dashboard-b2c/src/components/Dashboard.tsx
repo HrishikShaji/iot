@@ -18,10 +18,10 @@ import { PowerSensorType, SwitchSensorType, TemperatureSensorType, WaterSensorTy
 import useMqtt from "@/hooks/useMqtt"
 
 interface Props {
-	switchData: SwitchSensorType;
-	powerData: PowerSensorType;
-	temperatureData: TemperatureSensorType;
-	waterLevelData: WaterSensorType;
+	switchData: SwitchSensorType | null;
+	powerData: PowerSensorType | null;
+	temperatureData: TemperatureSensorType | null;
+	waterLevelData: WaterSensorType | null;
 }
 
 
