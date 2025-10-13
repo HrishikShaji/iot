@@ -24,8 +24,8 @@ export default function HomePage({ email, userId, status }: Props) {
 	return (
 		<>
 			<Header
-				title="Trailer Control Panel"
-				subtitle="Interactive sensor control with sliders and toggles"
+				title="Admin Dashboard"
+				subtitle="View all trailers metrics"
 				isConnected={isConnected}
 			>
 				<UserProfile
