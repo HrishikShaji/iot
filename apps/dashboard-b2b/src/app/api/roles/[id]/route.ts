@@ -4,11 +4,12 @@ import { NextRequest, NextResponse } from 'next/server';
 // GET single role
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
+	const { id } = await params
 	try {
 		const role = await prisma.role.findUnique({
-			where: { id: params.id },
+			where: { id },
 			include: {
 				permissions: {
 					include: {
@@ -43,15 +44,16 @@ export async function GET(
 // PUT - Update role
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
+	const { id } = await params
 	try {
 		const body = await request.json();
 		const { name, description, permissionIds } = body;
 
 		// Check if role exists
 		const existingRole = await prisma.role.findUnique({
-			where: { id: params.id },
+			where: { id },
 		});
 
 		if (!existingRole) {
@@ -77,7 +79,7 @@ export async function PUT(
 
 		// Update role and permissions
 		const role = await prisma.role.update({
-			where: { id: params.id },
+			where: { id },
 			data: {
 				name,
 				description,
@@ -117,12 +119,13 @@ export async function PUT(
 // DELETE role
 export async function DELETE(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
+	const { id } = await params
 	try {
 		// Check if role exists
 		const role = await prisma.role.findUnique({
-			where: { id: params.id },
+			where: { id },
 			include: {
 				_count: {
 					select: {
@@ -149,7 +152,7 @@ export async function DELETE(
 
 		// Delete role (permissions will cascade delete)
 		await prisma.role.delete({
-			where: { id: params.id },
+			where: { id },
 		});
 
 		return NextResponse.json(

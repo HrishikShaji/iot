@@ -4,11 +4,12 @@ import { NextRequest, NextResponse } from 'next/server';
 // GET single permission
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
+	const { id } = await params
 	try {
 		const permission = await prisma.permission.findUnique({
-			where: { id: params.id },
+			where: { id },
 			include: {
 				roles: {
 					include: {
@@ -43,15 +44,16 @@ export async function GET(
 // PUT - Update permission
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
+	const { id } = await params
 	try {
 		const body = await request.json();
 		const { action, resource, scope, description } = body;
 
 		// Check if permission exists
 		const existingPermission = await prisma.permission.findUnique({
-			where: { id: params.id },
+			where: { id },
 		});
 
 		if (!existingPermission) {
@@ -90,7 +92,7 @@ export async function PUT(
 
 		// Update permission
 		const permission = await prisma.permission.update({
-			where: { id: params.id },
+			where: { id },
 			data: {
 				action,
 				resource,
@@ -119,12 +121,13 @@ export async function PUT(
 // DELETE permission
 export async function DELETE(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
+	const { id } = await params
 	try {
 		// Check if permission exists
 		const permission = await prisma.permission.findUnique({
-			where: { id: params.id },
+			where: { id },
 			include: {
 				_count: {
 					select: {
@@ -151,7 +154,7 @@ export async function DELETE(
 
 		// Delete permission
 		await prisma.permission.delete({
-			where: { id: params.id },
+			where: { id },
 		});
 
 		return NextResponse.json(
