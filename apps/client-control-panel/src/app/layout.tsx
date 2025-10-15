@@ -8,6 +8,7 @@ import Header from "@repo/ui/components/elements/Header";
 import MqttConnectionStatus from "@/components/common/MqttConnectionStatus";
 import UserProfile from "@/components/common/UserProfile";
 import { AppSidebar } from "@repo/ui/components/elements/AppSidebar"
+import { sidebarLinks } from "@/lib/sidebar-links"
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -51,7 +52,7 @@ export default function RootLayout({
 									<UserProfile />
 								</Header>
 								<div className="flex flex-1">
-									<AppSidebar />
+									<AppSidebar links={sidebarLinks} />
 									<SidebarInset>
 										<div className="flex flex-1 flex-col gap-4 p-4">
 											<div className="h-full w-full  overflow-auto">
