@@ -120,7 +120,7 @@ export default function LocationMonitoring() {
 	}
 
 	return (
-		<div className='p-10 z-30 absolute rounded-3xl overflow-hidden h-[600px] w-full'>
+		<div className='  rounded-3xl overflow-hidden h-full w-full'>
 			<div ref={mapRef} className="w-full h-full rounded-3xl" />
 		</div>
 	);

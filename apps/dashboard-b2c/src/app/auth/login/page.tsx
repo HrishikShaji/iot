@@ -41,7 +41,7 @@ export default function Page() {
 	}
 
 	return (
-		<div className="min-h-screen flex items-center justify-center p-4">
+		<div className="h-full flex items-center justify-center p-4">
 			<Card className="w-full max-w-md border-border/40 shadow-sm">
 				<CardHeader className="space-y-2 text-center">
 					<CardTitle className="text-3xl  tracking-tight text-balance">Welcome back</CardTitle>

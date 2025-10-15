@@ -6,7 +6,7 @@ import { prisma } from "@repo/db"
 export async function POST(req: Request) {
 	try {
 		const { email, password } = await req.json()
-
+		console.log("THIS RAN")
 		if (!email || !password) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
@@ -29,11 +29,18 @@ export async function POST(req: Request) {
 		// Hash password
 		const hashedPassword = await bcrypt.hash(password, 10)
 
+		const role = await prisma.role.findUnique({ where: { name: "user" } })
 		// Create user
+
+		console.log("this is role", role)
+		if (!role) {
+			throw new Error("No Role")
+		}
 		const user = await prisma.user.create({
 			data: {
 				email,
 				password: hashedPassword,
+				roleId: role.id
 			},
 		})
 
@@ -42,6 +49,7 @@ export async function POST(req: Request) {
 			{ status: 201 }
 		)
 	} catch (error) {
+		console.log(error)
 		return NextResponse.json(
 			{ error: "Something went wrong" },
 			{ status: 500 }

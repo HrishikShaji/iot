@@ -3,6 +3,7 @@ import Header from "@repo/ui/components/elements/Header"
 import useMqtt from "@/hooks/useMqtt";
 import UserProfile from "./common/UserProfile";
 import B2BDashboard from "./B2BDashboard";
+import MqttConnectionStatus from "./common/MqttConnectionStatus";
 
 interface Props {
 	email: string;
@@ -22,18 +23,6 @@ export default function HomePage({ email, userId, status }: Props) {
 	}
 
 	return (
-		<>
-			<Header
-				title="Admin Dashboard"
-				subtitle="View all trailers metrics"
-				isConnected={isConnected}
-			>
-				<UserProfile
-					email={email}
-					status={status}
-				/>
-			</Header>
-			<B2BDashboard />
-		</>
+		<B2BDashboard />
 	)
 }

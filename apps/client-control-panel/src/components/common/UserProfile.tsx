@@ -1,15 +1,31 @@
 "use client"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import UserProfileMenu from "@repo/ui/components/elements/UserProfileMenu"
+import { useEffect } from "react"
 
-interface Props {
-	email: string;
-	status: "authenticated" | "unauthenticated" | "loading";
-}
 
-export default function UserProfile({ email, status }: Props) {
+export default function UserProfile() {
 	const router = useRouter()
+	const { data: session, status } = useSession()
+
+	useEffect(() => {
+		if (status === "unauthenticated") {
+			router.push("/auth/login")
+		}
+	}, [status, router])
+
+	if (status === "loading") {
+		return (
+			<div className="h-screen flex items-center justify-center">
+				<p className="text-lg">Loading...</p>
+			</div>
+		)
+	}
+
+	if (status !== "authenticated" || !session.user?.id || !session.user.email) {
+		return null
+	}
 
 	const handleLogout = async () => {
 		await signOut({ redirect: false })
@@ -19,7 +35,7 @@ export default function UserProfile({ email, status }: Props) {
 
 	return (
 		<UserProfileMenu
-			email={email}
+			email={session.user.email}
 			signOut={handleLogout}
 			status={status}
 		/>

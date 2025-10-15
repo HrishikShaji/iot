@@ -15,30 +15,17 @@ export default function HomePage({ email, userId, status }: Props) {
 
 	if (!client) {
 		return (
-			<div className="h-screen flex items-center justify-center">
+			<div className="h-full flex items-center justify-center">
 				<p className="text-lg">Connecting to broker...</p>
 			</div>
 		)
 	}
 
 	return (
-		<>
-			<Header
-				title="Trailer Control Panel"
-				subtitle="Interactive sensor control with sliders and toggles"
-				isConnected={isConnected}
-			>
-				<UserProfile
-					email={email}
-					status={status}
-				/>
-			</Header>
-			<ControlPanel
-				client={client}
-				email={email}
-				userId={userId}
-			/>
-
-		</>
+		<ControlPanel
+			client={client}
+			email={email}
+			userId={userId}
+		/>
 	)
 }

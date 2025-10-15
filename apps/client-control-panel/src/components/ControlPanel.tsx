@@ -15,7 +15,7 @@ interface Props {
 export default function ControlPanel({ userId, email, client }: Props) {
 
 	return (
-		<div className="h-screen p-4 md:p-6 lg:p-8 relative"
+		<div className="h-full p-4 md:p-6 lg:p-8 relative"
 			style={{
 				backgroundImage: "url('/home_m_2.jpg')",
 				backgroundSize: 'cover',
@@ -26,7 +26,7 @@ export default function ControlPanel({ userId, email, client }: Props) {
 
 			<div className="absolute top-0 left-0 bg-gradient-to-r from-black/50 to-black h-full w-full"></div>
 
-			<div className="grid grid-cols-1 absolute top-40 right-10 w-[40%] lg:grid-cols-2 gap-6">
+			<div className="grid grid-cols-1 h-full  w-[70%] lg:grid-cols-2 gap-6">
 				<SwitchCard
 					userId={userId}
 					email={email}
@@ -47,11 +47,11 @@ export default function ControlPanel({ userId, email, client }: Props) {
 					userId={userId}
 					client={client}
 				/>
-				<LocationCard
-					client={client}
-					userId={userId}
-					email={email}
-				/>
+				{/* <LocationCard */}
+				{/* 	client={client} */}
+				{/* 	userId={userId} */}
+				{/* 	email={email} */}
+				{/* /> */}
 			</div>
 		</div>
 	)

@@ -29,7 +29,7 @@ export default function Dashboard({ waterLevelData, powerData, switchData, tempe
 
 
 	return (
-		<div className="h-screen p-4 md:p-6 lg:p-8 relative"
+		<div className="h-full p-4 md:p-6 lg:p-8 relative"
 			style={{
 				backgroundImage: "url('/home_m_2.jpg')",
 				backgroundSize: 'cover',

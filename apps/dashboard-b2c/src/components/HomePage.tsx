@@ -16,30 +16,18 @@ export default function HomePage({ email, userId, status }: Props) {
 
 	if (!client) {
 		return (
-			<div className="h-screen flex items-center justify-center">
+			<div className="h-full flex items-center justify-center">
 				<p className="text-lg">Connecting to broker...</p>
 			</div>
 		)
 	}
 
 	return (
-		<>
-			<Header
-				title="Trailer Dashboard"
-				subtitle="View Trailer metrics"
-				isConnected={isConnected}
-			>
-				<UserProfile
-					email={email}
-					status={status}
-				/>
-			</Header>
-			<Dashboard
-				switchData={switchData}
-				powerData={powerData}
-				waterLevelData={waterLevelData}
-				temperatureData={temperatureData}
-			/>
-		</>
+		<Dashboard
+			switchData={switchData}
+			powerData={powerData}
+			waterLevelData={waterLevelData}
+			temperatureData={temperatureData}
+		/>
 	)
 }

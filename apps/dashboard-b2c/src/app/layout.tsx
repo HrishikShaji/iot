@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import { MqttProvider } from "@/contexts/MqttContext";
+import { SidebarInset, SidebarProvider } from "@repo/ui/components/ui/sidebar";
+import Header from "@repo/ui/components/elements/Header";
+import MqttConnectionStatus from "@/components/common/MqttConnectionStatus";
+import UserProfile from "@/components/common/UserProfile";
+import { AppSidebar } from "@repo/ui/components/elements/AppSidebar"
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -30,12 +36,34 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
+		<html lang="en" className="dark">
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} font-poppins antialiased`}
 			>
 				<SessionProvider>
-					{children}
+					<MqttProvider>
+						<div className="[--header-height:100px]">
+							<SidebarProvider className="flex flex-col">
+								<Header
+									title="Trailer Dashboard"
+									subtitle="View trailer metrics"
+								>
+									<MqttConnectionStatus />
+									<UserProfile />
+								</Header>
+								<div className="flex flex-1">
+									<AppSidebar />
+									<SidebarInset>
+										<div className="flex flex-1 flex-col gap-4 p-4">
+											<div className="h-full w-full  overflow-auto">
+												{children}
+											</div>
+										</div>
+									</SidebarInset>
+								</div>
+							</SidebarProvider>
+						</div>
+					</MqttProvider>
 				</SessionProvider>
 			</body>
 		</html>

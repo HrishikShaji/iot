@@ -1,9 +1,14 @@
 "use client"
 
+import { AppSidebar } from "@/components/common/AppSidebar";
+import UserProfile from "@/components/common/UserProfile";
 import HomePage from "@/components/HomePage";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import Header from "../components/common/Header";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import MqttConnectionStatus from "@/components/common/MqttConnectionStatus";
 
 export default function Home() {
 	const router = useRouter()
@@ -17,7 +22,7 @@ export default function Home() {
 
 	if (status === "loading") {
 		return (
-			<div className="h-screen flex items-center justify-center">
+			<div className="h-full flex items-center justify-center">
 				<p className="text-lg">Loading...</p>
 			</div>
 		)
@@ -29,8 +34,8 @@ export default function Home() {
 	return (
 		<HomePage
 			email={session.user.email}
-			userId={session.user.id}
 			status={status}
+			userId={session.user.id}
 		/>
 	);
 }

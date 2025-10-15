@@ -30,10 +30,18 @@ export async function POST(req: Request) {
 		const hashedPassword = await bcrypt.hash(password, 10)
 
 		// Create user
+		const role = await prisma.role.findUnique({ where: { name: "user" } })
+		// Create user
+
+		console.log("this is role", role)
+		if (!role) {
+			throw new Error("No Role")
+		}
 		const user = await prisma.user.create({
 			data: {
 				email,
 				password: hashedPassword,
+				roleId: role.id
 			},
 		})
 
