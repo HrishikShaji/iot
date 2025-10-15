@@ -1,10 +1,8 @@
 "use client"
 
-import { AppSidebar } from "@/components/common/AppSidebar";
 import UserProfile from "@/components/common/UserProfile";
 import HomePage from "@/components/HomePage";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import Header from "../components/common/Header";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
