@@ -14,7 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   email         String    @unique
@@ -24,6 +23,10 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  
+  // One user has ONE role
+  roleId        String    @db.ObjectId
+  role          Role      @relation(fields: [roleId], references: [id])
 }
 
 model Account {
@@ -39,9 +42,8 @@ model Account {
   scope             String?
   id_token          String? @db.String
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   @@unique([provider, providerAccountId])
 }
 
@@ -58,6 +60,46 @@ model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
-
+  
   @@unique([identifier, token])
+}
+
+model Role {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       @unique // "employee", "customer", "admin"
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  // One role can have MANY users
+  users       User[]
+  
+  // One role can have MANY permissions
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  action      String           // "create", "read", "update", "delete"
+  resource    String           // "users", "profile", etc.
+  scope       String           @default("all") // "all", "own", "department", "team"
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  
+  // One permission can belong to MANY roles
+  roles       RolePermission[]
+  
+  @@unique([action, resource, scope])
+}
+
+// Junction table for Role <-> Permission (many-to-many)
+model RolePermission {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  roleId       String     @db.ObjectId
+  permissionId String     @db.ObjectId
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  
+  @@unique([roleId, permissionId])
 }
