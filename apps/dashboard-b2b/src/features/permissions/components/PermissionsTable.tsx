@@ -11,13 +11,13 @@ export default function PermissionsTable({ permissions, fetchPermissions }: Prop
 		<div className="rounded-md border">
 			<div className="overflow-x-auto">
 				<table className="w-full">
-					<thead className="bg-gray-50">
+					<thead className="">
 						<tr className="border-b">
-							<th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Action</th>
-							<th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Resource</th>
-							<th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Scope</th>
-							<th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Description</th>
-							<th className="px-4 py-3 text-right text-sm font-medium text-gray-700">Actions</th>
+							<th className="px-4 py-3 text-left text-sm font-medium ">Action</th>
+							<th className="px-4 py-3 text-left text-sm font-medium ">Resource</th>
+							<th className="px-4 py-3 text-left text-sm font-medium ">Scope</th>
+							<th className="px-4 py-3 text-left text-sm font-medium ">Description</th>
+							<th className="px-4 py-3 text-right text-sm font-medium ">Actions</th>
 						</tr>
 					</thead>
 					<tbody>

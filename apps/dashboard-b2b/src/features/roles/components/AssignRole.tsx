@@ -78,7 +78,7 @@ export default function AssignRole({ fetchRoles, selectedRole, permissions }: Pr
 					{permissions.map((permission) => (
 						<div
 							key={permission.id}
-							className="flex items-start space-x-3 p-3 border rounded-lg hover:bg-gray-50"
+							className="flex items-start space-x-3 p-3 border rounded-lg "
 						>
 							<Checkbox
 								id={`perm-${permission.id}`}

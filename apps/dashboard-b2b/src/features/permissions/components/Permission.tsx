@@ -10,7 +10,7 @@ interface Props {
 
 export default function Permission({ permission, fetchPermissions }: Props) {
 	return (
-		<tr key={permission.id} className="border-b hover:bg-gray-50">
+		<tr key={permission.id} className="border-b ">
 			<td className="px-4 py-3">
 				<Badge>{permission.action}</Badge>
 			</td>
