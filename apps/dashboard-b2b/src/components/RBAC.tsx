@@ -77,8 +77,8 @@ export default function RBAC() {
 	}
 
 	return (
-		<div className="h-full p-8">
-			<div className="max-w-7xl mx-auto">
+		<div className="h-full p-8 ">
+			<div className="max-w-7xl mx-auto h-full">
 				<div className="mb-8">
 					<h1 className="text-3xl font-bold  flex items-center gap-2">
 						<Shield className="w-8 h-8" />

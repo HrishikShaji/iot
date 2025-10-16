@@ -15,18 +15,21 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  email         String    @unique
+  id            String                @id @default(auto()) @map("_id") @db.ObjectId
+  email         String                @unique
   password      String
   emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
   accounts      Account[]
   sessions      Session[]
   
-  // One user has ONE role
-  roleId        String    @db.ObjectId
-  role          Role      @relation(fields: [roleId], references: [id])
+  // B2C role (individual user context)
+  roleId        String?               @db.ObjectId
+  role          Role?                 @relation(fields: [roleId], references: [id])
+  
+  // B2B memberships (organizational context)
+  organizations OrganizationMember[]
 }
 
 model Account {
@@ -64,33 +67,61 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Organization {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        String   // "B2C" or "B2B"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  members     OrganizationMember[]
+  roles       Role[]
+}
+
+model OrganizationMember {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String       @db.ObjectId
+  organizationId String       @db.ObjectId
+  roleId         String       @db.ObjectId
+  joinedAt       DateTime     @default(now())
+  
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           Role         @relation(fields: [roleId], references: [id])
+  
+  @@unique([userId, organizationId])
+}
+
 model Role {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  name        String       @unique // "employee", "customer", "admin"
-  description String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id             String              @id @default(auto()) @map("_id") @db.ObjectId
+  name           String              
+  description    String?
+  context        String              // "B2C" or "B2B"
+  organizationId String?             @db.ObjectId // null for B2C roles, set for org-specific B2B roles
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
   
-  // One role can have MANY users
-  users       User[]
+  organization   Organization?       @relation(fields: [organizationId], references: [id])
+  users          User[]
+  members        OrganizationMember[]
+  permissions    RolePermission[]
   
-  // One role can have MANY permissions
-  permissions RolePermission[]
+  @@unique([name, context, organizationId])
 }
 
 model Permission {
   id          String           @id @default(auto()) @map("_id") @db.ObjectId
-  action      String           // "create", "read", "update", "delete"
-  resource    String           // "users", "profile", etc.
-  scope       String           @default("all") // "all", "own", "department", "team"
+  action      String           
+  resource    String           
+  scope       String           @default("all")
+  context     String           // "B2C", "B2B", or "both"
   description String?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   
-  // One permission can belong to MANY roles
   roles       RolePermission[]
   
-  @@unique([action, resource, scope])
+  @@unique([action, resource, scope, context])
 }
 
 // Junction table for Role <-> Permission (many-to-many)
