@@ -17,7 +17,7 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 	const [permissionForm, setPermissionForm] = useState({
 		action: '',
 		resource: '',
-		scope: 'all',
+		scope: '',
 		description: '',
 		context
 	});
@@ -52,7 +52,7 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 			// 	description: 'Permission created successfully',
 			// });
 
-			setPermissionForm({ action: '', resource: '', scope: 'all', description: '', context });
+			setPermissionForm({ action: '', resource: '', scope: '', description: '', context });
 			setIsPermissionDialogOpen(false);
 			fetchPermissions();
 		} catch (error: any) {
@@ -72,7 +72,7 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 			<DialogTrigger asChild>
 				<Button
 					onClick={() => {
-						setPermissionForm({ context, action: '', resource: '', scope: 'all', description: '' });
+						setPermissionForm({ context, action: '', resource: '', scope: '', description: '' });
 					}}
 				>
 					<Plus className="w-4 h-4 mr-2" />
@@ -132,7 +132,7 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 							onValueChange={(value) => setPermissionForm({ ...permissionForm, scope: value })}
 						>
 							<SelectTrigger id="perm-scope">
-								<SelectValue />
+								<SelectValue placeholder="Select scope" />
 							</SelectTrigger>
 							<SelectContent>
 								{permissionScopes.map((scope) => (

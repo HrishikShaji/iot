@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Role, Permission } from "@/types/form-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react"
 import { Key } from "lucide-react"
 import { DialogTrigger } from "@radix-ui/react-dialog";
@@ -18,6 +18,14 @@ export default function AssignRole({ fetchRoles, selectedRole, permissions }: Pr
 	const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [selectedPermissionIds, setSelectedPermissionIds] = useState<string[]>([]);
+
+	useEffect(() => {
+		if (selectedRole?.permissions) {
+			const permissionIds = selectedRole.permissions.map((p) => p.id)
+			setSelectedPermissionIds(permissionIds)
+		}
+	}, [selectedRole])
+
 	const handleAssignPermissions = async () => {
 		if (!selectedRole) return;
 
@@ -56,6 +64,7 @@ export default function AssignRole({ fetchRoles, selectedRole, permissions }: Pr
 		}
 	};
 
+	console.log("permissions", selectedRole)
 
 	const togglePermission = (permissionId: string) => {
 		setSelectedPermissionIds(prev =>

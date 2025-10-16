@@ -13,5 +13,8 @@ export const permissionResources = [
 	"ota"
 ]
 export const permissionScopes = [
-	"all",
+	"organization",
+	"site",
+	"group",
+	"trailer"
 ];
