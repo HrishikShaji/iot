@@ -20,6 +20,7 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 		resource: permission.resource,
 		scope: permission.scope,
 		description: permission.description,
+		context: permission.context
 	});
 	const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -47,7 +48,7 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 			// 	description: 'Permission updated successfully',
 			// });
 
-			setPermissionForm({ action: '', resource: '', scope: 'all', description: '' });
+			setPermissionForm({ action: '', resource: '', scope: 'all', description: '', context: "B2C" });
 			setSelectedPermission(null);
 			setIsPermissionDialogOpen(false);
 			fetchPermissions();
@@ -71,7 +72,8 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 							action: permission.action,
 							resource: permission.resource,
 							scope: permission.scope,
-							description: permission.description
+							description: permission.description,
+							context: permission.context
 						});
 					}}
 				>

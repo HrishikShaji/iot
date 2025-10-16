@@ -48,7 +48,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
 	try {
 		const body = await request.json();
-		const { name, description, permissionIds } = body;
+		const { name, description, permissionIds, context } = body;
 
 		if (!name) {
 			return NextResponse.json(
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Check if role already exists
-		const existingRole = await prisma.role.findUnique({
+		const existingRole = await prisma.role.findFirst({
 			where: { name },
 		});
 
@@ -74,6 +74,7 @@ export async function POST(request: NextRequest) {
 			data: {
 				name,
 				description,
+				context,
 				permissions: permissionIds
 					? {
 						create: permissionIds.map((permissionId: string) => ({

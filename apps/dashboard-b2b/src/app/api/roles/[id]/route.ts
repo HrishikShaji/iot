@@ -65,7 +65,7 @@ export async function PUT(
 
 		// If name is being changed, check for conflicts
 		if (name && name !== existingRole.name) {
-			const nameConflict = await prisma.role.findUnique({
+			const nameConflict = await prisma.role.findFirst({
 				where: { name },
 			});
 

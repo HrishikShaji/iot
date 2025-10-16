@@ -18,6 +18,7 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 		resource: '',
 		scope: 'all',
 		description: '',
+		context: "B2C"
 	});
 	const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 			// 	description: 'Permission created successfully',
 			// });
 
-			setPermissionForm({ action: '', resource: '', scope: 'all', description: '' });
+			setPermissionForm({ action: '', resource: '', scope: 'all', description: '', context: "B2C" });
 			setIsPermissionDialogOpen(false);
 			fetchPermissions();
 		} catch (error: any) {
@@ -70,7 +71,7 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 			<DialogTrigger asChild>
 				<Button
 					onClick={() => {
-						setPermissionForm({ action: '', resource: '', scope: 'all', description: '' });
+						setPermissionForm({ context: "B2C", action: '', resource: '', scope: 'all', description: '' });
 					}}
 				>
 					<Plus className="w-4 h-4 mr-2" />

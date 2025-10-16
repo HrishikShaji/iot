@@ -49,7 +49,7 @@ export async function PUT(
 	const { id } = await params
 	try {
 		const body = await request.json();
-		const { action, resource, scope, description } = body;
+		const { action, resource, scope, description, context } = body;
 
 		// Check if permission exists
 		const existingPermission = await prisma.permission.findUnique({
@@ -68,16 +68,19 @@ export async function PUT(
 			action &&
 			resource &&
 			scope &&
+			context &&
 			(action !== existingPermission.action ||
 				resource !== existingPermission.resource ||
-				scope !== existingPermission.scope)
+				scope !== existingPermission.scope ||
+				context !== existingPermission.context)
 		) {
 			const conflict = await prisma.permission.findUnique({
 				where: {
-					action_resource_scope: {
+					action_resource_scope_context: {
 						action,
 						resource,
 						scope,
+						context
 					},
 				},
 			});
@@ -98,6 +101,7 @@ export async function PUT(
 				resource,
 				scope,
 				description,
+				context
 			},
 			include: {
 				_count: {

@@ -44,7 +44,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
 	try {
 		const body = await request.json();
-		const { action, resource, scope = 'all', description } = body;
+		const { action, resource, scope = 'all', description, context } = body;
 
 		if (!action || !resource) {
 			return NextResponse.json(
@@ -56,10 +56,11 @@ export async function POST(request: NextRequest) {
 		// Check if permission already exists
 		const existingPermission = await prisma.permission.findUnique({
 			where: {
-				action_resource_scope: {
+				action_resource_scope_context: {
 					action,
 					resource,
 					scope,
+					context
 				},
 			},
 		});
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
 				resource,
 				scope,
 				description,
+				context
 			},
 			include: {
 				_count: {

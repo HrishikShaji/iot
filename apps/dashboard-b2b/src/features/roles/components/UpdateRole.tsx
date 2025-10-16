@@ -16,7 +16,7 @@ export default function UpdateRole({ fetchRoles, role }: Props) {
 	const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const [roleForm, setRoleForm] = useState({ name: role.name, description: role.description });
+	const [roleForm, setRoleForm] = useState({ name: role.name, description: role.description, context: role.context });
 
 	const handleUpdateRole = async () => {
 		if (!roleForm.name) return;
@@ -29,6 +29,7 @@ export default function UpdateRole({ fetchRoles, role }: Props) {
 				body: JSON.stringify({
 					name: roleForm.name,
 					description: roleForm.description,
+					context: roleForm.context
 				}),
 			});
 
@@ -42,7 +43,7 @@ export default function UpdateRole({ fetchRoles, role }: Props) {
 			// 	description: 'Role updated successfully',
 			// });
 
-			setRoleForm({ name: '', description: '' });
+			setRoleForm({ name: '', description: '', context: role.context });
 			setIsRoleDialogOpen(false);
 			fetchRoles();
 		} catch (error: any) {
@@ -60,7 +61,7 @@ export default function UpdateRole({ fetchRoles, role }: Props) {
 			<DialogTrigger asChild>
 				<Button
 					onClick={() => {
-						setRoleForm({ name: role.name, description: role.description });
+						setRoleForm({ name: role.name, description: role.description, context: role.context });
 					}}
 				>
 					<Edit className="w-4 h-4 mr-2" />
