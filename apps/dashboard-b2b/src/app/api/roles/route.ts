@@ -2,9 +2,22 @@ import { prisma } from '@repo/db';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET all roles
-export async function GET() {
+export async function GET(request: NextRequest) {
+	const { searchParams } = new URL(request.url)
+	const context = searchParams.get("context")
+
+	if (!context) {
+		return NextResponse.json(
+			{ error: 'No context' },
+			{ status: 400 }
+		);
+
+	}
 	try {
 		const roles = await prisma.role.findMany({
+			where: {
+				context
+			},
 			include: {
 				permissions: {
 					include: {

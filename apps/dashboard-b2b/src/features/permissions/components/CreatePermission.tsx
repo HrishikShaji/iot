@@ -6,19 +6,20 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Plus, Loader2 } from "lucide-react"
 import { useState } from "react";
-import { permissionActions, permissionScopes } from "@/lib/permission-constants";
+import { permissionActions, permissionResources, permissionScopes } from "@/lib/permission-constants";
 
 interface Props {
 	fetchPermissions: () => void;
+	context: string;
 }
 
-export default function CreatePermission({ fetchPermissions }: Props) {
+export default function CreatePermission({ fetchPermissions, context }: Props) {
 	const [permissionForm, setPermissionForm] = useState({
 		action: '',
 		resource: '',
 		scope: 'all',
 		description: '',
-		context: "B2C"
+		context
 	});
 	const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -51,7 +52,7 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 			// 	description: 'Permission created successfully',
 			// });
 
-			setPermissionForm({ action: '', resource: '', scope: 'all', description: '', context: "B2C" });
+			setPermissionForm({ action: '', resource: '', scope: 'all', description: '', context });
 			setIsPermissionDialogOpen(false);
 			fetchPermissions();
 		} catch (error: any) {
@@ -71,7 +72,7 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 			<DialogTrigger asChild>
 				<Button
 					onClick={() => {
-						setPermissionForm({ context: "B2C", action: '', resource: '', scope: 'all', description: '' });
+						setPermissionForm({ context, action: '', resource: '', scope: 'all', description: '' });
 					}}
 				>
 					<Plus className="w-4 h-4 mr-2" />
@@ -108,14 +109,21 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="perm-resource">Resource *</Label>
-						<Input
-							id="perm-resource"
-							placeholder="e.g., users, products"
+						<Select
 							value={permissionForm.resource}
-							onChange={(e) =>
-								setPermissionForm({ ...permissionForm, resource: e.target.value })
-							}
-						/>
+							onValueChange={(value) => setPermissionForm({ ...permissionForm, resource: value })}
+						>
+							<SelectTrigger id="perm-resource">
+								<SelectValue placeholder="Select resource" />
+							</SelectTrigger>
+							<SelectContent>
+								{permissionResources.map((action) => (
+									<SelectItem key={action} value={action}>
+										{action}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="perm-scope">Scope *</Label>

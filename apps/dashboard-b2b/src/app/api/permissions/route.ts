@@ -2,9 +2,22 @@ import { prisma } from '@repo/db';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET all permissions
-export async function GET() {
+export async function GET(request: NextRequest) {
+	const { searchParams } = new URL(request.url)
+	const context = searchParams.get("context")
+
+	if (!context) {
+		return NextResponse.json(
+			{ error: 'No context' },
+			{ status: 400 }
+		);
+
+	}
 	try {
 		const permissions = await prisma.permission.findMany({
+			where: {
+				context
+			},
 			include: {
 				_count: {
 					select: {

@@ -109,6 +109,7 @@ export default function RBAC() {
 									</div>
 									<CreateRole
 										fetchRoles={fetchRoles}
+										context='B2C'
 									/>
 								</div>
 							</CardHeader>
@@ -132,6 +133,7 @@ export default function RBAC() {
 									</div>
 									<CreatePermission
 										fetchPermissions={fetchPermissions}
+										context='B2C'
 									/>
 								</div>
 							</CardHeader>

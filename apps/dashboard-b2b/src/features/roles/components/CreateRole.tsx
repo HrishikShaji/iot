@@ -9,14 +9,15 @@ import { Plus, Loader2 } from "lucide-react"
 
 interface Props {
 	fetchRoles: () => void;
+	context: string;
 }
 
-export default function CreateRole({ fetchRoles }: Props) {
+export default function CreateRole({ fetchRoles, context }: Props) {
 	const [selectedRole, setSelectedRole] = useState<Role | null>(null);
 	const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const [roleForm, setRoleForm] = useState({ name: '', description: '', context: "B2C" });
+	const [roleForm, setRoleForm] = useState({ name: '', description: '', context });
 	const handleCreateRole = async () => {
 		if (!roleForm.name) {
 			// toast({
@@ -35,7 +36,7 @@ export default function CreateRole({ fetchRoles }: Props) {
 				body: JSON.stringify({
 					name: roleForm.name,
 					description: roleForm.description,
-					context: roleForm.context,
+					context,
 					permissionIds: [],
 				}),
 			});
@@ -50,7 +51,7 @@ export default function CreateRole({ fetchRoles }: Props) {
 			// 	description: 'Role created successfully',
 			// });
 
-			setRoleForm({ name: '', description: '', context: "B2C" });
+			setRoleForm({ name: '', description: '', context });
 			setIsRoleDialogOpen(false);
 			fetchRoles();
 		} catch (error: any) {
@@ -70,7 +71,7 @@ export default function CreateRole({ fetchRoles }: Props) {
 				<Button
 					onClick={() => {
 						setSelectedRole(null);
-						setRoleForm({ name: '', description: '', context: "B2C" });
+						setRoleForm({ name: '', description: '', context });
 					}}
 				>
 					<Plus className="w-4 h-4 mr-2" />

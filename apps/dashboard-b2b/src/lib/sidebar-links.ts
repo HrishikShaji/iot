@@ -5,40 +5,35 @@ export const sidebarLinks = [
 		icon: "Home",
 	},
 	{
-		title: "Users",
+		title: "B2C",
 		icon: "Users",
 		children: [
 			{
-				title: "All Users",
-				href: "/users",
+				title: "roles",
+				href: "/b2c/roles",
 				icon: "User",
 			},
 			{
-				title: "Add User",
-				href: "/users/add",
+				title: "permissions",
+				href: "/b2c/permissions",
 				icon: "UserPlus",
 			},
 		],
 	},
 	{
-		title: "Content",
-		icon: "FileText",
+		title: "B2B",
+		icon: "Users",
 		children: [
 			{
-				title: "Posts",
-				href: "/content/posts",
-				icon: "FileText",
+				title: "roles",
+				href: "/b2b/roles",
+				icon: "User",
 			},
 			{
-				title: "Pages",
-				href: "/content/pages",
-				icon: "File",
+				title: "permissions",
+				href: "/b2b/permissions",
+				icon: "UserPlus",
 			},
 		],
-	},
-	{
-		title: "Settings",
-		href: "/settings",
-		icon: "Settings",
 	},
 ]
