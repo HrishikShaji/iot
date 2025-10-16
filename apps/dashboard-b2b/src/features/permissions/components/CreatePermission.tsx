@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Plus, Loader2 } from "lucide-react"
 import { useState } from "react";
+import { permissionActions, permissionScopes } from "@/lib/permission-constants";
 
 interface Props {
 	fetchPermissions: () => void;
@@ -21,8 +22,6 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 	const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	const actions = ['create', 'read', 'update', 'delete'];
-	const scopes = ['all', 'own', 'department', 'team'];
 	const handleCreatePermission = async () => {
 		if (!permissionForm.action || !permissionForm.resource) {
 			// toast({
@@ -98,7 +97,7 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 								<SelectValue placeholder="Select action" />
 							</SelectTrigger>
 							<SelectContent>
-								{actions.map((action) => (
+								{permissionActions.map((action) => (
 									<SelectItem key={action} value={action}>
 										{action}
 									</SelectItem>
@@ -127,7 +126,7 @@ export default function CreatePermission({ fetchPermissions }: Props) {
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								{scopes.map((scope) => (
+								{permissionScopes.map((scope) => (
 									<SelectItem key={scope} value={scope}>
 										{scope}
 									</SelectItem>

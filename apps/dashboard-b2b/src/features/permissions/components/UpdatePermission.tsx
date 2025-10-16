@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Plus, Loader2, Edit } from "lucide-react"
 import { useState } from "react";
 import { Permission } from "@/types/form-types";
+import { permissionActions, permissionScopes } from "@/lib/permission-constants";
 
 interface Props {
 	fetchPermissions: () => void;
@@ -24,8 +25,6 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 	const [loading, setLoading] = useState(false);
 	const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null);
 
-	const actions = ['create', 'read', 'update', 'delete'];
-	const scopes = ['all', 'own', 'department', 'team'];
 
 	const handleUpdatePermission = async () => {
 		if (!permissionForm.action || !permissionForm.resource) return;
@@ -99,7 +98,7 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 								<SelectValue placeholder="Select action" />
 							</SelectTrigger>
 							<SelectContent>
-								{actions.map((action) => (
+								{permissionActions.map((action) => (
 									<SelectItem key={action} value={action}>
 										{action}
 									</SelectItem>
@@ -128,7 +127,7 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								{scopes.map((scope) => (
+								{permissionScopes.map((scope) => (
 									<SelectItem key={scope} value={scope}>
 										{scope}
 									</SelectItem>
