@@ -14,6 +14,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
 import { Role } from "@repo/db"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Loader2 } from "lucide-react"
 
 export default function Page() {
 	const [email, setEmail] = useState("")
@@ -23,6 +25,7 @@ export default function Page() {
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(false)
 	const [roles, setRoles] = useState<Role[]>([])
+	const [rolesLoading, setRolesLoading] = useState(false)
 	const router = useRouter()
 
 	useEffect(() => {
@@ -32,6 +35,7 @@ export default function Page() {
 	const fetchRoles = async () => {
 		console.log("this ran")
 		try {
+			setRolesLoading(true)
 			const response = await fetch('/api/roles?context=B2C');
 			if (!response.ok) throw new Error('Failed to fetch roles');
 			const data = await response.json();
@@ -43,6 +47,7 @@ export default function Page() {
 			// 	variant: 'destructive',
 			// });
 		} finally {
+			setRolesLoading(false)
 		}
 	};
 
@@ -164,21 +169,26 @@ export default function Page() {
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="role">Role</Label>
-							<Select
-								value={roleId}
-								onValueChange={(value) => setRoleId(value)}
-							>
-								<SelectTrigger id="role">
-									<SelectValue placeholder="Select role" />
-								</SelectTrigger>
-								<SelectContent>
-									{roles.map((role) => (
-										<SelectItem key={role.id} value={role.id}>
-											{role.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
+							<Badge>This is for development,will be removed later.</Badge>
+							{rolesLoading ?
+								<Loader2 className="w-4 h-4 mr-2 animate-spin" /> :
+								<Select
+									value={roleId}
+									onValueChange={(value) => setRoleId(value)}
+								>
+									<SelectTrigger id="role">
+										<SelectValue placeholder="Select role" />
+									</SelectTrigger>
+									<SelectContent>
+										{roles.map((role) => (
+											<SelectItem key={role.id} value={role.id}>
+												{role.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+
+							}
 						</div>
 
 						{error && (
