@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
@@ -12,21 +12,53 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
+import { Role } from "@repo/db"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Loader2 } from "lucide-react"
 
 export default function Page() {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
+	const [roleId, setRoleId] = useState("")
 	const [confirmPassword, setConfirmPassword] = useState("")
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(false)
+	const [roles, setRoles] = useState<Role[]>([])
+	const [rolesLoading, setRolesLoading] = useState(false)
 	const router = useRouter()
+
+	useEffect(() => {
+		fetchRoles()
+	}, [])
+
+	const fetchRoles = async () => {
+		console.log("this ran")
+		try {
+			setRolesLoading(true)
+			const response = await fetch('/api/roles?context=B2C');
+			if (!response.ok) throw new Error('Failed to fetch roles');
+			const data = await response.json();
+			setRoles(data);
+		} catch (error) {
+			// toast({
+			// 	title: 'Error',
+			// 	description: 'Failed to fetch roles',
+			// 	variant: 'destructive',
+			// });
+		} finally {
+			setRolesLoading(false)
+		}
+	};
+
+	console.log("Available roles", roles)
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setError("")
 
 		// Validation
-		if (!email || !password || !confirmPassword) {
+		if (!email || !password || !confirmPassword || !roleId) {
 			setError("All fields are required")
 			return
 		}
@@ -50,7 +82,7 @@ export default function Page() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email, password }),
+				body: JSON.stringify({ email, password, roleId }),
 			})
 
 			const data = await res.json()
@@ -81,7 +113,7 @@ export default function Page() {
 	}
 
 	return (
-		<div className="min-h-screen flex items-center justify-center p-4">
+		<div className="h-full flex items-center justify-center p-4">
 			<Card className="w-full max-w-md border-border/40 shadow-sm">
 				<CardHeader className="space-y-2 text-center">
 					<CardTitle className="text-3xl  tracking-tight text-balance">Create an account</CardTitle>
@@ -134,6 +166,29 @@ export default function Page() {
 								required
 								className="h-11"
 							/>
+						</div>
+						<div className="space-y-2">
+							<Label htmlFor="role">Role</Label>
+							<Badge>This is for development,will be removed later.</Badge>
+							{rolesLoading ?
+								<Loader2 className="w-4 h-4 mr-2 animate-spin" /> :
+								<Select
+									value={roleId}
+									onValueChange={(value) => setRoleId(value)}
+								>
+									<SelectTrigger id="role">
+										<SelectValue placeholder="Select role" />
+									</SelectTrigger>
+									<SelectContent>
+										{roles.map((role) => (
+											<SelectItem key={role.id} value={role.id}>
+												{role.name}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+
+							}
 						</div>
 
 						{error && (

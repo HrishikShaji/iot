@@ -5,7 +5,7 @@ import { prisma } from "@repo/db"
 
 export async function POST(req: Request) {
 	try {
-		const { email, password } = await req.json()
+		const { email, password, roleId } = await req.json()
 
 		if (!email || !password) {
 			return NextResponse.json(
@@ -29,19 +29,18 @@ export async function POST(req: Request) {
 		// Hash password
 		const hashedPassword = await bcrypt.hash(password, 10)
 
-		// Create user
-		const role = await prisma.role.findFirst({ where: { name: "user" } })
+		// const role = await prisma.role.findFirst({ where: { name: "user" } })
 		// Create user
 
-		console.log("this is role", role)
-		if (!role) {
-			throw new Error("No Role")
-		}
+		// console.log("this is role", role)
+		// if (!role) {
+		// 	throw new Error("No Role")
+		// }
 		const user = await prisma.user.create({
 			data: {
 				email,
 				password: hashedPassword,
-				roleId: role.id
+				roleId
 			},
 		})
 
