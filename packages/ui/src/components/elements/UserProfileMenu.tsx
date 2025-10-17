@@ -4,6 +4,7 @@ import { useState } from "react"
 import { User, LogOut, Loader2, ChevronDown } from "lucide-react"
 import { Button } from "../ui/button"
 import { Avatar, AvatarFallback } from "../ui/avatar"
+import { Card } from "../ui/card"
 
 interface Props {
 	email: string | undefined | null;
@@ -32,11 +33,7 @@ export default function UserProfileMenu({ email, status, signOut }: Props) {
 		return null
 	}
 
-	const initials = email
-		? email.split("@")[0]
-			.substring(0, 2)
-			.toUpperCase()
-		: "U"
+	const initials = email ? email.split("@")[0]?.substring(0, 2).toUpperCase() : "U"
 
 	return (
 		<div className="relative">
@@ -45,8 +42,8 @@ export default function UserProfileMenu({ email, status, signOut }: Props) {
 				onClick={() => setIsExpanded(!isExpanded)}
 				className="group"
 			>
-				<Avatar className="h-10 w-10 border-2 border-primary/10 bg-white cursor-pointer transition-all hover:border-primary/30 hover:scale-105">
-					<AvatarFallback className="bg-primary/5  font-semibold group-hover:bg-primary/10">
+				<Avatar className="h-10 w-10 border-2 border-primary/10  cursor-pointer transition-all hover:border-primary/30 hover:scale-105">
+					<AvatarFallback className="  font-semibold ">
 						{initials}
 					</AvatarFallback>
 				</Avatar>
@@ -62,8 +59,8 @@ export default function UserProfileMenu({ email, status, signOut }: Props) {
 					/>
 
 					{/* Dropdown Card */}
-					<div className="absolute bg-white rounded-2xl right-0 top-12 z-[9999]  shadow-lg animate-in slide-in-from-top-2 duration-200">
-						<div className="p-4">
+					<Card className="absolute  rounded-2xl right-0 top-12 z-[9999]  shadow-lg animate-in slide-in-from-top-2 duration-200">
+						<div className="px-4">
 							<div className="flex items-center gap-3 pb-3 border-b">
 								<div className="min-w-0 flex-1">
 									<p className="font-semibold text-foreground truncate text-sm">
@@ -94,7 +91,7 @@ export default function UserProfileMenu({ email, status, signOut }: Props) {
 								</Button>
 							</div>
 						</div>
-					</div>
+					</Card>
 				</>
 			)}
 		</div>

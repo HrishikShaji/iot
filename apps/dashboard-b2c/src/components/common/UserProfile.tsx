@@ -3,6 +3,7 @@ import { signOut, useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import UserProfileMenu from "@repo/ui/components/elements/UserProfileMenu"
 import { useEffect } from "react"
+import { Loader2 } from "lucide-react"
 
 
 export default function UserProfile() {
@@ -17,9 +18,7 @@ export default function UserProfile() {
 
 	if (status === "loading") {
 		return (
-			<div className="h-screen flex items-center justify-center">
-				<p className="text-lg">Loading...</p>
-			</div>
+			<Loader2 className="w-4 h-4 mr-2 animate-spin" />
 		)
 	}
 
