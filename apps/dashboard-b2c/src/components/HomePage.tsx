@@ -23,11 +23,14 @@ export default function HomePage({ email, userId, status }: Props) {
 	}
 
 	return (
-		<Dashboard
-			switchData={switchData}
-			powerData={powerData}
-			waterLevelData={waterLevelData}
-			temperatureData={temperatureData}
-		/>
+		<>
+			{/* <div className="p-10 bg-red-500 w-full">hello</div> */}
+			<Dashboard
+				switchData={switchData}
+				powerData={powerData}
+				waterLevelData={waterLevelData}
+				temperatureData={temperatureData}
+			/>
+		</>
 	)
 }

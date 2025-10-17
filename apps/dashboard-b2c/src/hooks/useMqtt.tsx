@@ -36,7 +36,7 @@ export default function useMqtt() {
 					if (err) {
 						console.log(`Subscription error for ${topic}:`, err)
 					} else {
-						console.log(`Subscribed to ${topic} topic`)
+						// console.log(`Subscribed to ${topic} topic`)
 					}
 				})
 			})
@@ -45,7 +45,7 @@ export default function useMqtt() {
 		mqttClient.on("message", (topic, message) => {
 			try {
 				const data = JSON.parse(message.toString())
-				console.log("Received message:", { topic, data })
+				// console.log("Received message:", { topic, data })
 
 				switch (topic) {
 					case "switch/state":

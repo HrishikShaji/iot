@@ -43,8 +43,8 @@ export default function RootLayout({
 			>
 				<SessionProvider>
 					<MqttProvider>
-						<div className="[--header-height:100px]">
-							<SidebarProvider className="flex flex-col">
+						<div className="h-screen flex flex-col [--header-height:100px]">
+							<SidebarProvider className="flex flex-col flex-1 min-h-0">
 								<Header
 									title="Trailer Dashboard"
 									subtitle="View trailer metrics"
@@ -52,13 +52,11 @@ export default function RootLayout({
 									<MqttConnectionStatus />
 									<UserProfile />
 								</Header>
-								<div className="flex flex-1">
+								<div className="flex flex-1 min-h-0">
 									<AppSidebar links={sidebarLinks} />
-									<SidebarInset>
-										<div className="flex flex-1 flex-col gap-4 p-4">
-											<div className="h-full w-full  overflow-auto">
-												{children}
-											</div>
+									<SidebarInset className="flex-1 min-h-0">
+										<div className="flex flex-col h-full gap-4 p-4">
+											{children}
 										</div>
 									</SidebarInset>
 								</div>

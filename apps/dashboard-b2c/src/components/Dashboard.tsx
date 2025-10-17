@@ -1,9 +1,4 @@
 "use client"
-import { useState, useEffect } from "react"
-import mqtt, { type MqttClient } from "mqtt"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Activity, Thermometer, Droplets, Zap, Power, Wifi, WifiOff } from "lucide-react"
 import SensorCard from "./SensorCard"
 import PowerMonitoring from "@/features/power/components/PowerMonitoring"
 import PowerInfo from "@/features/power/components/PowerInfo"
@@ -13,9 +8,7 @@ import TemperatureMonitoring from "@/features/temperature/components/Temperature
 import TemperatureInfo from "@/features/temperature/components/TemperatureInfo"
 import SwitchMonitoring from "@/features/switch/components/SwitchMonitoring"
 import SwitchInfo from "@/features/switch/components/SwitchInfo"
-import { SERVER_URL } from "@/lib/variables"
 import { PowerSensorType, SwitchSensorType, TemperatureSensorType, WaterSensorType } from "@repo/types"
-import useMqtt from "@/hooks/useMqtt"
 
 interface Props {
 	switchData: SwitchSensorType | null;
@@ -27,46 +20,47 @@ interface Props {
 
 export default function Dashboard({ waterLevelData, powerData, switchData, temperatureData }: Props) {
 
-
 	return (
-		<div className="h-full p-4 md:p-6 lg:p-8 relative"
-			style={{
-				backgroundImage: "url('/home_m_2.jpg')",
-				backgroundSize: 'cover',
-				backgroundRepeat: 'no-repeat',
-				backgroundPosition: 'center'
-			}}
-		>
-			{/* Sensor Controls Grid */}
-			<div className="absolute top-0 left-0  bg-gradient-to-r from-black/50 to-black h-full w-full"></div>
+		<div className="flex-1 min-h-0 w-full overflow-auto">
+			<div className="h-full p-4 md:p-6 lg:p-8 relative"
+				style={{
+					backgroundImage: "url('/home_m_2.jpg')",
+					backgroundSize: 'cover',
+					backgroundRepeat: 'no-repeat',
+					backgroundPosition: 'center'
+				}}
+			>
+				{/* Sensor Controls Grid */}
+				<div className="absolute top-0 left-0  bg-gradient-to-r from-black/50 to-black h-full w-full"></div>
 
-			<div className="absolute z-10 bottom-10 left-0 px-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-				<SensorCard
-					title="Switch  Sensor"
-					icon={<SwitchMonitoring />}
-				>
-					<SwitchInfo switchData={switchData} />
-				</SensorCard>
-				<SensorCard
-					title="Temperature Sensor"
-					icon={<TemperatureMonitoring />}
-				>
-					<TemperatureInfo temperatureData={temperatureData} />
-				</SensorCard>
-				<SensorCard
-					title="Water Sensor"
-					icon={<WaterMonitoring />}
-				>
-					<WaterInfo waterLevelData={waterLevelData} />
-				</SensorCard>
-				<SensorCard
-					title="Power Sensor"
-					icon={<PowerMonitoring />}
-				>
-					<PowerInfo powerData={powerData} />
-				</SensorCard>
+				<div className=" px-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+					<SensorCard
+						title="Switch  Sensor"
+						icon={<SwitchMonitoring />}
+					>
+						<SwitchInfo switchData={switchData} />
+					</SensorCard>
+					<SensorCard
+						title="Temperature Sensor"
+						icon={<TemperatureMonitoring />}
+					>
+						<TemperatureInfo temperatureData={temperatureData} />
+					</SensorCard>
+					<SensorCard
+						title="Water Sensor"
+						icon={<WaterMonitoring />}
+					>
+						<WaterInfo waterLevelData={waterLevelData} />
+					</SensorCard>
+					<SensorCard
+						title="Power Sensor"
+						icon={<PowerMonitoring />}
+					>
+						<PowerInfo powerData={powerData} />
+					</SensorCard>
+				</div>
+
 			</div>
-
 		</div>
 	)
 }

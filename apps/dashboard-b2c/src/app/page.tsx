@@ -26,6 +26,8 @@ export default function Home() {
 	if (status !== "authenticated" || !session.user?.id || !session.user.email) {
 		return null
 	}
+
+	console.log(session.user)
 	return (
 		<HomePage
 			email={session.user.email}

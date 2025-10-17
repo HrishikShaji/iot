@@ -37,7 +37,7 @@ export default function usePowerSensorData() {
 						console.log("🔥 Parse error for item:", item, err);
 					}
 				})
-				console.log(parsedArray)
+				// console.log(parsedArray)
 				setMessages(parsedArray)
 			}
 		});
