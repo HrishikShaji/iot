@@ -23,7 +23,10 @@ model User {
   updatedAt     DateTime              @updatedAt
   accounts      Account[]
   sessions      Session[]
-  
+
+  trailerId     String?                @db.ObjectId
+  trailer       Trailer?               @relation(fields:[trailerId],references:[id])
+
   // B2C role (individual user context)
   roleId        String               @db.ObjectId
   role          Role                 @relation(fields: [roleId], references: [id])
@@ -65,6 +68,15 @@ model VerificationToken {
   expires    DateTime
   
   @@unique([identifier, token])
+}
+
+model Trailer {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+  
 }
 
 model Organization {
