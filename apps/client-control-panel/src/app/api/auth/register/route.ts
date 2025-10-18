@@ -5,9 +5,9 @@ import { prisma } from "@repo/db"
 
 export async function POST(req: Request) {
 	try {
-		const { email, password, roleId } = await req.json()
+		const { email, password, roleId, trailerName } = await req.json()
 
-		if (!email || !password) {
+		if (!email || !password || !trailerName) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
@@ -43,6 +43,7 @@ export async function POST(req: Request) {
 				roleId
 			},
 		})
+
 
 		return NextResponse.json(
 			{ message: "User created successfully", userId: user.id },
