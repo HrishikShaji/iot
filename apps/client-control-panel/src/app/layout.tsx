@@ -9,6 +9,7 @@ import MqttConnectionStatus from "@/components/common/MqttConnectionStatus";
 import UserProfile from "@/components/common/UserProfile";
 import { AppSidebar } from "@repo/ui/components/elements/AppSidebar"
 import { sidebarLinks } from "@/lib/sidebar-links"
+import TrailerInfo from "@/components/common/TrailerInfo";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -48,6 +49,7 @@ export default function RootLayout({
 									title="Trailer Control Panel"
 									subtitle="Interactive sensor control with sliders and toggles"
 								>
+									<TrailerInfo />
 									<MqttConnectionStatus />
 									<UserProfile />
 								</Header>

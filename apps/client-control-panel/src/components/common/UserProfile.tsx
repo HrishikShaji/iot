@@ -30,7 +30,7 @@ export default function UserProfile() {
 		await signOut({ redirect: false })
 		router.push("/auth/login")
 	}
-
+	console.log(session.user.trailer)
 
 	return (
 		<UserProfileMenu
