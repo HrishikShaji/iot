@@ -44,6 +44,17 @@ export async function POST(req: Request) {
 			},
 		})
 
+		const role = await prisma.role.findUnique({ where: { id: roleId } })
+
+		if (role?.name === "Owner Admin") {
+			const trailer = await prisma.trailer.create({
+				data: {
+					name: trailerName,
+					userId: user.id
+				}
+			})
+			console.log("TRAILER CREATED", trailer)
+		}
 
 		return NextResponse.json(
 			{ message: "User created successfully", userId: user.id },

@@ -21,6 +21,7 @@ export default function Page() {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 	const [roleId, setRoleId] = useState("")
+	const [trailerName, setTrailerName] = useState("")
 	const [confirmPassword, setConfirmPassword] = useState("")
 	const [error, setError] = useState("")
 	const [loading, setLoading] = useState(false)
@@ -82,7 +83,7 @@ export default function Page() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email, password, roleId }),
+				body: JSON.stringify({ email, password, roleId, trailerName }),
 			})
 
 			const data = await res.json()
@@ -123,6 +124,20 @@ export default function Page() {
 				</CardHeader>
 				<CardContent>
 					<form onSubmit={handleSubmit} className="space-y-5">
+						<div className="space-y-2">
+							<Label htmlFor="trailerName" className="text-sm font-medium">
+								Trailer Name
+							</Label>
+							<Input
+								id="trailerName"
+								type="text"
+								placeholder="my trailer"
+								value={trailerName}
+								onChange={(e) => setTrailerName(e.target.value)}
+								required
+								className="h-11"
+							/>
+						</div>
 						<div className="space-y-2">
 							<Label htmlFor="email" className="text-sm font-medium">
 								Email address
