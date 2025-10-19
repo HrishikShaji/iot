@@ -15,24 +15,92 @@ datasource db {
 }
 
 model User {
-  id            String                @id @default(auto()) @map("_id") @db.ObjectId
-  email         String                @unique
-  password      String
-  emailVerified DateTime?
-  createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @updatedAt
-  accounts      Account[]
-  sessions      Session[]
-
-  // One-to-one relation with Trailer
-  trailer       Trailer?              @relation("UserTrailer")
-
-  // B2C role (individual user context)
-  roleId        String                @db.ObjectId
-  role          Role                  @relation(fields: [roleId], references: [id])
+  id                String                @id @default(auto()) @map("_id") @db.ObjectId
+  email             String                @unique
+  password          String
+  emailVerified     DateTime?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  accounts          Account[]
+  sessions          Session[]
   
-  // B2B memberships (organizational context)
-  organizations OrganizationMember[]
+  // Owned trailer (one-to-one)
+  trailer           Trailer?              @relation("UserTrailer")
+  
+  // Trailers this user has access to (shared)
+  trailerAccesses   TrailerAccess[]       @relation("TrailerAccesses")
+  
+  // Invitations sent by this user
+  sentInvitations   Invitation[]          @relation("SentInvitations")
+  
+  // Access grants made by this user
+  grantedAccesses   TrailerAccess[]       @relation("GrantedAccesses")
+  
+  // B2C role
+  roleId            String                @db.ObjectId
+  role              Role                  @relation(fields: [roleId], references: [id])
+  
+  // B2B memberships
+  organizations     OrganizationMember[]
+}
+
+model Trailer {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  
+  // Owner
+  userId      String           @unique @db.ObjectId
+  user        User             @relation("UserTrailer", fields: [userId], references: [id])
+  
+  // Shared access
+  sharedWith  TrailerAccess[]  @relation("SharedWith")
+  
+  // Invitations for this trailer
+  invitations Invitation[]     @relation("TrailerInvitations")
+}
+
+model Invitation {
+  id            String           @id @default(auto()) @map("_id") @db.ObjectId
+  email         String
+  inviterId     String           @db.ObjectId
+  inviter       User             @relation("SentInvitations", fields: [inviterId], references: [id])
+  trailerId     String           @db.ObjectId
+  trailer       Trailer          @relation("TrailerInvitations", fields: [trailerId], references: [id])
+  token         String           @unique
+  status        InvitationStatus @default(PENDING)
+  expiresAt     DateTime
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  
+  @@unique([email, trailerId])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+}
+
+model TrailerAccess {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String     @db.ObjectId
+  user        User       @relation("TrailerAccesses", fields: [userId], references: [id])
+  trailerId   String     @db.ObjectId
+  trailer     Trailer    @relation("SharedWith", fields: [trailerId], references: [id])
+  accessType  AccessType @default(VIEW)
+  grantedAt   DateTime   @default(now())
+  grantedBy   String     @db.ObjectId
+  granter     User       @relation("GrantedAccesses", fields: [grantedBy], references: [id])
+  
+  @@unique([userId, trailerId])
+}
+
+enum AccessType {
+  VIEW
+  EDIT
+  ADMIN
 }
 
 model Account {
@@ -70,16 +138,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Trailer {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Foreign key to User (owning side)
-  userId      String   @unique @db.ObjectId
-  user        User     @relation("UserTrailer", fields: [userId], references: [id])
-}
 
 model Organization {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
