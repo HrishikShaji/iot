@@ -5,7 +5,7 @@ import { prisma } from "@repo/db"
 
 export async function POST(req: Request) {
 	try {
-		const { email, password, roleId } = await req.json()
+		const { email, password, roleId, invitationToken } = await req.json()
 
 		if (!email || !password) {
 			return NextResponse.json(
@@ -36,6 +36,60 @@ export async function POST(req: Request) {
 		// if (!role) {
 		// 	throw new Error("No Role")
 		// }
+		//
+
+
+		if (invitationToken) {
+			const invitation = await prisma.invitation.findUnique({
+				where: { token: invitationToken },
+			});
+
+			if (
+				!invitation ||
+				invitation.status !== 'PENDING' ||
+				invitation.expiresAt < new Date() ||
+				invitation.email !== email
+			) {
+				return NextResponse.json(
+					{ error: 'Invalid or expired invitation' },
+					{ status: 400 }
+				);
+			}
+
+			// Create user and grant access in transaction
+			const result = await prisma.$transaction(async (tx) => {
+
+				const user = await tx.user.create({
+					data: {
+						email,
+						password: hashedPassword,
+						roleId,
+					},
+				});
+
+				await tx.trailerAccess.create({
+					data: {
+						userId: user.id,
+						trailerId: invitation.trailerId,
+						grantedBy: invitation.inviterId,
+						accessType: 'VIEW',
+					},
+				});
+
+				await tx.invitation.update({
+					where: { id: invitation.id },
+					data: { status: 'ACCEPTED' },
+				});
+
+				return user;
+			});
+
+			return NextResponse.json({
+				message: 'Account created successfully with trailer access',
+				user: { id: result.id, email: result.email },
+			});
+		}
+
 		const user = await prisma.user.create({
 			data: {
 				email,

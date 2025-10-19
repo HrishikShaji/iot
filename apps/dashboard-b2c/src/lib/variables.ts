@@ -1,3 +1,8 @@
+export const SMTP_HOST = process.env.SMTP_HOST || ""
+export const SMTP_USER = process.env.SMTP_USER || ""
+export const SMTP_PASS = process.env.SMTP_PASS || ""
+export const NODE_ENV = process.env.NODE_ENV || ""
+export const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL || ""
 export const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || ""
 export const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || ""
 export const FIREBASE_AUTH_DOMAIN = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || ""

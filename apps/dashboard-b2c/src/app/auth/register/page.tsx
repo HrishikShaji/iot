@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -27,6 +27,11 @@ export default function Page() {
 	const [roles, setRoles] = useState<Role[]>([])
 	const [rolesLoading, setRolesLoading] = useState(false)
 	const router = useRouter()
+	const searchParams = useSearchParams();
+	const invitationToken = searchParams.get('token');
+	const [validatingToken, setValidatingToken] = useState(!!invitationToken);
+	const [invitationInfo, setInvitationInfo] = useState<any>(null);
+
 
 	useEffect(() => {
 		fetchRoles()
@@ -48,6 +53,31 @@ export default function Page() {
 			// });
 		} finally {
 			setRolesLoading(false)
+		}
+	};
+
+
+	useEffect(() => {
+		if (invitationToken) {
+			validateInvitation();
+		}
+	}, [invitationToken]);
+
+	const validateInvitation = async () => {
+		try {
+			const response = await fetch(`/api/invitations/validate?token=${invitationToken}`);
+			const data = await response.json();
+
+			if (!response.ok) {
+				setError(data.error || 'Invalid invitation');
+				return;
+			}
+
+			setInvitationInfo(data.invitation);
+		} catch (error) {
+			setError('Failed to validate invitation');
+		} finally {
+			setValidatingToken(false);
 		}
 	};
 
@@ -111,7 +141,16 @@ export default function Page() {
 			setLoading(false)
 		}
 	}
-
+	if (validatingToken) {
+		return (
+			<div className="min-h-screen flex items-center justify-center bg-gray-50">
+				<div className="text-center">
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+					<p className="mt-4 text-gray-600">Validating invitation...</p>
+				</div>
+			</div>
+		);
+	}
 	return (
 		<div className="h-full flex items-center justify-center p-4">
 			<Card className="w-full max-w-md border-border/40 shadow-sm">
@@ -119,6 +158,13 @@ export default function Page() {
 					<CardTitle className="text-3xl  tracking-tight text-balance">Create an account</CardTitle>
 					<CardDescription className="text-base text-muted-foreground">
 						Get started with your new account
+						{invitationInfo && (
+							<div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+								<p className="text-sm text-blue-800">
+									<strong>{invitationInfo.inviterEmail}</strong> has invited you to access their trailer: <strong>{invitationInfo.trailerName}</strong>
+								</p>
+							</div>
+						)}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
