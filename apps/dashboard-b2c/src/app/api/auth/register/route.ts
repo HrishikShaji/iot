@@ -84,6 +84,8 @@ export async function POST(req: Request) {
 				return user;
 			});
 
+			console.log("user with invited trailer", result)
+
 			return NextResponse.json({
 				message: 'Account created successfully with trailer access',
 				user: { id: result.id, email: result.email },

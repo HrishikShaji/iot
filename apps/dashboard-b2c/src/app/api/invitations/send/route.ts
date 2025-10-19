@@ -6,9 +6,11 @@ import { auth } from '../../../../../auth';
 
 export async function POST(request: NextRequest) {
 	try {
+		console.log("its here")
 		const session = await auth()
 
 		if (!session) {
+			console.log('no session')
 			return NextResponse.json(
 				{ error: 'Unauthorized' },
 				{ status: 401 }
@@ -19,6 +21,7 @@ export async function POST(request: NextRequest) {
 		const user = session.user
 
 		if (!user) {
+			console.log('no user')
 			return NextResponse.json(
 				{ error: 'Unauthorized' },
 				{ status: 401 }
@@ -28,6 +31,7 @@ export async function POST(request: NextRequest) {
 		const { email } = await request.json();
 
 		if (!email || !email.includes('@')) {
+			console.log('no email')
 			return NextResponse.json(
 				{ error: 'Invalid email address' },
 				{ status: 400 }
@@ -41,6 +45,7 @@ export async function POST(request: NextRequest) {
 		});
 
 		if (!userWithTrailer?.trailer) {
+			console.log('no trailer')
 			return NextResponse.json(
 				{ error: 'You do not have a trailer to share' },
 				{ status: 400 }
@@ -49,6 +54,7 @@ export async function POST(request: NextRequest) {
 
 		// Check if user is trying to invite themselves
 		if (email === user.email) {
+			console.log('cannot invite yourself')
 			return NextResponse.json(
 				{ error: 'You cannot invite yourself' },
 				{ status: 400 }
@@ -66,6 +72,7 @@ export async function POST(request: NextRequest) {
 		});
 
 		if (existingInvitation) {
+			console.log('active invitation')
 			return NextResponse.json(
 				{ error: 'An active invitation already exists for this email' },
 				{ status: 400 }
@@ -83,6 +90,7 @@ export async function POST(request: NextRequest) {
 		});
 
 		if (existingUser?.trailerAccesses.length) {
+			console.log('already has access')
 			return NextResponse.json(
 				{ error: 'This user already has access to your trailer' },
 				{ status: 400 }
@@ -106,6 +114,7 @@ export async function POST(request: NextRequest) {
 
 		// Send invitation email
 		if (!user.email) {
+			console.log('no email to sent')
 			return NextResponse.json(
 				{ error: 'Failed to send invitation becaouse no email' },
 				{ status: 500 }

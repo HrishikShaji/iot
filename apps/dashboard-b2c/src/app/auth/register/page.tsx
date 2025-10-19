@@ -112,7 +112,7 @@ export default function Page() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email, password, roleId }),
+				body: JSON.stringify({ email, password, roleId, invitationToken }),
 			})
 
 			const data = await res.json()

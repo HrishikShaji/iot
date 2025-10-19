@@ -17,8 +17,8 @@ export async function sendInvitationEmail(
 	token: string,
 	inviterEmail: string
 ) {
-	const invitationUrl = `${NEXT_PUBLIC_APP_URL}/signup?token=${token}`;
-
+	const invitationUrl = `${NEXT_PUBLIC_APP_URL}/auth/register?token=${token}`;
+	console.log("Calling this", SMTP_HOST, SMTP_USER, SMTP_HOST, NEXT_PUBLIC_APP_URL, NODE_ENV)
 	await transporter.sendMail({
 		from: SMTP_USER,
 		to,

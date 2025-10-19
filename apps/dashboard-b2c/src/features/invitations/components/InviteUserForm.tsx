@@ -28,6 +28,7 @@ export default function InviteUserForm() {
 			setMessage({ type: 'success', text: 'Invitation sent successfully!' });
 			setEmail('');
 		} catch (error) {
+			console.log("ERROR", error)
 			setMessage({
 				type: 'error',
 				text: error instanceof Error ? error.message : 'Failed to send invitation',
