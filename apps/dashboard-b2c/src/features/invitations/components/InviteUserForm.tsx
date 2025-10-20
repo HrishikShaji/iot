@@ -1,6 +1,11 @@
 'use client';
-
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function InviteUserForm() {
 	const [email, setEmail] = useState('');
@@ -28,7 +33,7 @@ export default function InviteUserForm() {
 			setMessage({ type: 'success', text: 'Invitation sent successfully!' });
 			setEmail('');
 		} catch (error) {
-			console.log("ERROR", error)
+			console.log("ERROR", error);
 			setMessage({
 				type: 'error',
 				text: error instanceof Error ? error.message : 'Failed to send invitation',
@@ -39,44 +44,43 @@ export default function InviteUserForm() {
 	};
 
 	return (
-		<div className="bg-white rounded-lg shadow p-6">
-			<h2 className="text-xl font-semibold mb-4">Invite User to Access Your Trailer</h2>
-
-			<form onSubmit={handleSubmit} className="space-y-4">
-				<div>
-					<label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-						Email Address
-					</label>
-					<input
-						type="email"
-						id="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						placeholder="user@example.com"
-						required
-						className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-					/>
-				</div>
-
-				{message && (
-					<div
-						className={`p-4 rounded-lg ${message.type === 'success'
-							? 'bg-green-50 text-green-800'
-							: 'bg-red-50 text-red-800'
-							}`}
-					>
-						{message.text}
+		<Card className="w-full">
+			<CardHeader>
+				<CardTitle>Invite User</CardTitle>
+				<CardDescription>Send an invitation to access your trailer</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<form onSubmit={handleSubmit} className="space-y-4">
+					<div className="space-y-2">
+						<Label htmlFor="email">Email Address</Label>
+						<Input
+							type="email"
+							id="email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							placeholder="user@example.com"
+							required
+							disabled={loading}
+						/>
 					</div>
-				)}
 
-				<button
-					type="submit"
-					disabled={loading}
-					className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
-				>
-					{loading ? 'Sending...' : 'Send Invitation'}
-				</button>
-			</form>
-		</div>
+					{message && (
+						<Alert variant={message.type === 'success' ? 'default' : 'destructive'}>
+							{message.type === 'success' ? (
+								<CheckCircle2 className="h-4 w-4" />
+							) : (
+								<AlertCircle className="h-4 w-4" />
+							)}
+							<AlertDescription>{message.text}</AlertDescription>
+						</Alert>
+					)}
+
+					<Button type="submit" disabled={loading} className="w-full">
+						{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+						{loading ? 'Sending...' : 'Send Invitation'}
+					</Button>
+				</form>
+			</CardContent>
+		</Card>
 	);
 }
