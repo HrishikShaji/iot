@@ -2,10 +2,13 @@ import { notFound } from 'next/navigation';
 import { auth } from '../../../../auth';
 import { prisma } from '@repo/db';
 import TrailerAccessManager from '@/features/trailers/components/TrailerAccessManager';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Truck, User, Calendar, Shield } from 'lucide-react';
 
 export default async function TrailerPage({ params }: { params: { id: string } }) {
 	const session = await auth();
-
 	if (!session?.user) {
 		return notFound();
 	}
@@ -32,17 +35,67 @@ export default async function TrailerPage({ params }: { params: { id: string } }
 		return notFound();
 	}
 
+	// Get user's access type if not owner
+	const userAccess = hasAccess ? trailer.sharedWith[0] : null;
+
 	return (
 		<div className="container mx-auto px-4 py-8 max-w-4xl">
-			<h1 className="text-3xl font-bold mb-8">{trailer.name}</h1>
-
-			<div className="grid gap-8">
-				{/* Trailer content */}
-				<div className="bg-white rounded-lg shadow p-6">
-					<h2 className="text-xl font-semibold mb-4">Trailer Details</h2>
-					<p>Owner: {trailer.user.email}</p>
-					{/* Add more trailer details */}
+			<div className="flex items-center justify-between mb-8">
+				<div className="flex items-center gap-3">
+					<Truck className="h-8 w-8 text-primary" />
+					<h1 className="text-3xl font-bold">{trailer.name}</h1>
 				</div>
+				{isOwner ? (
+					<Badge variant="default" className="flex items-center gap-1">
+						<Shield className="h-3 w-3" />
+						Owner
+					</Badge>
+				) : userAccess ? (
+					<Badge variant="secondary" className="flex items-center gap-1">
+						<Shield className="h-3 w-3" />
+						{userAccess.accessType}
+					</Badge>
+				) : null}
+			</div>
+
+			<div className="grid gap-6">
+				{/* Trailer Details */}
+				<Card>
+					<CardHeader>
+						<CardTitle>Trailer Details</CardTitle>
+						<CardDescription>
+							{isOwner ? 'You own this trailer' : 'This trailer is shared with you'}
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="flex items-center gap-2 text-sm">
+							<User className="h-4 w-4 text-muted-foreground" />
+							<span className="text-muted-foreground">Owner:</span>
+							<span className="font-medium">{trailer.user.email}</span>
+						</div>
+
+						<Separator />
+
+						<div className="flex items-center gap-2 text-sm">
+							<Calendar className="h-4 w-4 text-muted-foreground" />
+							<span className="text-muted-foreground">Created:</span>
+							<span className="font-medium">
+								{new Date(trailer.createdAt).toLocaleDateString()}
+							</span>
+						</div>
+
+						{trailer.updatedAt && (
+							<div className="flex items-center gap-2 text-sm">
+								<Calendar className="h-4 w-4 text-muted-foreground" />
+								<span className="text-muted-foreground">Last Updated:</span>
+								<span className="font-medium">
+									{new Date(trailer.updatedAt).toLocaleDateString()}
+								</span>
+							</div>
+						)}
+
+					</CardContent>
+				</Card>
 
 				{/* Only show access manager if user is the owner */}
 				{isOwner && <TrailerAccessManager trailerId={params.id} />}
