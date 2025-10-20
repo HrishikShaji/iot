@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Loader2, Users, Calendar, ShieldCheck, Eye, Edit, Shield } from 'lucide-react';
+import { Role } from '@repo/db';
+import TrailerAccessRow from './TrailerAccessRow';
 
 interface TrailerAccess {
 	id: string;
@@ -14,6 +16,11 @@ interface TrailerAccess {
 		id: string;
 		email: string;
 	};
+	role: {
+		id: string;
+		name: string;
+		description: string;
+	}
 }
 
 interface TrailerAccessManagerProps {
@@ -24,15 +31,41 @@ export default function TrailerAccessManager({ trailerId }: TrailerAccessManager
 	const [accesses, setAccesses] = useState<TrailerAccess[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [updatingId, setUpdatingId] = useState<string | null>(null);
+	const [roles, setRoles] = useState<Role[]>([])
+	const [rolesLoading, setRolesLoading] = useState(false)
+	const [roleId, setRoleId] = useState("")
+
 
 	useEffect(() => {
 		fetchAccesses();
+		fetchRoles()
 	}, [trailerId]);
+
+
+	const fetchRoles = async () => {
+		console.log("this ran")
+		try {
+			setRolesLoading(true)
+			const response = await fetch('/api/roles?context=B2C');
+			if (!response.ok) throw new Error('Failed to fetch roles');
+			const data = await response.json();
+			setRoles(data);
+		} catch (error) {
+			// toast({
+			// 	title: 'Error',
+			// 	description: 'Failed to fetch roles',
+			// 	variant: 'destructive',
+			// });
+		} finally {
+			setRolesLoading(false)
+		}
+	};
 
 	const fetchAccesses = async () => {
 		try {
 			const response = await fetch(`/api/trailers/${trailerId}/access`);
 			const data = await response.json();
+			console.log("Trailer accesses:", data.accesses)
 			setAccesses(data.accesses || []);
 		} catch (error) {
 			console.error('Error fetching accesses:', error);
@@ -112,80 +145,7 @@ export default function TrailerAccessManager({ trailerId }: TrailerAccessManager
 				) : (
 					<div className="space-y-3">
 						{accesses.map((access) => (
-							<div
-								key={access.id}
-								className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent transition-colors"
-							>
-								<div className="flex-1 space-y-1">
-									<p className="font-medium">{access.user.email}</p>
-									<p className="text-sm text-muted-foreground flex items-center gap-1">
-										<Calendar className="h-3 w-3" />
-										Access granted: {new Date(access.grantedAt).toLocaleDateString()}
-									</p>
-								</div>
-								<div className="flex items-center gap-3">
-									<Select
-										value={access.accessType}
-										onValueChange={(value) => handleUpdateAccess(access.id, value)}
-										disabled={updatingId === access.id}
-									>
-										<SelectTrigger className="w-[130px]">
-											<SelectValue />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="VIEW">
-												<span className="flex items-center gap-2">
-													<Eye className="h-4 w-4" />
-													View
-												</span>
-											</SelectItem>
-											<SelectItem value="EDIT">
-												<span className="flex items-center gap-2">
-													<Edit className="h-4 w-4" />
-													Edit
-												</span>
-											</SelectItem>
-											<SelectItem value="ADMIN">
-												<span className="flex items-center gap-2">
-													<Shield className="h-4 w-4" />
-													Admin
-												</span>
-											</SelectItem>
-										</SelectContent>
-									</Select>
-
-									<AlertDialog>
-										<AlertDialogTrigger asChild>
-											<Button
-												variant="destructive"
-												size="sm"
-												disabled={updatingId === access.id}
-											>
-												{updatingId === access.id ? (
-													<Loader2 className="h-4 w-4 animate-spin" />
-												) : (
-													'Revoke'
-												)}
-											</Button>
-										</AlertDialogTrigger>
-										<AlertDialogContent>
-											<AlertDialogHeader>
-												<AlertDialogTitle>Revoke Access</AlertDialogTitle>
-												<AlertDialogDescription>
-													Are you sure you want to revoke access for {access.user.email}?
-													They will no longer be able to access this trailer.
-												</AlertDialogDescription>
-											</AlertDialogHeader>
-											<AlertDialogFooter>
-												<AlertDialogCancel>Cancel</AlertDialogCancel>
-												<AlertDialogAction onClick={() => handleRevokeAccess(access.id)}>
-													Revoke
-												</AlertDialogAction>
-											</AlertDialogFooter>
-										</AlertDialogContent>
-									</AlertDialog>
-								</div>
-							</div>
+							<TrailerAccessRow key={access.id} access={access} roles={roles} />
 						))}
 					</div>
 				)}

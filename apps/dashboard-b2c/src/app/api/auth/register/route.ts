@@ -69,6 +69,7 @@ export async function POST(req: Request) {
 
 				await tx.trailerAccess.create({
 					data: {
+						roleId,
 						userId: user.id,
 						trailerId: invitation.trailerId,
 						grantedBy: invitation.inviterId,
@@ -105,6 +106,7 @@ export async function POST(req: Request) {
 			{ status: 201 }
 		)
 	} catch (error) {
+		console.log(error)
 		return NextResponse.json(
 			{ error: "Something went wrong" },
 			{ status: 500 }

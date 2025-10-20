@@ -33,9 +33,7 @@ export default function Page() {
 	const [invitationInfo, setInvitationInfo] = useState<any>(null);
 
 
-	useEffect(() => {
-		fetchRoles()
-	}, [])
+	console.log(invitationInfo)
 
 	const fetchRoles = async () => {
 		console.log("this ran")
@@ -60,6 +58,8 @@ export default function Page() {
 	useEffect(() => {
 		if (invitationToken) {
 			validateInvitation();
+		} else {
+			fetchRoles()
 		}
 	}, [invitationToken]);
 
@@ -74,6 +74,8 @@ export default function Page() {
 			}
 
 			setInvitationInfo(data.invitation);
+			console.log("setting role id", data.invitation.role.id)
+			setRoleId(data.invitation.role.id)
 		} catch (error) {
 			setError('Failed to validate invitation');
 		} finally {
@@ -107,6 +109,8 @@ export default function Page() {
 
 		try {
 			// Register user
+			//
+			console.log("with data :", roleId)
 			const res = await fetch("/api/auth/register", {
 				method: "POST",
 				headers: {
@@ -161,7 +165,7 @@ export default function Page() {
 						{invitationInfo && (
 							<div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
 								<p className="text-sm text-blue-800">
-									<strong>{invitationInfo.inviterEmail}</strong> has invited you to access their trailer: <strong>{invitationInfo.trailerName}</strong>
+									<strong>{invitationInfo.inviterEmail}</strong> has invited you to access their trailer: <strong>{invitationInfo.trailerName}</strong> as a <strong>{invitationInfo.role.name}</strong>
 								</p>
 							</div>
 						)}
@@ -216,15 +220,14 @@ export default function Page() {
 						<div className="space-y-2">
 							<Label htmlFor="role">Role</Label>
 							<Badge>This is for development,will be removed later.</Badge>
-							{rolesLoading ?
-								<Loader2 className="w-4 h-4 mr-2 animate-spin" /> :
-								<Select
-									value={roleId}
-									onValueChange={(value) => setRoleId(value)}
-								>
-									<SelectTrigger id="role">
-										<SelectValue placeholder="Select role" />
-									</SelectTrigger>
+							<Select
+								value={roleId}
+								onValueChange={(value) => setRoleId(value)}
+							>
+								<SelectTrigger id="role">
+									<SelectValue placeholder="Select role" />
+								</SelectTrigger>
+								{rolesLoading ? <Loader2 className="w-4 h-4 animate-spin" /> :
 									<SelectContent>
 										{roles.map((role) => (
 											<SelectItem key={role.id} value={role.id}>
@@ -232,9 +235,10 @@ export default function Page() {
 											</SelectItem>
 										))}
 									</SelectContent>
-								</Select>
 
-							}
+								}
+							</Select>
+
 						</div>
 
 						{error && (

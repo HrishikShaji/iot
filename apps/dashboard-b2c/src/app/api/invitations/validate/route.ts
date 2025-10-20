@@ -26,6 +26,13 @@ export async function GET(request: NextRequest) {
 						name: true,
 					},
 				},
+				role: {
+					select: {
+						id: true,
+						description: true,
+						name: true
+					}
+				}
 			},
 		});
 
@@ -61,6 +68,7 @@ export async function GET(request: NextRequest) {
 				email: invitation.email,
 				inviterEmail: invitation.inviter.email,
 				trailerName: invitation.trailer.name,
+				role: invitation.role
 			},
 		});
 	} catch (error) {

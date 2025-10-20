@@ -28,7 +28,15 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const { email } = await request.json();
+		const { email, roleId } = await request.json();
+
+		if (!roleId) {
+			console.log('no email')
+			return NextResponse.json(
+				{ error: 'Role is required' },
+				{ status: 400 }
+			);
+		}
 
 		if (!email || !email.includes('@')) {
 			console.log('no email')
@@ -103,6 +111,7 @@ export async function POST(request: NextRequest) {
 
 		const invitation = await prisma.invitation.create({
 			data: {
+				roleId,
 				email,
 				inviterId: user.id,
 				trailerId: userWithTrailer.trailer.id,

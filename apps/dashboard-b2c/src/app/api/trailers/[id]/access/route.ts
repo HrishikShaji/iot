@@ -46,6 +46,13 @@ export async function GET(
 						email: true,
 					},
 				},
+				role: {
+					select: {
+						id: true,
+						description: true,
+						name: true
+					}
+				}
 			},
 			orderBy: { grantedAt: 'desc' },
 		});

@@ -70,6 +70,8 @@ model Invitation {
   trailer       Trailer          @relation("TrailerInvitations", fields: [trailerId], references: [id])
   token         String           @unique
   status        InvitationStatus @default(PENDING)
+  roleId        String           @db.ObjectId
+  role          Role             @relation(fields: [roleId], references: [id])
   expiresAt     DateTime
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
@@ -93,6 +95,8 @@ model TrailerAccess {
   grantedAt   DateTime   @default(now())
   grantedBy   String     @db.ObjectId
   granter     User       @relation("GrantedAccesses", fields: [grantedBy], references: [id])
+  roleId      String     @db.ObjectId
+  role        Role       @relation(fields: [roleId], references: [id])
   
   @@unique([userId, trailerId])
 }
@@ -175,6 +179,8 @@ model Role {
   
   organization   Organization?       @relation(fields: [organizationId], references: [id])
   users          User[]
+  invitations    Invitation[]
+  trailerAccesses TrailerAccess[]
   members        OrganizationMember[]
   permissions    RolePermission[]
   
