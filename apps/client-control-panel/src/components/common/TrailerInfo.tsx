@@ -14,6 +14,6 @@ export default function TrailerInfo() {
 		return <Loader2 className="w-4 h-4 animate-spin" />
 	}
 	return (
-		<Badge>{`Trailer:${data?.user.trailer.name}`}</Badge>
+		<Badge>{`Trailer:${data?.user?.trailer?.name}`}</Badge>
 	)
 }
