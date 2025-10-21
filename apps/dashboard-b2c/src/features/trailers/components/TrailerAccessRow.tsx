@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Loader2, Users, Calendar, ShieldCheck, Eye, Edit, Shield } from 'lucide-react';
 import { Role } from '@repo/db';
+import { DeleteTrailerButton } from '@/features/permissions/components/DeleteTrailerButton';
 
 interface TrailerAccess {
 	id: string;
@@ -19,7 +20,8 @@ interface TrailerAccess {
 		id: string;
 		name: string;
 		description: string;
-	}
+	},
+	trailerId: string;
 }
 
 interface TrailerAccessManagerProps {
@@ -111,35 +113,36 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 			</div>
 
 			<div className="flex items-center gap-3">
-				<Select
-					value={access.accessType}
-					onValueChange={(value) => handleUpdateAccess(access.id, value)}
-					disabled={updatingId === access.id}
-				>
-					<SelectTrigger className="w-[130px]">
-						<SelectValue />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="VIEW">
-							<span className="flex items-center gap-2">
-								<Eye className="h-4 w-4" />
-								View
-							</span>
-						</SelectItem>
-						<SelectItem value="EDIT">
-							<span className="flex items-center gap-2">
-								<Edit className="h-4 w-4" />
-								Edit
-							</span>
-						</SelectItem>
-						<SelectItem value="ADMIN">
-							<span className="flex items-center gap-2">
-								<Shield className="h-4 w-4" />
-								Admin
-							</span>
-						</SelectItem>
-					</SelectContent>
-				</Select>
+				<DeleteTrailerButton trailerId={access.trailerId} />
+				{/* <Select */}
+				{/* 	value={access.accessType} */}
+				{/* 	onValueChange={(value) => handleUpdateAccess(access.id, value)} */}
+				{/* 	disabled={updatingId === access.id} */}
+				{/* > */}
+				{/* 	<SelectTrigger className="w-[130px]"> */}
+				{/* 		<SelectValue /> */}
+				{/* 	</SelectTrigger> */}
+				{/* 	<SelectContent> */}
+				{/* 		<SelectItem value="VIEW"> */}
+				{/* 			<span className="flex items-center gap-2"> */}
+				{/* 				<Eye className="h-4 w-4" /> */}
+				{/* 				View */}
+				{/* 			</span> */}
+				{/* 		</SelectItem> */}
+				{/* 		<SelectItem value="EDIT"> */}
+				{/* 			<span className="flex items-center gap-2"> */}
+				{/* 				<Edit className="h-4 w-4" /> */}
+				{/* 				Edit */}
+				{/* 			</span> */}
+				{/* 		</SelectItem> */}
+				{/* 		<SelectItem value="ADMIN"> */}
+				{/* 			<span className="flex items-center gap-2"> */}
+				{/* 				<Shield className="h-4 w-4" /> */}
+				{/* 				Admin */}
+				{/* 			</span> */}
+				{/* 		</SelectItem> */}
+				{/* 	</SelectContent> */}
+				{/* </Select> */}
 
 				<AlertDialog>
 					<AlertDialogTrigger asChild>

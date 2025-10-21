@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Loader2, Truck, User, Calendar, Eye } from 'lucide-react';
+import { DeleteTrailerButton } from '@/features/permissions/components/DeleteTrailerButton';
 
 interface SharedTrailer {
 	id: string;
@@ -106,6 +107,7 @@ export default function SharedTrailersList() {
 									</div>
 								</div>
 								<div className="flex items-center gap-3">
+									<DeleteTrailerButton trailerId={sharedTrailer.trailer.id} />
 									<Badge>{sharedTrailer.role.name}</Badge>
 									{/* {getAccessBadge(sharedTrailer.accessType)} */}
 									<Button asChild>

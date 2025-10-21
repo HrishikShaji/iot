@@ -1,5 +1,6 @@
 "use client"
 
+import { DeleteTrailerButton } from "@/features/permissions/components/DeleteTrailerButton"
 import TrailerAccessManager from "@/features/trailers/components/TrailerAccessManager"
 import { useSession } from "next-auth/react"
 

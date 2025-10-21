@@ -28,6 +28,7 @@ export async function PATCH(
 			);
 		}
 
+		console.log("CURRENT USER:", user)
 		const { accessType, roleId } = await request.json();
 
 		if (!roleId) {
@@ -39,7 +40,7 @@ export async function PATCH(
 
 		const access = await prisma.trailerAccess.findUnique({
 			where: { id: accessId },
-			include: { trailer: true },
+			include: { trailer: true, user: true },
 		});
 
 		if (!access || access.trailer.userId !== user.id) {
@@ -55,7 +56,17 @@ export async function PATCH(
 			data: { roleId },
 		});
 
-		return NextResponse.json({ access: updatedAccess });
+		const updatedUser = await prisma.user.update({
+			where: { id: access.userId },
+			data: {
+				roleId
+			}
+		})
+
+		console.log("updating user:", updatedUser.email)
+
+
+		return NextResponse.json({ access: updatedAccess, updatedUser });
 	} catch (error) {
 		console.error('Error updating access:', error);
 		return NextResponse.json(
@@ -82,6 +93,8 @@ export async function DELETE(
 
 		const user = session.user;
 
+		console.log("CURRENT USER:", user)
+
 		if (!user) {
 			return NextResponse.json(
 				{ error: 'Unauthorized' },
@@ -91,8 +104,10 @@ export async function DELETE(
 
 		const access = await prisma.trailerAccess.findUnique({
 			where: { id: accessId },
-			include: { trailer: true },
+			include: { trailer: true, user: true },
 		});
+
+		console.log("USER WITH ACCESS", access)
 
 		if (!access || access.trailer.userId !== user.id) {
 			return NextResponse.json(

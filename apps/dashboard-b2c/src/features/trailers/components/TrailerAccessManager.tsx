@@ -20,7 +20,8 @@ interface TrailerAccess {
 		id: string;
 		name: string;
 		description: string;
-	}
+	};
+	trailerId: string;
 }
 
 interface TrailerAccessManagerProps {
