@@ -32,6 +32,13 @@ export async function GET(request: NextRequest) {
 						},
 					},
 				},
+				role: {
+					select: {
+						id: true,
+						name: true,
+						description: true
+					}
+				}
 			},
 		});
 

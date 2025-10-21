@@ -6,9 +6,11 @@ import { auth } from '../../../../../../auth';
 // Update access type
 export async function PATCH(
 	request: NextRequest,
-	{ params }: { params: { accessId: string } }
+	{ params }: { params: Promise<{ accessId: string }> }
 ) {
 	try {
+		const { accessId } = await params
+		console.log("this is access id:", accessId)
 		const session = await auth()
 		if (!session) {
 			return NextResponse.json(
@@ -26,21 +28,22 @@ export async function PATCH(
 			);
 		}
 
-		const { accessType } = await request.json();
+		const { accessType, roleId } = await request.json();
 
-		if (!['VIEW', 'EDIT', 'ADMIN'].includes(accessType)) {
+		if (!roleId) {
 			return NextResponse.json(
-				{ error: 'Invalid access type' },
+				{ error: 'Invalid role' },
 				{ status: 400 }
 			);
 		}
 
 		const access = await prisma.trailerAccess.findUnique({
-			where: { id: params.accessId },
+			where: { id: accessId },
 			include: { trailer: true },
 		});
 
 		if (!access || access.trailer.userId !== user.id) {
+			console.log('access not found', access)
 			return NextResponse.json(
 				{ error: 'Access not found or unauthorized' },
 				{ status: 404 }
@@ -48,8 +51,8 @@ export async function PATCH(
 		}
 
 		const updatedAccess = await prisma.trailerAccess.update({
-			where: { id: params.accessId },
-			data: { accessType },
+			where: { id: accessId },
+			data: { roleId },
 		});
 
 		return NextResponse.json({ access: updatedAccess });
@@ -65,9 +68,10 @@ export async function PATCH(
 // Revoke access
 export async function DELETE(
 	request: NextRequest,
-	{ params }: { params: { accessId: string } }
+	{ params }: { params: Promise<{ accessId: string }> }
 ) {
 	try {
+		const { accessId } = await params
 		const session = await auth()
 		if (!session) {
 			return NextResponse.json(
@@ -86,7 +90,7 @@ export async function DELETE(
 		}
 
 		const access = await prisma.trailerAccess.findUnique({
-			where: { id: params.accessId },
+			where: { id: accessId },
 			include: { trailer: true },
 		});
 
@@ -98,7 +102,7 @@ export async function DELETE(
 		}
 
 		await prisma.trailerAccess.delete({
-			where: { id: params.accessId },
+			where: { id: accessId },
 		});
 
 		return NextResponse.json({ message: 'Access revoked successfully' });

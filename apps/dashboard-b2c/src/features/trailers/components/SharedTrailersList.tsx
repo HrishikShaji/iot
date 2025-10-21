@@ -16,6 +16,11 @@ interface SharedTrailer {
 			email: string;
 		};
 	};
+	role: {
+		id: string;
+		name: string;
+		description: string
+	}
 }
 
 export default function SharedTrailersList() {
@@ -31,6 +36,7 @@ export default function SharedTrailersList() {
 			const response = await fetch('/api/trailers/shared');
 			const data = await response.json();
 			setSharedTrailers(data.sharedTrailers || []);
+			console.log(data.sharedTrailers)
 		} catch (error) {
 			console.error('Error fetching shared trailers:', error);
 		} finally {
@@ -100,7 +106,8 @@ export default function SharedTrailersList() {
 									</div>
 								</div>
 								<div className="flex items-center gap-3">
-									{getAccessBadge(sharedTrailer.accessType)}
+									<Badge>{sharedTrailer.role.name}</Badge>
+									{/* {getAccessBadge(sharedTrailer.accessType)} */}
 									<Button asChild>
 										<a href={`/trailers/${sharedTrailer.trailer.id}`}>
 											<Eye className="h-4 w-4 mr-2" />

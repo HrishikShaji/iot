@@ -5,9 +5,10 @@ import { auth } from '../../../../../../auth';
 // Get all users with access to a trailer
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
+		const { id } = await params
 		const session = await auth()
 		if (!session) {
 			return NextResponse.json(
@@ -27,7 +28,7 @@ export async function GET(
 
 		// Check if user owns this trailer
 		const trailer = await prisma.trailer.findUnique({
-			where: { id: params.id },
+			where: { id },
 		});
 
 		if (!trailer || trailer.userId !== user.id) {
@@ -38,7 +39,7 @@ export async function GET(
 		}
 
 		const accesses = await prisma.trailerAccess.findMany({
-			where: { trailerId: params.id },
+			where: { trailerId: id },
 			include: {
 				user: {
 					select: {

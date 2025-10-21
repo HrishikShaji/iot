@@ -52,6 +52,21 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 		}
 	};
 
+	const handleUpdateAccessRole = async (accessId: string, roleId: string) => {
+		setUpdatingId(accessId);
+		setRoleId(roleId)
+		try {
+			const response = await fetch(`/api/trailers/access/${accessId}`, {
+				method: 'PATCH',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ roleId }),
+			});
+		} catch (error) {
+			console.error('Error updating access:', error);
+		} finally {
+			setUpdatingId(null);
+		}
+	};
 	const handleRevokeAccess = async (accessId: string) => {
 		setUpdatingId(accessId);
 		try {
@@ -80,7 +95,7 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 			<div className="flex items-center gap-3 mr-2">
 				<Select
 					value={roleId}
-					onValueChange={(value) => setRoleId(value)}
+					onValueChange={(value) => handleUpdateAccessRole(access.id, value)}
 				>
 					<SelectTrigger id="role">
 						<SelectValue placeholder="Select role" />
