@@ -6,6 +6,11 @@ export const sidebarLinks = [
 		icon: "Home",
 	},
 	{
+		title: "Add Trailer",
+		href: "/trailer/create",
+		icon: "Caravan"
+	},
+	{
 		title: "Users",
 		icon: "Users",
 		children: [

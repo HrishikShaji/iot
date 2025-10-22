@@ -6,27 +6,25 @@ import { useRouter } from 'next/navigation';
 
 interface SharedTrailer {
 	id: string;
-	accessType: string;
-	grantedAt: string;
-	trailer: {
+	name: string;
+	createdAt: string;
+	user: {
+		email: string;
 		id: string;
-		name: string;
-		user: {
-			email: string;
-		};
-	};
-	role: {
-		id: string;
-		name: string;
-		description: string
+		role: {
+			id: string;
+			name: string;
+			description: string;
+		}
 	}
 }
 
-export default function SharedTrailersDropdown() {
+export default function UserTrailersDropdown() {
 	const [trailers, setTrailers] = useState<SharedTrailer[]>([]);
 	const [trailerId, setTrailerId] = useState("")
 	const [loading, setLoading] = useState(true);
 	const router = useRouter()
+
 
 	useEffect(() => {
 		fetchTrailers();
@@ -34,10 +32,10 @@ export default function SharedTrailersDropdown() {
 
 	const fetchTrailers = async () => {
 		try {
-			const response = await fetch('/api/trailers/shared');
+			const response = await fetch('/api/trailers');
 			const data = await response.json();
-			setTrailers(data.sharedTrailers || []);
-			console.log(data.sharedTrailers)
+			setTrailers(data.trailers || []);
+			console.log(data.trailers)
 		} catch (error) {
 			console.error('Error fetching shared trailers:', error);
 		} finally {
@@ -58,6 +56,7 @@ export default function SharedTrailersDropdown() {
 	}
 
 	return (
+
 		<Select
 			value={trailerId}
 			onValueChange={handleValueChange}
@@ -67,8 +66,8 @@ export default function SharedTrailersDropdown() {
 			</SelectTrigger>
 			<SelectContent>
 				{trailers.map((trailer) => (
-					<SelectItem key={trailer.trailer.id} value={trailer.trailer.id}>
-						{trailer.trailer.name}
+					<SelectItem key={trailer.id} value={trailer.id}>
+						{trailer.name}
 					</SelectItem>
 				))}
 			</SelectContent>
