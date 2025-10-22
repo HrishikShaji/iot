@@ -14,6 +14,11 @@ export const homeSidebarLinks = [
 		href: "/trailers/shared",
 		icon: "Caravan",
 	},
+	{
+		title: "inbox",
+		href: "/inbox",
+		icon: "Caravan",
+	},
 ]
 
 

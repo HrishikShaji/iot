@@ -30,6 +30,13 @@ export async function POST(request: NextRequest) {
 
 		const { email, roleId, trailerId } = await request.json();
 		console.log("TRAILER ID:", trailerId)
+
+		const existingUser = await prisma.user.findFirst({
+			where: {
+				email
+			}
+		})
+
 		if (!roleId) {
 			console.log('no email')
 			return NextResponse.json(
@@ -95,7 +102,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Check if user already has access
-		const existingUser = await prisma.user.findUnique({
+		const existingUserAccess = await prisma.user.findUnique({
 			where: { email },
 			include: {
 				trailerAccesses: {
@@ -104,7 +111,7 @@ export async function POST(request: NextRequest) {
 			},
 		});
 
-		if (existingUser?.trailerAccesses.length) {
+		if (existingUserAccess?.trailerAccesses.length) {
 			console.log('already has access')
 			return NextResponse.json(
 				{ error: 'This user already has access to your trailer' },
@@ -137,7 +144,10 @@ export async function POST(request: NextRequest) {
 			);
 
 		}
-		await sendInvitationEmail(email, token, user.email);
+
+		if (!existingUser) {
+			await sendInvitationEmail(email, token, user.email);
+		}
 
 		return NextResponse.json({
 			message: 'Invitation sent successfully',
