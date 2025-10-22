@@ -1,13 +1,14 @@
 import { notFound } from 'next/navigation';
-import { auth } from '../../../../auth';
 import { prisma } from '@repo/db';
 import TrailerAccessManager from '@/features/trailers/components/TrailerAccessManager';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Truck, User, Calendar, Shield } from 'lucide-react';
+import { auth } from '../../../../../auth';
 
-export default async function TrailerPage({ params }: { params: { id: string } }) {
+export default async function TrailerPage({ params }: { params: Promise<{ id: string }> }) {
+	const { id } = await params
 	const session = await auth();
 	if (!session?.user) {
 		return notFound();
@@ -15,7 +16,7 @@ export default async function TrailerPage({ params }: { params: { id: string } }
 
 	// Check if user owns this trailer or has access to it
 	const trailer = await prisma.trailer.findUnique({
-		where: { id: params.id },
+		where: { id: id },
 		include: {
 			user: true,
 			sharedWith: {
@@ -98,7 +99,7 @@ export default async function TrailerPage({ params }: { params: { id: string } }
 				</Card>
 
 				{/* Only show access manager if user is the owner */}
-				{isOwner && <TrailerAccessManager trailerId={params.id} />}
+				{isOwner && <TrailerAccessManager trailerId={id} />}
 			</div>
 		</div>
 	);

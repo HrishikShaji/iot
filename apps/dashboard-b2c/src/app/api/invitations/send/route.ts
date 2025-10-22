@@ -28,12 +28,19 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const { email, roleId } = await request.json();
-
+		const { email, roleId, trailerId } = await request.json();
+		console.log("TRAILER ID:", trailerId)
 		if (!roleId) {
 			console.log('no email')
 			return NextResponse.json(
 				{ error: 'Role is required' },
+				{ status: 400 }
+			);
+		}
+		if (!trailerId) {
+			console.log('no trailer')
+			return NextResponse.json(
+				{ error: 'Trailer is required' },
 				{ status: 400 }
 			);
 		}
@@ -46,19 +53,19 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// Check if user has a trailer
-		const userWithTrailer = await prisma.user.findUnique({
-			where: { id: user.id },
-			include: { trailer: true },
-		});
-
-		if (!userWithTrailer?.trailer) {
-			console.log('no trailer')
-			return NextResponse.json(
-				{ error: 'You do not have a trailer to share' },
-				{ status: 400 }
-			);
-		}
+		// // Check if user has a trailer
+		// const userWithTrailer = await prisma.user.findUnique({
+		// 	where: { id: user.id },
+		// 	include: { trailers: true },
+		// });
+		//
+		// if (!userWithTrailer?.trailers.length) {
+		// 	console.log('no trailer')
+		// 	return NextResponse.json(
+		// 		{ error: 'You do not have a trailer to share' },
+		// 		{ status: 400 }
+		// 	);
+		// }
 
 		// Check if user is trying to invite themselves
 		if (email === user.email) {
@@ -73,7 +80,7 @@ export async function POST(request: NextRequest) {
 		const existingInvitation = await prisma.invitation.findFirst({
 			where: {
 				email,
-				trailerId: userWithTrailer.trailer.id,
+				trailerId,
 				status: 'PENDING',
 				expiresAt: { gt: new Date() },
 			},
@@ -92,7 +99,7 @@ export async function POST(request: NextRequest) {
 			where: { email },
 			include: {
 				trailerAccesses: {
-					where: { trailerId: userWithTrailer.trailer.id },
+					where: { trailerId },
 				},
 			},
 		});
@@ -114,7 +121,7 @@ export async function POST(request: NextRequest) {
 				roleId,
 				email,
 				inviterId: user.id,
-				trailerId: userWithTrailer.trailer.id,
+				trailerId,
 				token,
 				expiresAt,
 				status: 'PENDING',

@@ -9,6 +9,7 @@ import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Role } from '@repo/db';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import { useSession } from 'next-auth/react';
 
 export default function InviteUserForm() {
 	const [email, setEmail] = useState('');
@@ -17,7 +18,10 @@ export default function InviteUserForm() {
 	const [roles, setRoles] = useState<Role[]>([])
 	const [rolesLoading, setRolesLoading] = useState(false)
 	const [roleId, setRoleId] = useState("")
+	const [trailerId, setTrailerId] = useState("")
 
+	const { data } = useSession()
+	console.log(data?.user.trailers)
 	useEffect(() => {
 		fetchRoles()
 	}, [])
@@ -50,7 +54,7 @@ export default function InviteUserForm() {
 			const response = await fetch('/api/invitations/send', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email, roleId }),
+				body: JSON.stringify({ email, roleId, trailerId }),
 			});
 
 			const data = await response.json();
@@ -92,6 +96,29 @@ export default function InviteUserForm() {
 							disabled={loading}
 						/>
 					</div>
+					<div className="space-y-2">
+						<Label htmlFor="role">Trailer</Label>
+						{data?.user.trailers ?
+							<Select
+								value={trailerId}
+								onValueChange={(value) => setTrailerId(value)}
+							>
+								<SelectTrigger id="role">
+									<SelectValue placeholder="Select trailer" />
+								</SelectTrigger>
+								<SelectContent>
+									{data.user.trailers.map((trailer) => (
+										<SelectItem key={trailer.id} value={trailer.id}>
+											{trailer.name}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+							:
+							<Loader2 className="w-4 h-4 mr-2 animate-spin" />
+						}
+					</div>
+
 					<div className="space-y-2">
 						<Label htmlFor="role">Role</Label>
 						{rolesLoading ?

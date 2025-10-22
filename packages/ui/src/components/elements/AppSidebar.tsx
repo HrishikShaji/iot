@@ -30,16 +30,21 @@ type NavLink = {
 	children?: NavLink[]
 }
 
-type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
-	links?: NavLink[]
+type SidebarData = {
+	links: NavLink[];
+	header?: string;
 }
 
-export function AppSidebar({ links = [], ...props }: AppSidebarProps) {
+type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
+	data: SidebarData
+}
+
+export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) {
 	const pathname = usePathname()
 
-	if (pathname === "/auth/login" || pathname === "/auth/register") {
-		return null
-	}
+	// if (pathname === "/auth/login" || pathname === "/auth/register") {
+	// 	return null
+	// }
 
 	const renderLinks = (navLinks: NavLink[]) => {
 		return navLinks.map((link, index) => {
@@ -109,11 +114,16 @@ export function AppSidebar({ links = [], ...props }: AppSidebarProps) {
 		>
 			<SidebarHeader>
 				<SidebarMenu>
+					{data.header ?
+						<div className="border-1 p-2 rounded-md">
+							{data.header}
+						</div>
+						: null}
 					{/* You can add header content here */}
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
-				<SidebarMenu>{renderLinks(links)}</SidebarMenu>
+				<SidebarMenu>{renderLinks(data.links)}</SidebarMenu>
 			</SidebarContent>
 			<SidebarFooter>
 				{/* You can add footer content here */}

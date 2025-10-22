@@ -24,8 +24,7 @@ model User {
   accounts          Account[]
   sessions          Session[]
   
-  // Owned trailer (one-to-one)
-  trailer           Trailer?              @relation("UserTrailer")
+  trailers           Trailer[]              @relation("UserTrailer")
   
   // Trailers this user has access to (shared)
   trailerAccesses   TrailerAccess[]       @relation("TrailerAccesses")
