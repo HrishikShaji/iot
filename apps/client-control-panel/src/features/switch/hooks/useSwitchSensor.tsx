@@ -11,23 +11,54 @@ interface Props {
 export default function useSwitchSensor({ email, client, userId }: Props) {
 	const [switchState, setSwitchState] = useState(false)
 
-	const toggleSwitch = () => {
-		const newState = !switchState
-		setSwitchState(newState)
-		if (client) {
-			const newState = !switchState
-			setSwitchState(newState)
-			publishSensorData(newState)
-		}
-	}
-
+	// Subscribe to switch state changes
 	useEffect(() => {
-		publishSensorData(switchState)
-	}, [])
+		if (!client) return;
+
+		const topic = "switch/state";
+
+		// Message handler for incoming switch state updates
+		const handleMessage = (topic: string, message: Buffer) => {
+			try {
+				const data: SwitchSensorType = JSON.parse(message.toString());
+				// Update local state when receiving messages from other apps
+				setSwitchState(data.state);
+				console.log("Received switch state:", data.state);
+			} catch (err) {
+				console.error("Error parsing message:", err);
+			}
+		};
+
+		// Subscribe to the topic
+		client.subscribe(topic, { qos: 0 }, (err) => {
+			if (err) {
+				console.error("Subscribe error:", err);
+			} else {
+				console.log("Subscribed to switch/state");
+			}
+		});
+
+		// Set up message listener
+		client.on("message", handleMessage);
+
+		// Publish initial state
+		publishSensorData(switchState);
+
+		// Cleanup
+		return () => {
+			client.unsubscribe(topic);
+			client.off("message", handleMessage);
+		};
+	}, [client]);
+
+	const toggleSwitch = () => {
+		const newState = !switchState;
+		setSwitchState(newState);
+		publishSensorData(newState);
+	}
 
 	const publishSensorData = (newState: boolean) => {
 		if (client) {
-
 			const message: SwitchSensorType = {
 				userId,
 				email,
@@ -35,7 +66,6 @@ export default function useSwitchSensor({ email, client, userId }: Props) {
 				timestamp: new Date().toISOString(),
 				device: "main-switch",
 			}
-
 			client.publish("switch/state", JSON.stringify(message), { qos: 0, retain: true }, (err) => {
 				if (err) {
 					console.log("Publish error:", err)
@@ -47,5 +77,4 @@ export default function useSwitchSensor({ email, client, userId }: Props) {
 	}
 
 	return { toggleSwitch, switchState, setSwitchState }
-
 }
