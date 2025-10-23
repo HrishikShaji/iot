@@ -57,6 +57,7 @@ export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) 
 				: null
 
 			if (hasChildren) {
+				console.log("This is link", link.href)
 				return (
 					<Collapsible key={index} asChild defaultOpen={false}>
 						<SidebarMenuItem>

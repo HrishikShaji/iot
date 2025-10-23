@@ -143,7 +143,7 @@ export const sidebarLinks = [
 export function getSidebarLinks(id: string, name: string) {
 	return [
 		{
-			title: name,
+			title: "Home",
 			href: "/",
 			icon: "Home",
 		},
@@ -177,17 +177,17 @@ export function getSidebarLinks(id: string, name: string) {
 					href: `/trailers/${id}/manage`,
 					icon: "Caravan",
 				},
-				{
-					title: "shared trailers",
-					href: "/trailers/shared",
-					icon: "Caravan",
-				},
 			],
 		},
 		{
 			title: "Controls & systems",
 			icon: "Settings",
 			children: [
+				{
+					title: "switch",
+					href: `/trailers/${id}/controls/switch`,
+					icon: "Settings",
+				},
 				{
 					title: "energy",
 					href: "/controls/energy",
