@@ -33,7 +33,7 @@ export default function useSwitchSensor({ email, client, userId, trailerId }: Pr
 		// Subscribe to the topic
 		client.subscribe(topic, { qos: 0 }, (err) => {
 			if (err) {
-				console.error("Subscribe error:", err);
+				console.log("Subscribe error:", err);
 			} else {
 				console.log("Subscribed to switch/state");
 			}

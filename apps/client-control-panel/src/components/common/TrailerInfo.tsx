@@ -1,7 +1,7 @@
 "use client"
 import { useSession } from "next-auth/react";
-import { Badge } from "../ui/badge";
 import { Loader2 } from "lucide-react";
+import { Badge } from "@repo/ui/components/ui/badge"
 
 export default function TrailerInfo() {
 	const { status, data } = useSession()

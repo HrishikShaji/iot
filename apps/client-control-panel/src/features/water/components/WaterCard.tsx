@@ -1,8 +1,8 @@
 "use client"
 
 import { Droplets } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ui/card"
+import { Switch } from "@repo/ui/components/ui/switch"
 import type { MqttClient } from "mqtt"
 import { getStatusColor } from "@/lib/utils"
 import WaterModal from "./WaterModal"

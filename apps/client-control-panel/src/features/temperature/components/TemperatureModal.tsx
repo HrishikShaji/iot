@@ -1,15 +1,15 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/components/ui/button"
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@repo/ui/components/ui/dialog"
 import { Droplets, MapPin, Send, Settings2, Thermometer } from "lucide-react"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from "@/components/ui/select"
+import { Label } from "@repo/ui/components/ui/label"
+import { Slider } from "@repo/ui/components/ui/slider"
+import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from "@repo/ui/components/ui/select"
 import { formatValue } from "@/lib/utils"
 import { TemperatureSensorType } from "@repo/types"
 

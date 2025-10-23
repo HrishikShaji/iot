@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Loader2, Truck, User, Calendar, Eye } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select"
 import { useRouter } from 'next/navigation';
 
 interface SharedTrailer {

@@ -3,6 +3,7 @@ import ControlPanel from "./ControlPanel"
 import useMqtt from "@/hooks/useMqtt"
 import Header from "@repo/ui/components/elements/Header"
 import UserProfile from "./common/UserProfile";
+import { Home } from "@repo/ui/icons"
 
 interface Props {
 	email: string;
@@ -23,6 +24,7 @@ export default function HomePage({ email, userId, status }: Props) {
 
 	return (
 		<ControlPanel
+			trailerId=""
 			client={client}
 			email={email}
 			userId={userId}

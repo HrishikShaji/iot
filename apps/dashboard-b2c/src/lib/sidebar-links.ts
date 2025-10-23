@@ -4,16 +4,16 @@ export const homeSidebarLinks = [
 		href: "/",
 		icon: "Home",
 	},
-	{
-		title: "Your Trailers",
-		href: "/trailers",
-		icon: "Caravan",
-	},
-	{
-		title: "Shared Trailers",
-		href: "/trailers/shared",
-		icon: "Caravan",
-	},
+	// {
+	// 	title: "Your Trailers",
+	// 	href: "/trailers",
+	// 	icon: "Caravan",
+	// },
+	// {
+	// 	title: "Shared Trailers",
+	// 	href: "/trailers/shared",
+	// 	icon: "Caravan",
+	// },
 	{
 		title: "inbox",
 		href: "/inbox",
