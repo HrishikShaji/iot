@@ -10,9 +10,10 @@ interface Props {
 	userId: string;
 	email: string;
 	client: MqttClient;
+	trailerId: string;
 }
 
-export default function ControlPanel({ userId, email, client }: Props) {
+export default function ControlPanel({ userId, email, client, trailerId }: Props) {
 
 	return (
 		<div className="h-full p-4 md:p-6 lg:p-8 relative"
@@ -31,6 +32,7 @@ export default function ControlPanel({ userId, email, client }: Props) {
 					userId={userId}
 					email={email}
 					client={client}
+					trailerId={trailerId}
 				/>
 				<TemperatureCard
 					email={email}

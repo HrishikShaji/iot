@@ -4,13 +4,17 @@ import app from "@/lib/firebase";
 import { SwitchSensorType } from "@repo/types";
 
 
-export default function useSwitchMonitoring() {
+interface Props {
+	trailerId: string;
+}
+
+export default function useSwitchMonitoring({ trailerId }: Props) {
 	const [messages, setMessages] = useState<SwitchSensorType[]>([])
 	useEffect(() => {
 		const database = getDatabase(app);
 		const messagesRef = ref(database, 'messages');
 
-		const specificTopic = "switch/state";
+		const specificTopic = `switch/state/${trailerId}`;
 		const messagesQuery = query(
 			messagesRef,
 			orderByChild('topic'),

@@ -4,8 +4,12 @@ import useSwitchMonitoring from "../hooks/useSwitchMonitoring"
 import SwitchChart1 from "./SwitchChart1"
 import SwitchStatsTable from "./SwitchStatsTable"
 
-export default function SwitchMonitoring() {
-	const { messages } = useSwitchMonitoring()
+interface Props {
+	trailerId: string;
+}
+
+export default function SwitchMonitoring({ trailerId }: Props) {
+	const { messages } = useSwitchMonitoring({ trailerId })
 
 	return (
 		<Dialog>

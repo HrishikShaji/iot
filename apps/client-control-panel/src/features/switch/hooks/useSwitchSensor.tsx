@@ -6,16 +6,17 @@ interface Props {
 	client: MqttClient;
 	userId: string;
 	email: string;
+	trailerId: string;
 }
 
-export default function useSwitchSensor({ email, client, userId }: Props) {
+export default function useSwitchSensor({ email, client, userId, trailerId }: Props) {
 	const [switchState, setSwitchState] = useState(false)
+	const topic = `switch/state/${trailerId}`;
 
 	// Subscribe to switch state changes
 	useEffect(() => {
 		if (!client) return;
 
-		const topic = "switch/state";
 
 		// Message handler for incoming switch state updates
 		const handleMessage = (topic: string, message: Buffer) => {
@@ -66,7 +67,7 @@ export default function useSwitchSensor({ email, client, userId }: Props) {
 				timestamp: new Date().toISOString(),
 				device: "main-switch",
 			}
-			client.publish("switch/state", JSON.stringify(message), { qos: 0, retain: true }, (err) => {
+			client.publish(topic, JSON.stringify(message), { qos: 0, retain: true }, (err) => {
 				if (err) {
 					console.log("Publish error:", err)
 				} else {
