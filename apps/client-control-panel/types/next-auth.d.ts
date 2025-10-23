@@ -24,20 +24,20 @@ declare module "next-auth" {
 		user: {
 			id: string
 			role: Role
-			trailer: Trailer
+			trailers: Trailer[]
 		} & DefaultSession["user"]
 	}
 
 	interface User {
 		role: Role
-		trailer: Trailer
+		trailers: Trailer[]
 	}
 }
 
 declare module "@auth/core/adapters" {
 	interface AdapterUser {
 		role: Role
-		trailer: Trailer
+		trailers: Trailer[]
 	}
 }
 
@@ -45,6 +45,6 @@ declare module "next-auth/jwt" {
 	interface JWT {
 		id: string
 		role: Role
-		trailer: Trailer
+		trailers: Trailer[]
 	}
 }

@@ -36,7 +36,7 @@ export default function Dashboard({ waterLevelData, powerData, switchData, tempe
 				<div className=" px-10 w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 					<SensorCard
 						title="Switch  Sensor"
-						icon={<SwitchMonitoring />}
+						icon={<SwitchMonitoring trailerId="" />}
 					>
 						<SwitchInfo switchData={switchData} />
 					</SensorCard>

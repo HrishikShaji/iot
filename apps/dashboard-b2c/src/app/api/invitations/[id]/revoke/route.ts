@@ -4,9 +4,10 @@ import { auth } from '../../../../../../auth';
 
 export async function POST(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
 	try {
+		const { id } = await params
 		const session = await auth()
 		if (!session) {
 			return NextResponse.json(
@@ -25,7 +26,7 @@ export async function POST(
 		}
 
 		const invitation = await prisma.invitation.findUnique({
-			where: { id: params.id },
+			where: { id },
 		});
 
 		if (!invitation || invitation.inviterId !== user.id) {
@@ -36,7 +37,7 @@ export async function POST(
 		}
 
 		await prisma.invitation.update({
-			where: { id: params.id },
+			where: { id },
 			data: { status: 'EXPIRED' },
 		});
 

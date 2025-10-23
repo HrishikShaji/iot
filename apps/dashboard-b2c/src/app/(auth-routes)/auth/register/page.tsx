@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Loader2 } from "lucide-react"
 
-export default function Page() {
+function RegisterForm() {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 	const [roleId, setRoleId] = useState("")
@@ -266,5 +266,20 @@ export default function Page() {
 				</CardFooter>
 			</Card>
 		</div>
+	)
+}
+
+export default function Page() {
+	return (
+		<Suspense fallback={
+			<div className="min-h-screen flex items-center justify-center bg-gray-50">
+				<div className="text-center">
+					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+					<p className="mt-4 text-gray-600">Loading...</p>
+				</div>
+			</div>
+		}>
+			<RegisterForm />
+		</Suspense>
 	)
 }
