@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 		}
 		const user = session.user;
 
-		if (!user) {
+		if (!user || !user.email) {
 			return NextResponse.json(
 				{ error: 'Unauthorized' },
 				{ status: 401 }
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 		}
 
 		const invitations = await prisma.invitation.findMany({
-			where: { inviterId: user.id },
+			where: { email: user.email },
 			orderBy: { createdAt: 'desc' },
 			select: {
 				id: true,
@@ -30,10 +30,13 @@ export async function GET(request: NextRequest) {
 				status: true,
 				createdAt: true,
 				expiresAt: true,
-				roleId: true
+				token: true,
+				roleId: true,
+				role: true,
+				trailer: true
 			},
 		});
-
+		console.log("INVITATIONS:", invitations)
 		return NextResponse.json({ invitations });
 	} catch (error) {
 		console.error('Error fetching invitations:', error);

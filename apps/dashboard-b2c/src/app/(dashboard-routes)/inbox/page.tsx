@@ -1,9 +1,9 @@
-import InvitationsList from "@/features/invitations/components/InvitationsList";
+import Inbox from "@/features/invitations/components/Inbox";
 
 export default function Page() {
 	return (
 		<div>
-			<InvitationsList />
+			<Inbox />
 		</div>
 	)
 }
