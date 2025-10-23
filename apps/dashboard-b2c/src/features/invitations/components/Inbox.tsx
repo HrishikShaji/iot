@@ -118,7 +118,7 @@ export default function Inbox() {
 								<div className="flex-1 space-y-1">
 									<div className="flex items-center gap-2">
 										<Mail className="h-4 w-4 text-muted-foreground" />
-										<p className="font-medium">{invitation.email}</p>
+										<p className="font-medium">{(invitation as any).inviter.email}</p>
 									</div>
 									<div className='flex gap-2'>
 										<Badge>{(invitation as any).role.name}</Badge>

@@ -33,7 +33,8 @@ export async function GET(request: NextRequest) {
 				token: true,
 				roleId: true,
 				role: true,
-				trailer: true
+				trailer: true,
+				inviter: true
 			},
 		});
 		console.log("INVITATIONS:", invitations)
