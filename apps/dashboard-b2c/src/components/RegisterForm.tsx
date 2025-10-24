@@ -33,7 +33,7 @@ export default function RegisterForm() {
 	const [invitationInfo, setInvitationInfo] = useState<any>(null);
 
 
-	console.log(invitationInfo)
+	// console.log(invitationInfo)
 
 	const fetchRoles = async () => {
 		console.log("this ran")
