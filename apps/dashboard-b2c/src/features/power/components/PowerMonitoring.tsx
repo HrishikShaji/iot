@@ -5,9 +5,9 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@repo/ui/components/ui/dialog";
 import { transformToChartData, calculateStats, getPowerQuality } from '../lib/utils';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/ui/tabs';
 import usePowerSensorData from '../hooks/usePowerSensorData';
 import { PowerChart1 } from './PowerChart1';
 import { PowerChart2 } from './PowerChart2';

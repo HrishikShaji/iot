@@ -1,7 +1,7 @@
 'use client';
 import InvitationsList from '@/features/invitations/components/InvitationsList';
 import InviteUserForm from '@/features/invitations/components/InviteUserForm';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/ui/tabs';
 import { UserPlus, List } from 'lucide-react';
 
 export default function Page() {

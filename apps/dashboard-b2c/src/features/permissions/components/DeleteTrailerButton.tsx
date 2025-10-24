@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@repo/ui/components/ui/badge";
 import { usePermission } from "../hooks/usePermission";
 
 

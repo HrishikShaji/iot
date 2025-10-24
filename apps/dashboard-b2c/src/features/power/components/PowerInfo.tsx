@@ -1,6 +1,6 @@
 import { Activity, Zap } from "lucide-react"
 import { formatTime, getStatusColor } from "@/lib/utils"
-import { Separator } from "@/components/ui/separator"
+import { Separator } from "@repo/ui/components/ui/separator"
 import { PowerSensorType } from "@repo/types"
 
 interface Props {

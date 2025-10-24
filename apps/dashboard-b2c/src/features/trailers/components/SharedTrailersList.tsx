@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
+import { Badge } from '@repo/ui/components/ui/badge';
+import { Button } from '@repo/ui/components/ui/button';
 import { Loader2, Truck, User, Calendar, Eye } from 'lucide-react';
 import { DeleteTrailerButton } from '@/features/permissions/components/DeleteTrailerButton';
 

@@ -1,5 +1,5 @@
 import { BarChartIcon, Power } from "lucide-react"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@repo/ui/components/ui/dialog"
 import useSwitchMonitoring from "../hooks/useSwitchMonitoring"
 import SwitchChart1 from "./SwitchChart1"
 import SwitchStatsTable from "./SwitchStatsTable"

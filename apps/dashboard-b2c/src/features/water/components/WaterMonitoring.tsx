@@ -1,5 +1,5 @@
 import { Gauge, BarChartIcon } from "lucide-react"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@repo/ui/components/ui/dialog"
 import { WaterStatsTable } from "@/features/water/components/WaterStatsTable"
 import WaterChart1 from "@/features/water/components/WaterChart1"
 import useWaterMonitoring from "../hooks/useWaterMonitoring"

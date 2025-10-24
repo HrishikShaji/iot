@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@repo/db';
 import TrailerAccessManager from '@/features/trailers/components/TrailerAccessManager';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
+import { Badge } from '@repo/ui/components/ui/badge';
+import { Separator } from '@repo/ui/components/ui/separator';
 import { Truck, User, Calendar, Shield } from 'lucide-react';
 import { auth } from '../../../../../auth';
 

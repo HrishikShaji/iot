@@ -1,5 +1,5 @@
 import { Thermometer, Droplets, BarChartIcon } from "lucide-react"
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@repo/ui/components/ui/dialog"
 import useTemperatureMonitoring from "../hooks/useTemperatureMonitoring"
 import TemperatureChart1 from "./TemperatureChart1"
 import { TemperatureStatsTable } from "./TemperatureStatsTable"

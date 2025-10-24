@@ -1,8 +1,8 @@
 import { Activity, Droplets } from "lucide-react"
 import { formatTime, getStatusColor, getWaterLevelStatus } from "@/lib/utils"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
+import { Progress } from "@repo/ui/components/ui/progress"
+import { Separator } from "@repo/ui/components/ui/separator"
+import { Badge } from "@repo/ui/components/ui/badge"
 import { WaterSensorType } from "@repo/types"
 
 interface Props {

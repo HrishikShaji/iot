@@ -1,5 +1,5 @@
 import { Activity, Power } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
 import { ReactNode, useEffect, useState } from "react";
 
 interface Props {

@@ -8,7 +8,7 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from "@/components/ui/table"
+} from "@repo/ui/components/ui/table"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,10 +16,10 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+} from "@repo/ui/components/ui/dropdown-menu"
+import { Button } from "@repo/ui/components/ui/button"
+import { Input } from "@repo/ui/components/ui/input"
+import { Badge } from "@repo/ui/components/ui/badge"
 import { MoreHorizontal, Pencil, Trash2, Mail, Shield, Search } from "lucide-react"
 
 interface Props {
