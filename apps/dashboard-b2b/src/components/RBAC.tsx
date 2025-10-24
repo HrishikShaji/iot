@@ -8,8 +8,8 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from '@repo/ui/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/ui/components/ui/tabs';
 import { Permission, Role } from '@/types/form-types';
 import CreateRole from '@/features/roles/components/CreateRole';
 import RolesTable from '@/features/roles/components/RolesTable';

@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@repo/ui/components/ui/badge";
 import { Permission as PermissionType } from "@/types/form-types"
 import DeletePermission from "./DeletePermission";
 import UpdatePermission from "./UpdatePermission";

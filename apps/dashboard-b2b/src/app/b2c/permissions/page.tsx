@@ -8,7 +8,7 @@ import {
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from '@/components/ui/card';
+} from '@repo/ui/components/ui/card';
 import { Permission, Role } from '@/types/form-types';
 import CreatePermission from '@/features/permissions/components/CreatePermission';
 import PermissionsTable from '@/features/permissions/components/PermissionsTable';

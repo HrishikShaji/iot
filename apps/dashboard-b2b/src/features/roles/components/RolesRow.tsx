@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@repo/ui/components/ui/badge"
+import { Button } from "@repo/ui/components/ui/button"
 import { Permission, Role } from "@/types/form-types"
 import AssignRole from "./AssignRole"
 import DeleteRole from "./DeleteRole";

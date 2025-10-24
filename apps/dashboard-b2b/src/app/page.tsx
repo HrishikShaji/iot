@@ -2,7 +2,7 @@
 
 import UserProfile from "@/components/common/UserProfile";
 import HomePage from "@/components/HomePage";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@repo/ui/components/ui/sidebar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

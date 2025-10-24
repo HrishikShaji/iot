@@ -1,7 +1,7 @@
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@repo/ui/components/ui/dialog";
+import { Label } from "@repo/ui/components/ui/label";
+import { Input } from "@repo/ui/components/ui/input"
+import { Textarea } from "@repo/ui/components/ui/textarea"
 import { Button } from "@repo/ui/components/ui/button";
 import { useState } from "react";
 import { Role } from "@/types/form-types";
