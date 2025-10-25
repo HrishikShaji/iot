@@ -51,7 +51,7 @@ model Trailer {
   
   // Owner
   userId      String           @unique @db.ObjectId
-  user        User             @relation("UserTrailer", fields: [userId], references: [id])
+  user        User             @relation("UserTrailer", fields: [userId], references: [id], onDelete: Cascade)
   
   // Shared access
   sharedWith  TrailerAccess[]  @relation("SharedWith")
@@ -64,9 +64,9 @@ model Invitation {
   id            String           @id @default(auto()) @map("_id") @db.ObjectId
   email         String
   inviterId     String           @db.ObjectId
-  inviter       User             @relation("SentInvitations", fields: [inviterId], references: [id])
+  inviter       User             @relation("SentInvitations", fields: [inviterId], references: [id], onDelete: Cascade)
   trailerId     String           @db.ObjectId
-  trailer       Trailer          @relation("TrailerInvitations", fields: [trailerId], references: [id])
+  trailer       Trailer          @relation("TrailerInvitations", fields: [trailerId], references: [id], onDelete: Cascade)
   token         String           @unique
   status        InvitationStatus @default(PENDING)
   roleId        String           @db.ObjectId
@@ -78,28 +78,27 @@ model Invitation {
   @@unique([email, trailerId])
 }
 
-enum InvitationStatus {
-  PENDING
-  ACCEPTED
-  EXPIRED
-}
-
 model TrailerAccess {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   userId      String     @db.ObjectId
-  user        User       @relation("TrailerAccesses", fields: [userId], references: [id])
+  user        User       @relation("TrailerAccesses", fields: [userId], references: [id], onDelete: Cascade)
   trailerId   String     @db.ObjectId
-  trailer     Trailer    @relation("SharedWith", fields: [trailerId], references: [id])
+  trailer     Trailer    @relation("SharedWith", fields: [trailerId], references: [id], onDelete: Cascade)
   accessType  AccessType @default(VIEW)
   grantedAt   DateTime   @default(now())
   grantedBy   String     @db.ObjectId
-  granter     User       @relation("GrantedAccesses", fields: [grantedBy], references: [id])
+  granter     User       @relation("GrantedAccesses", fields: [grantedBy], references: [id], onDelete: Cascade)
   roleId      String     @db.ObjectId
   role        Role       @relation(fields: [roleId], references: [id])
   
   @@unique([userId, trailerId])
 }
 
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+}
 enum AccessType {
   VIEW
   EDIT
