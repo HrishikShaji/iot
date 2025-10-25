@@ -27,14 +27,13 @@ export async function GET(request: NextRequest) {
 			},
 			orderBy: [
 				{ resource: 'asc' },
-				{ action: 'asc' },
 			],
 		});
 
 		// Format the response
 		const formattedPermissions = permissions.map((permission) => ({
 			id: permission.id,
-			action: permission.action,
+			actions: permission.actions,
 			resource: permission.resource,
 			scope: permission.scope,
 			description: permission.description,
@@ -57,11 +56,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
 	try {
 		const body = await request.json();
-		const { action, resource, scope = 'all', description, context } = body;
+		const { actions, resource, scope = 'all', description, context } = body;
 
-		if (!action || !resource) {
+		if (!actions || !Array.isArray(actions) || actions.length === 0 || !resource) {
 			return NextResponse.json(
-				{ error: 'Action and resource are required' },
+				{ error: 'Actions (array) and resource are required' },
 				{ status: 400 }
 			);
 		}
@@ -69,8 +68,7 @@ export async function POST(request: NextRequest) {
 		// Check if permission already exists
 		const existingPermission = await prisma.permission.findUnique({
 			where: {
-				action_resource_scope_context: {
-					action,
+				resource_scope_context: {
 					resource,
 					scope,
 					context
@@ -88,7 +86,7 @@ export async function POST(request: NextRequest) {
 		// Create permission
 		const permission = await prisma.permission.create({
 			data: {
-				action,
+				actions,
 				resource,
 				scope,
 				description,

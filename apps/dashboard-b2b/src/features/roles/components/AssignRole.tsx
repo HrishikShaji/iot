@@ -96,7 +96,9 @@ export default function AssignRole({ fetchRoles, selectedRole, permissions }: Pr
 							/>
 							<div className="flex-1">
 								<label htmlFor={`perm-${permission.id}`} className="text-sm font-medium cursor-pointer">
-									{permission.action}:{permission.resource}
+									{permission.actions.map((a, i) => (
+										<Badge key={i} className="mr-1">{a}</Badge>
+									))}:{permission.resource}
 								</label>
 								<div className="flex gap-2 mt-1">
 									<Badge variant="outline" className="text-xs">

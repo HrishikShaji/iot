@@ -11,7 +11,7 @@ export interface Role {
 
 export interface Permission {
 	id: string;
-	action: string;
+	actions: string[];
 	resource: string;
 	scope: string;
 	context: string;

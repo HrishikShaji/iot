@@ -4,10 +4,11 @@ import { Label } from "@repo/ui/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select"
 import { Input } from "@repo/ui/components/ui/input"
 import { Textarea } from "@repo/ui/components/ui/textarea"
-import { Plus, Loader2, Edit } from "lucide-react"
+import { Loader2, Edit, X } from "lucide-react"
 import { useState } from "react";
 import { Permission } from "@/types/form-types";
 import { permissionActions, permissionScopes } from "@/lib/permission-constants";
+import { Badge } from "@repo/ui/components/ui/badge";
 
 interface Props {
 	fetchPermissions: () => void;
@@ -16,7 +17,7 @@ interface Props {
 
 export default function UpdatePermission({ fetchPermissions, permission }: Props) {
 	const [permissionForm, setPermissionForm] = useState({
-		action: permission.action,
+		actions: permission.actions || [],
 		resource: permission.resource,
 		scope: permission.scope,
 		description: permission.description,
@@ -24,11 +25,10 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 	});
 	const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [selectedPermission, setSelectedPermission] = useState<Permission | null>(null);
-
+	const [selectedAction, setSelectedAction] = useState('');
 
 	const handleUpdatePermission = async () => {
-		if (!permissionForm.action || !permissionForm.resource) return;
+		if (!permissionForm.actions.length || !permissionForm.resource) return;
 
 		setLoading(true);
 		try {
@@ -48,8 +48,7 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 			// 	description: 'Permission updated successfully',
 			// });
 
-			setPermissionForm({ action: '', resource: '', scope: 'all', description: '', context: "B2C" });
-			setSelectedPermission(null);
+			setSelectedAction('');
 			setIsPermissionDialogOpen(false);
 			fetchPermissions();
 		} catch (error: any) {
@@ -63,18 +62,42 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 		}
 	};
 
+	const handleAddAction = (action: string) => {
+		if (action && !permissionForm.actions.includes(action)) {
+			setPermissionForm({
+				...permissionForm,
+				actions: [...permissionForm.actions, action]
+			});
+			setSelectedAction('');
+		}
+	};
+
+	const handleRemoveAction = (actionToRemove: string) => {
+		setPermissionForm({
+			...permissionForm,
+			actions: permissionForm.actions.filter(a => a !== actionToRemove)
+		});
+	};
+
+	const availableActions = permissionActions.filter(
+		action => !permissionForm.actions.includes(action)
+	);
+
 	return (
 		<Dialog open={isPermissionDialogOpen} onOpenChange={setIsPermissionDialogOpen}>
 			<DialogTrigger asChild>
 				<Button
+					variant="ghost"
+					size="icon"
 					onClick={() => {
 						setPermissionForm({
-							action: permission.action,
+							actions: permission.actions || [],
 							resource: permission.resource,
 							scope: permission.scope,
-							description: permission.description,
+							description: permission.description || '',
 							context: permission.context
 						});
+						setSelectedAction('');
 					}}
 				>
 					<Edit className="w-4 h-4" />
@@ -91,22 +114,35 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 				</DialogHeader>
 				<div className="space-y-4 py-4">
 					<div className="space-y-2">
-						<Label htmlFor="perm-action">Action *</Label>
+						<Label htmlFor="perm-actions">Actions *</Label>
 						<Select
-							value={permissionForm.action}
-							onValueChange={(value) => setPermissionForm({ ...permissionForm, action: value })}
+							value={selectedAction}
+							onValueChange={handleAddAction}
 						>
-							<SelectTrigger id="perm-action">
-								<SelectValue placeholder="Select action" />
+							<SelectTrigger id="perm-actions">
+								<SelectValue placeholder="Select actions" />
 							</SelectTrigger>
 							<SelectContent>
-								{permissionActions.map((action) => (
+								{availableActions.map((action) => (
 									<SelectItem key={action} value={action}>
 										{action}
 									</SelectItem>
 								))}
 							</SelectContent>
 						</Select>
+						{permissionForm.actions.length > 0 && (
+							<div className="flex flex-wrap gap-2 mt-2">
+								{permissionForm.actions.map((action) => (
+									<Badge key={action} variant="secondary" className="gap-1">
+										{action}
+										<X
+											className="w-3 h-3 cursor-pointer hover:text-destructive"
+											onClick={() => handleRemoveAction(action)}
+										/>
+									</Badge>
+								))}
+							</div>
+						)}
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="perm-resource">Resource *</Label>
@@ -155,14 +191,13 @@ export default function UpdatePermission({ fetchPermissions, permission }: Props
 					</Button>
 					<Button
 						onClick={handleUpdatePermission}
-						disabled={loading}
+						disabled={loading || !permissionForm.actions.length || !permissionForm.resource}
 					>
 						{loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-						{selectedPermission ? 'Update' : 'Create'}
+						Update
 					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-
 	)
 }

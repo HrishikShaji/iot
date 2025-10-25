@@ -41,7 +41,9 @@ export async function checkUserPermission({
 			const perm = rp.permission;
 
 			// Match action and resource
-			const actionMatch = perm.action === action || perm.action === '*';
+			const actionMatch =
+				perm.actions.includes(action) ||
+				perm.actions.includes('*');
 			const resourceMatch = perm.resource === resource || perm.resource === '*';
 			const scopeMatch = perm.scope === scope || perm.scope === 'all';
 			console.log("Action Match:", actionMatch)

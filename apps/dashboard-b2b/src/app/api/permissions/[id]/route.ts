@@ -46,10 +46,18 @@ export async function PUT(
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> }
 ) {
-	const { id } = await params
+	const { id } = await params;
 	try {
 		const body = await request.json();
-		const { action, resource, scope, description, context } = body;
+		const { actions, resource, scope, description, context } = body;
+
+		// Validate actions array
+		if (!actions || !Array.isArray(actions) || actions.length === 0) {
+			return NextResponse.json(
+				{ error: 'Actions array is required and must not be empty' },
+				{ status: 400 }
+			);
+		}
 
 		// Check if permission exists
 		const existingPermission = await prisma.permission.findUnique({
@@ -65,19 +73,16 @@ export async function PUT(
 
 		// If the unique combination is being changed, check for conflicts
 		if (
-			action &&
 			resource &&
 			scope &&
 			context &&
-			(action !== existingPermission.action ||
-				resource !== existingPermission.resource ||
+			(resource !== existingPermission.resource ||
 				scope !== existingPermission.scope ||
 				context !== existingPermission.context)
 		) {
 			const conflict = await prisma.permission.findUnique({
 				where: {
-					action_resource_scope_context: {
-						action,
+					resource_scope_context: {
 						resource,
 						scope,
 						context
@@ -85,7 +90,7 @@ export async function PUT(
 				},
 			});
 
-			if (conflict) {
+			if (conflict && conflict.id !== id) {
 				return NextResponse.json(
 					{ error: 'Permission with this combination already exists' },
 					{ status: 400 }
@@ -97,7 +102,7 @@ export async function PUT(
 		const permission = await prisma.permission.update({
 			where: { id },
 			data: {
-				action,
+				actions,
 				resource,
 				scope,
 				description,
@@ -127,7 +132,7 @@ export async function DELETE(
 	request: NextRequest,
 	{ params }: { params: Promise<{ id: string }> }
 ) {
-	const { id } = await params
+	const { id } = await params;
 	try {
 		// Check if permission exists
 		const permission = await prisma.permission.findUnique({

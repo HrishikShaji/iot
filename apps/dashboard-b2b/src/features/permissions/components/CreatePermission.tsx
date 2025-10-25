@@ -2,11 +2,11 @@ import { Button } from "@repo/ui/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@repo/ui/components/ui/dialog";
 import { Label } from "@repo/ui/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/components/ui/select"
-import { Input } from "@repo/ui/components/ui/input"
 import { Textarea } from "@repo/ui/components/ui/textarea"
-import { Plus, Loader2 } from "lucide-react"
+import { Plus, Loader2, X } from "lucide-react"
 import { useState } from "react";
 import { permissionActions, permissionResources, permissionScopes } from "@/lib/permission-constants";
+import { Badge } from "@repo/ui/components/ui/badge";
 
 interface Props {
 	fetchPermissions: () => void;
@@ -15,7 +15,7 @@ interface Props {
 
 export default function CreatePermission({ fetchPermissions, context }: Props) {
 	const [permissionForm, setPermissionForm] = useState({
-		action: '',
+		actions: [] as string[],
 		resource: '',
 		scope: '',
 		description: '',
@@ -23,12 +23,13 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 	});
 	const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [selectedAction, setSelectedAction] = useState('');
 
 	const handleCreatePermission = async () => {
-		if (!permissionForm.action || !permissionForm.resource) {
+		if (!permissionForm.actions.length || !permissionForm.resource) {
 			// toast({
 			// 	title: 'Validation Error',
-			// 	description: 'Action and resource are required',
+			// 	description: 'At least one action and resource are required',
 			// 	variant: 'destructive',
 			// });
 			return;
@@ -52,7 +53,8 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 			// 	description: 'Permission created successfully',
 			// });
 
-			setPermissionForm({ action: '', resource: '', scope: '', description: '', context });
+			setPermissionForm({ actions: [], resource: '', scope: '', description: '', context });
+			setSelectedAction('');
 			setIsPermissionDialogOpen(false);
 			fetchPermissions();
 		} catch (error: any) {
@@ -66,13 +68,34 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 		}
 	};
 
+	const handleAddAction = (action: string) => {
+		if (action && !permissionForm.actions.includes(action)) {
+			setPermissionForm({
+				...permissionForm,
+				actions: [...permissionForm.actions, action]
+			});
+			setSelectedAction('');
+		}
+	};
+
+	const handleRemoveAction = (actionToRemove: string) => {
+		setPermissionForm({
+			...permissionForm,
+			actions: permissionForm.actions.filter(a => a !== actionToRemove)
+		});
+	};
+
+	const availableActions = permissionActions.filter(
+		action => !permissionForm.actions.includes(action)
+	);
 
 	return (
 		<Dialog open={isPermissionDialogOpen} onOpenChange={setIsPermissionDialogOpen}>
 			<DialogTrigger asChild>
 				<Button
 					onClick={() => {
-						setPermissionForm({ context, action: '', resource: '', scope: '', description: '' });
+						setPermissionForm({ context, actions: [], resource: '', scope: '', description: '' });
+						setSelectedAction('');
 					}}
 				>
 					<Plus className="w-4 h-4 mr-2" />
@@ -90,22 +113,35 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 				</DialogHeader>
 				<div className="space-y-4 py-4">
 					<div className="space-y-2">
-						<Label htmlFor="perm-action">Action *</Label>
+						<Label htmlFor="perm-actions">Actions *</Label>
 						<Select
-							value={permissionForm.action}
-							onValueChange={(value) => setPermissionForm({ ...permissionForm, action: value })}
+							value={selectedAction}
+							onValueChange={handleAddAction}
 						>
-							<SelectTrigger id="perm-action">
-								<SelectValue placeholder="Select action" />
+							<SelectTrigger id="perm-actions">
+								<SelectValue placeholder="Select actions" />
 							</SelectTrigger>
 							<SelectContent>
-								{permissionActions.map((action) => (
+								{availableActions.map((action) => (
 									<SelectItem key={action} value={action}>
 										{action}
 									</SelectItem>
 								))}
 							</SelectContent>
 						</Select>
+						{permissionForm.actions.length > 0 && (
+							<div className="flex flex-wrap gap-2 mt-2">
+								{permissionForm.actions.map((action) => (
+									<Badge key={action} variant="secondary" className="gap-1">
+										{action}
+										<X
+											className="w-3 h-3 cursor-pointer hover:text-destructive"
+											onClick={() => handleRemoveAction(action)}
+										/>
+									</Badge>
+								))}
+							</div>
+						)}
 					</div>
 					<div className="space-y-2">
 						<Label htmlFor="perm-resource">Resource *</Label>
@@ -117,9 +153,9 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 								<SelectValue placeholder="Select resource" />
 							</SelectTrigger>
 							<SelectContent>
-								{permissionResources.map((action) => (
-									<SelectItem key={action} value={action}>
-										{action}
+								{permissionResources.map((resource) => (
+									<SelectItem key={resource} value={resource}>
+										{resource}
 									</SelectItem>
 								))}
 							</SelectContent>
@@ -161,7 +197,7 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 					</Button>
 					<Button
 						onClick={handleCreatePermission}
-						disabled={loading}
+						disabled={loading || !permissionForm.actions.length || !permissionForm.resource}
 					>
 						{loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
 						Create
@@ -169,6 +205,5 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
-
 	)
 }

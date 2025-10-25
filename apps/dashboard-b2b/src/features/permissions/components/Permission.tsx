@@ -11,8 +11,10 @@ interface Props {
 export default function Permission({ permission, fetchPermissions }: Props) {
 	return (
 		<tr key={permission.id} className="border-b ">
-			<td className="px-4 py-3">
-				<Badge>{permission.action}</Badge>
+			<td className="px-4 py-3 flex gap-2 items-center">
+				{permission.actions.map((a, i) => (
+					<Badge key={i}>{a}</Badge>
+				))}
 			</td>
 			<td className="px-4 py-3 font-medium">{permission.resource}</td>
 			<td className="px-4 py-3">

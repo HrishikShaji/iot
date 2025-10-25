@@ -187,7 +187,7 @@ model Role {
 
 model Permission {
   id          String           @id @default(auto()) @map("_id") @db.ObjectId
-  action      String           
+  actions     String[]         // Changed from action to actions array
   resource    String           
   scope       String           @default("all")
   context     String           // "B2C", "B2B", or "both"
@@ -197,7 +197,7 @@ model Permission {
   
   roles       RolePermission[]
   
-  @@unique([action, resource, scope, context])
+  @@unique([resource, scope, context])  // Removed action from unique constraint
 }
 
 // Junction table for Role <-> Permission (many-to-many)

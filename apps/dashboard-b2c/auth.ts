@@ -39,7 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 												description: true,
 												scope: true,
 												id: true,
-												action: true,
+												actions: true,
 												context: true,
 											}
 										}
