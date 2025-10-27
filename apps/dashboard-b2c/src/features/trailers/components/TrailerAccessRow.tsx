@@ -7,26 +7,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Loader2, Users, Calendar, ShieldCheck, Eye, Edit, Shield } from 'lucide-react';
 import { Role } from '@repo/db';
 import { DeleteTrailerButton } from '@/features/permissions/components/DeleteTrailerButton';
+import { RolesWithPermissions, TrailerAccessesWithRole } from '@/features/users/types/user-types';
 
-interface TrailerAccess {
-	id: string;
-	accessType: string;
-	grantedAt: string;
-	user: {
-		id: string;
-		email: string;
-	};
-	role: {
-		id: string;
-		name: string;
-		description: string;
-	},
-	trailerId: string;
-}
 
 interface TrailerAccessManagerProps {
-	access: TrailerAccess;
-	roles: Role[];
+	access: TrailerAccessesWithRole[number];
+	roles: RolesWithPermissions;
 }
 
 export default function TrailerAccessRow({ access, roles }: TrailerAccessManagerProps) {
@@ -39,20 +25,6 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 		}
 	}, [access])
 
-	const handleUpdateAccess = async (accessId: string, newAccessType: string) => {
-		setUpdatingId(accessId);
-		try {
-			const response = await fetch(`/api/trailers/access/${accessId}`, {
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ accessType: newAccessType }),
-			});
-		} catch (error) {
-			console.error('Error updating access:', error);
-		} finally {
-			setUpdatingId(null);
-		}
-	};
 
 	const handleUpdateAccessRole = async (accessId: string, roleId: string) => {
 		setUpdatingId(accessId);
@@ -89,10 +61,14 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 		>
 			<div className="flex-1 space-y-1">
 				<p className="font-medium">{access.user.email}</p>
-				<p className="text-sm text-muted-foreground flex items-center gap-1">
+				<div className="text-sm text-muted-foreground flex items-center gap-1">
 					<Calendar className="h-3 w-3" />
-					Access granted: {new Date(access.grantedAt).toLocaleDateString()}
-				</p>
+					Access granted: {new Date(access.grantedAt).toLocaleDateString('en-US', {
+						year: 'numeric',
+						month: '2-digit',
+						day: '2-digit'
+					})}
+				</div>
 			</div>
 			<div className="flex items-center gap-3 mr-2">
 				<Select

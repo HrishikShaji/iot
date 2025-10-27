@@ -6,6 +6,8 @@ import { Badge } from '@repo/ui/components/ui/badge';
 import { Separator } from '@repo/ui/components/ui/separator';
 import { Truck, User, Calendar, Shield } from 'lucide-react';
 import { auth } from '../../../../../auth';
+import Link from 'next/link';
+import { Button } from '@repo/ui/components/ui/button';
 
 export default async function TrailerPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
@@ -98,8 +100,9 @@ export default async function TrailerPage({ params }: { params: Promise<{ id: st
 					</CardContent>
 				</Card>
 
-				{/* Only show access manager if user is the owner */}
-				{isOwner && <TrailerAccessManager trailerId={id} />}
+				{isOwner && <Button asChild variant="link">
+					<Link href={`/trailers/${id}/users`}>View Users with Access to this trailer</Link>
+				</Button>}
 			</div>
 		</div>
 	);

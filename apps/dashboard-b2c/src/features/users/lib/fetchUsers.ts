@@ -13,5 +13,4 @@ export async function fetchUsers() {
 	})
 
 	return response
-
 }

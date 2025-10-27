@@ -50,22 +50,6 @@ export const sidebarLinks = [
 		],
 	},
 	{
-		title: "Trailers",
-		icon: "Caravan",
-		children: [
-			{
-				title: "manage trailer",
-				href: "/trailer/manage",
-				icon: "Caravan",
-			},
-			{
-				title: "shared trailers",
-				href: "/trailers/shared",
-				icon: "Caravan",
-			},
-		],
-	},
-	{
 		title: "Controls & systems",
 		icon: "Settings",
 		children: [
@@ -165,17 +149,6 @@ export function getSidebarLinks(id: string, name: string) {
 					title: "transfer trailer",
 					href: "/trailer",
 					icon: "UserPlus",
-				},
-			],
-		},
-		{
-			title: "Trailers",
-			icon: "Caravan",
-			children: [
-				{
-					title: "manage trailer",
-					href: `/trailers/${id}/manage`,
-					icon: "Caravan",
 				},
 			],
 		},
