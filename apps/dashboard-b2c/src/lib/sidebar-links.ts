@@ -137,7 +137,12 @@ export function getSidebarLinks(id: string, name: string) {
 			children: [
 				{
 					title: "invite",
-					href: "/invitations",
+					href: `/trailers/${id}/invite`,
+					icon: "User",
+				},
+				{
+					title: "sent invitations",
+					href: `/trailers/${id}/sent-invitations`,
 					icon: "User",
 				},
 				{

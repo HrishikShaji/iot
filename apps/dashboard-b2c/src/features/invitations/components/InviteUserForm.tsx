@@ -11,15 +11,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@repo/ui/components/ui/badge";
 import { useSession } from 'next-auth/react';
 
-export default function InviteUserForm() {
+interface Props {
+	trailerId: string;
+}
+
+export default function InviteUserForm({ trailerId }: Props) {
 	const [email, setEmail] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 	const [roles, setRoles] = useState<Role[]>([]);
 	const [roleId, setRoleId] = useState("");
-	const [trailerId, setTrailerId] = useState("");
 	const [selectedUser, setSelectedUser] = useState<User | null>(null);
-	const [trailers, setTrailers] = useState<Trailer[]>([])
 	const [showSuggestions, setShowSuggestions] = useState(false);
 	const [allUsers, setAllUsers] = useState<User[]>([]);
 	const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -29,7 +31,7 @@ export default function InviteUserForm() {
 
 	useEffect(() => {
 		const initializeData = async () => {
-			await Promise.all([fetchRoles(), fetchUsers(), fetchTrailers()]);
+			await Promise.all([fetchRoles(), fetchUsers()]);
 			setIsReady(true);
 		};
 		initializeData();
@@ -46,18 +48,6 @@ export default function InviteUserForm() {
 			}
 		}
 	}, [email, selectedUser, allUsers]);
-	const fetchTrailers = async () => {
-		try {
-			const response = await fetch('/api/trailers');
-			const data = await response.json();
-			setTrailers(data.trailers || []);
-			console.log(data.trailers)
-		} catch (error) {
-			console.error('Error fetching shared trailers:', error);
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	const fetchUsers = async () => {
 		try {
@@ -243,25 +233,6 @@ export default function InviteUserForm() {
 							)}
 						</div>
 
-						<div className="space-y-2">
-							<Label htmlFor="trailer">Trailer</Label>
-							<Select
-								value={trailerId}
-								onValueChange={(value) => setTrailerId(value)}
-								disabled={loading}
-							>
-								<SelectTrigger id="trailer">
-									<SelectValue placeholder="Select trailer" />
-								</SelectTrigger>
-								<SelectContent>
-									{trailers.map((trailer) => (
-										<SelectItem key={trailer.id} value={trailer.id}>
-											{trailer.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
 
 						<div className="space-y-2">
 							<Label htmlFor="role">Role</Label>
