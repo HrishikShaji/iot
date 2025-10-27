@@ -51,8 +51,8 @@ export default function DashboardLayout({
 									title="Trailer Dashboard"
 									subtitle="View trailer metrics"
 								>
-									<UserTrailersDropdown />
-									<SharedTrailersDropdown />
+									{/* <UserTrailersDropdown /> */}
+									{/* <SharedTrailersDropdown /> */}
 									<MqttConnectionStatus />
 									<UserProfile />
 								</Header>
