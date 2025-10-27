@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@repo/db';
-import TrailerAccessManager from '@/features/trailers/components/TrailerAccessManager';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
 import { Badge } from '@repo/ui/components/ui/badge';
 import { Separator } from '@repo/ui/components/ui/separator';
