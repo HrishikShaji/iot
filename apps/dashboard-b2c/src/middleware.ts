@@ -4,6 +4,7 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(req: NextRequest) {
 	// getToken works in Edge runtimes (no Prisma involved)
 	const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+	console.log("THIS IS TOKEN:", token)
 
 	const isAuthPage = req.nextUrl.pathname.startsWith("/auth/login");
 

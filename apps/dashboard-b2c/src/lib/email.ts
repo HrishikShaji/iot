@@ -5,7 +5,7 @@ import { NEXT_PUBLIC_APP_URL, NODE_ENV, SMTP_HOST, SMTP_PASS, SMTP_USER } from '
 const transporter = nodemailer.createTransport({
 	host: SMTP_HOST,
 	port: NODE_ENV === "development" ? 587 : 465,
-	secure: false,
+	secure: NODE_ENV === "production",
 	auth: {
 		user: SMTP_USER,
 		pass: SMTP_PASS,
