@@ -201,18 +201,24 @@ export function getSidebarLinks(id: string) {
 					]
 				},
 				{
-					title: "energy",
-					href: "/controls/energy",
+					title: "water",
 					icon: "Settings",
+					children: [
+						{
+							title: "control",
+							href: `/trailers/${id}/controls/water`,
+							icon: "Settings",
+						},
+						{
+							title: "analytics",
+							href: `/trailers/${id}/controls/water/analytics`,
+							icon: "Settings",
+						},
+					]
 				},
 				{
 					title: "climate",
 					href: "/controls/climate",
-					icon: "Settings",
-				},
-				{
-					title: "water",
-					href: "/controls/water",
 					icon: "Settings",
 				},
 				{
