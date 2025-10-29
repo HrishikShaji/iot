@@ -126,7 +126,7 @@ export const sidebarLinks = [
 	},
 ]
 
-export function getSidebarLinks(id: string, name: string) {
+export function getSidebarLinks(id: string) {
 	return [
 		{
 			title: "Home",
@@ -170,8 +170,19 @@ export function getSidebarLinks(id: string, name: string) {
 			children: [
 				{
 					title: "switch",
-					href: `/trailers/${id}/controls/switch`,
 					icon: "Settings",
+					children: [
+						{
+							title: "control",
+							href: `/trailers/${id}/controls/switch`,
+							icon: "Settings",
+						},
+						{
+							title: "analytics",
+							href: `/trailers/${id}/controls/switch/analytics`,
+							icon: "Settings",
+						},
+					]
 				},
 				{
 					title: "energy",

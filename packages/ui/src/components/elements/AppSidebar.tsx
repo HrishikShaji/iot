@@ -42,11 +42,8 @@ type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
 export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) {
 	const pathname = usePathname()
 
-	// if (pathname === "/auth/login" || pathname === "/auth/register") {
-	// 	return null
-	// }
-
-	const renderLinks = (navLinks: NavLink[]) => {
+	// Recursive function to render nested children
+	const renderNestedLinks = (navLinks: NavLink[], depth: number = 0): React.ReactNode => {
 		return navLinks.map((link, index) => {
 			const isActive = pathname === link.href
 			const hasChildren = link.children && link.children.length > 0
@@ -57,53 +54,75 @@ export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) 
 				: null
 
 			if (hasChildren) {
-				console.log("This is link", link.href)
+				// For top-level items (depth 0), use SidebarMenuItem
+				if (depth === 0) {
+					return (
+						<Collapsible key={index} asChild defaultOpen={false}>
+							<SidebarMenuItem>
+								<CollapsibleTrigger asChild>
+									<SidebarMenuButton tooltip={link.title}>
+										{IconComponent && <IconComponent className="w-4 h-4" />}
+										<span>{link.title}</span>
+										<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+									</SidebarMenuButton>
+								</CollapsibleTrigger>
+								<CollapsibleContent>
+									<SidebarMenuSub>
+										{renderNestedLinks(link.children, depth + 1)}
+									</SidebarMenuSub>
+								</CollapsibleContent>
+							</SidebarMenuItem>
+						</Collapsible>
+					)
+				}
+
+				// For nested items (depth > 0), use SidebarMenuSubItem
 				return (
 					<Collapsible key={index} asChild defaultOpen={false}>
-						<SidebarMenuItem>
+						<SidebarMenuSubItem>
 							<CollapsibleTrigger asChild>
-								<SidebarMenuButton tooltip={link.title}>
+								<SidebarMenuSubButton>
 									{IconComponent && <IconComponent className="w-4 h-4" />}
 									<span>{link.title}</span>
 									<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-								</SidebarMenuButton>
+								</SidebarMenuSubButton>
 							</CollapsibleTrigger>
 							<CollapsibleContent>
-								<SidebarMenuSub>
-									{link.children?.map((child, childIndex) => {
-										const ChildIconComponent = child.icon
-											? (LucideIcons[child.icon as keyof typeof LucideIcons] as LucideIcon)
-											: null
-										return (
-											<SidebarMenuSubItem key={childIndex}>
-												<SidebarMenuSubButton
-													asChild
-													isActive={pathname === child.href}
-												>
-													<Link href={child.href || "#"}>
-														{ChildIconComponent && <ChildIconComponent className="w-4 h-4" />}
-														<span>{child.title}</span>
-													</Link>
-												</SidebarMenuSubButton>
-											</SidebarMenuSubItem>
-										)
-									})}
+								<SidebarMenuSub className={`ml-${depth * 2}`}>
+									{renderNestedLinks(link.children, depth + 1)}
 								</SidebarMenuSub>
 							</CollapsibleContent>
-						</SidebarMenuItem>
+						</SidebarMenuSubItem>
 					</Collapsible>
 				)
 			}
 
+			// Leaf nodes (no children)
+			if (depth === 0) {
+				return (
+					<SidebarMenuItem key={index}>
+						<SidebarMenuButton asChild tooltip={link.title} isActive={isActive}>
+							<Link href={link.href || "#"}>
+								{IconComponent && <IconComponent className="w-4 h-4" />}
+								<span>{link.title}</span>
+							</Link>
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				)
+			}
+
 			return (
-				<SidebarMenuItem key={index}>
-					<SidebarMenuButton asChild tooltip={link.title} isActive={isActive}>
+				<SidebarMenuSubItem key={index}>
+					<SidebarMenuSubButton
+						asChild
+						isActive={isActive}
+					>
 						<Link href={link.href || "#"}>
 							{IconComponent && <IconComponent className="w-4 h-4" />}
 							<span>{link.title}</span>
 						</Link>
-					</SidebarMenuButton>
-				</SidebarMenuItem>
+					</SidebarMenuSubButton>
+				</SidebarMenuSubItem>
 			)
 		})
 	}
@@ -120,11 +139,10 @@ export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) 
 							{data.header}
 						</div>
 						: null}
-					{/* You can add header content here */}
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
-				<SidebarMenu>{renderLinks(data.links)}</SidebarMenu>
+				<SidebarMenu>{renderNestedLinks(data.links)}</SidebarMenu>
 			</SidebarContent>
 			<SidebarFooter>
 				{/* You can add footer content here */}
