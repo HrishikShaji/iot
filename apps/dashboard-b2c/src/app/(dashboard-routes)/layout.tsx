@@ -9,8 +9,6 @@ import MqttConnectionStatus from "@/components/common/MqttConnectionStatus";
 import UserProfile from "@/components/common/UserProfile";
 import { AppSidebar } from "@repo/ui/components/elements/AppSidebar"
 import { homeSidebarLinks } from "@/lib/sidebar-links"
-import UserTrailersDropdown from "@/features/trailers/components/UserTrailersDropdown";
-import SharedTrailersDropdown from "@/features/trailers/components/SharedTrailersDropdown";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",

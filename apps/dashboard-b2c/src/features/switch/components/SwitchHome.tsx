@@ -1,7 +1,7 @@
 "use client"
 import { useMqtt } from "@/contexts/MqttContext";
-import SwitchCard from "@/features/switch/components/SwitchCard";
 import { useSession } from "next-auth/react";
+import SwitchControl from "./SwitchControl";
 
 interface Props {
 	trailerId: string;
@@ -16,7 +16,7 @@ export default function SwitchHome({ trailerId }: Props) {
 	if (!data?.user.id || !data.user.email) return <div>No user</div>
 	return (
 		<div className="p-10">
-			<SwitchCard trailerId={trailerId} client={client} userId={data.user.id} email={data.user.email} />
+			<SwitchControl trailerId={trailerId} client={client} userId={data.user.id} email={data.user.email} />
 		</div>
 	)
 }
