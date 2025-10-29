@@ -102,7 +102,6 @@ export default async function TrailerPage({ params }: { params: Promise<{ id: st
 					</CardContent>
 				</Card>
 			</div>
-			<div className='h-[600px] w-full bg-purple-500'></div>
 		</TrailerLayoutContainer >
 	);
 }

@@ -11,7 +11,6 @@ export default async function Page({ params }: { params: Promise<{ id: string; }
 	return (
 		<TrailerLayoutContainer trailerId={id} links={links} currentPage="analytics">
 			<SwitchAnalytics trailerId={id} />
-			<div className="h-[900px] w-full bg-purple-500"></div>
 		</TrailerLayoutContainer>
 	)
 }
