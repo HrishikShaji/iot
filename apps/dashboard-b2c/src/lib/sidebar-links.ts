@@ -1,3 +1,5 @@
+import { icons } from "@repo/ui/icons"
+
 export const homeSidebarLinks = [
 	{
 		title: "Home",
@@ -144,6 +146,11 @@ export function getSidebarLinks(id: string, name: string) {
 					title: "sent invitations",
 					href: `/trailers/${id}/sent-invitations`,
 					icon: "User",
+				},
+				{
+					title: "users",
+					href: `/trailers/${id}/users`,
+					icon: "UserPlus"
 				},
 				{
 					title: "guest passes",

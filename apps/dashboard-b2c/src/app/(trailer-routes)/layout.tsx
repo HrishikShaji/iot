@@ -10,6 +10,7 @@ import UserProfile from "@/components/common/UserProfile";
 import { AppSidebar } from "@repo/ui/components/elements/AppSidebar"
 import { sidebarLinks } from "@/lib/sidebar-links"
 import CustomSidebarComponent from "@/components/common/CustomSidebarComponent";
+import TrailerBreadCrumbs from "@/components/common/TrailerBreadCrumbs";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",

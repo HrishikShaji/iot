@@ -7,6 +7,7 @@ import { Truck, User, Calendar, Shield } from 'lucide-react';
 import { auth } from '../../../../../auth';
 import Link from 'next/link';
 import { Button } from '@repo/ui/components/ui/button';
+import TrailerBreadCrumbs from '@/components/common/TrailerBreadCrumbs';
 
 export default async function TrailerPage({ params }: { params: Promise<{ id: string }> }) {
 	const { id } = await params
@@ -40,69 +41,70 @@ export default async function TrailerPage({ params }: { params: Promise<{ id: st
 	// Get user's access type if not owner
 	const userAccess = hasAccess ? trailer.sharedWith[0] : null;
 
+
 	return (
-		<div className="container mx-auto px-4 py-8 max-w-4xl">
-			<div className="flex items-center justify-between mb-8">
-				<div className="flex items-center gap-3">
-					<Truck className="h-8 w-8 text-primary" />
-					<h1 className="text-3xl font-bold">{trailer.name}</h1>
+		<div>
+			<TrailerBreadCrumbs links={[]} id={trailer.id} />
+			<div className="container mx-auto px-4 py-8 max-w-4xl">
+				<div className="flex items-center justify-between mb-8">
+					<div className="flex items-center gap-3">
+						<Truck className="h-8 w-8 text-primary" />
+						<h1 className="text-3xl font-bold">{trailer.name}</h1>
+					</div>
+					{isOwner ? (
+						<Badge variant="default" className="flex items-center gap-1">
+							<Shield className="h-3 w-3" />
+							Owner
+						</Badge>
+					) : userAccess ? (
+						<Badge variant="secondary" className="flex items-center gap-1">
+							<Shield className="h-3 w-3" />
+							{userAccess.accessType}
+						</Badge>
+					) : null}
 				</div>
-				{isOwner ? (
-					<Badge variant="default" className="flex items-center gap-1">
-						<Shield className="h-3 w-3" />
-						Owner
-					</Badge>
-				) : userAccess ? (
-					<Badge variant="secondary" className="flex items-center gap-1">
-						<Shield className="h-3 w-3" />
-						{userAccess.accessType}
-					</Badge>
-				) : null}
-			</div>
 
-			<div className="grid gap-6">
-				{/* Trailer Details */}
-				<Card>
-					<CardHeader>
-						<CardTitle>Trailer Details</CardTitle>
-						<CardDescription>
-							{isOwner ? 'You own this trailer' : 'This trailer is shared with you'}
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<div className="flex items-center gap-2 text-sm">
-							<User className="h-4 w-4 text-muted-foreground" />
-							<span className="text-muted-foreground">Owner:</span>
-							<span className="font-medium">{trailer.user.email}</span>
-						</div>
+				<div className="grid gap-6">
+					{/* Trailer Details */}
+					<Card>
+						<CardHeader>
+							<CardTitle>Trailer Details</CardTitle>
+							<CardDescription>
+								{isOwner ? 'You own this trailer' : 'This trailer is shared with you'}
+							</CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<div className="flex items-center gap-2 text-sm">
+								<User className="h-4 w-4 text-muted-foreground" />
+								<span className="text-muted-foreground">Owner:</span>
+								<span className="font-medium">{trailer.user.email}</span>
+							</div>
 
-						<Separator />
+							<Separator />
 
-						<div className="flex items-center gap-2 text-sm">
-							<Calendar className="h-4 w-4 text-muted-foreground" />
-							<span className="text-muted-foreground">Created:</span>
-							<span className="font-medium">
-								{new Date(trailer.createdAt).toLocaleDateString()}
-							</span>
-						</div>
-
-						{trailer.updatedAt && (
 							<div className="flex items-center gap-2 text-sm">
 								<Calendar className="h-4 w-4 text-muted-foreground" />
-								<span className="text-muted-foreground">Last Updated:</span>
+								<span className="text-muted-foreground">Created:</span>
 								<span className="font-medium">
-									{new Date(trailer.updatedAt).toLocaleDateString()}
+									{new Date(trailer.createdAt).toLocaleDateString()}
 								</span>
 							</div>
-						)}
 
-					</CardContent>
-				</Card>
+							{trailer.updatedAt && (
+								<div className="flex items-center gap-2 text-sm">
+									<Calendar className="h-4 w-4 text-muted-foreground" />
+									<span className="text-muted-foreground">Last Updated:</span>
+									<span className="font-medium">
+										{new Date(trailer.updatedAt).toLocaleDateString()}
+									</span>
+								</div>
+							)}
 
-				{isOwner && <Button asChild variant="link">
-					<Link href={`/trailers/${id}/users`}>View Users with Access to this trailer</Link>
-				</Button>}
+						</CardContent>
+					</Card>
+				</div>
 			</div>
+
 		</div>
 	);
 }
