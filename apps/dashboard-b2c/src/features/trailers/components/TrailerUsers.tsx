@@ -32,7 +32,7 @@ async function fetchData(id: string) {
 		where: { id },
 	});
 
-	if (!trailer || trailer.userId !== user.id) {
+	if (!trailer) {
 		throw new Error('Trailer not found or unauthorized');
 	}
 
