@@ -1,4 +1,4 @@
-import TrailerBreadCrumbs from "@/components/common/TrailerBreadCrumbs";
+import TrailerLayoutContainer from "@/components/common/TrailerLayoutContainer";
 import SwitchAnalytics from "@/features/switch/components/SwitchAnalytics";
 
 export default async function Page({ params }: { params: Promise<{ id: string; }> }) {
@@ -9,9 +9,8 @@ export default async function Page({ params }: { params: Promise<{ id: string; }
 	]
 
 	return (
-		<div>
-			<TrailerBreadCrumbs id={id} links={links} currentPage="analytics" />
+		<TrailerLayoutContainer links={links} trailerId={id} currentPage="analytics">
 			<SwitchAnalytics trailerId={id} />
-		</div>
+		</TrailerLayoutContainer>
 	)
 }
