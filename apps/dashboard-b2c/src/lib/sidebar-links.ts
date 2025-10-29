@@ -243,7 +243,7 @@ export function getSidebarLinks(id: string) {
 						},
 						{
 							title: "analytics",
-							href: `/trailers/${id}/controls/climate/security`,
+							href: `/trailers/${id}/controls/security/analytics`,
 							icon: "Settings",
 						},
 					]
