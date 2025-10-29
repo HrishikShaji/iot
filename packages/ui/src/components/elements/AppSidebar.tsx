@@ -42,7 +42,7 @@ type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
 export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) {
 	const pathname = usePathname()
 
-	// Recursive function to render nested children
+	// Recursive function to render nested links
 	const renderNestedLinks = (navLinks: NavLink[], depth: number = 0): React.ReactNode => {
 		return navLinks.map((link, index) => {
 			const isActive = pathname === link.href
@@ -68,7 +68,7 @@ export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) 
 								</CollapsibleTrigger>
 								<CollapsibleContent>
 									<SidebarMenuSub>
-										{renderNestedLinks(link.children, depth + 1)}
+										{renderNestedLinks(link.children!, depth + 1)}
 									</SidebarMenuSub>
 								</CollapsibleContent>
 							</SidebarMenuItem>
@@ -89,7 +89,7 @@ export function AppSidebar({ data = { links: [] }, ...props }: AppSidebarProps) 
 							</CollapsibleTrigger>
 							<CollapsibleContent>
 								<SidebarMenuSub className={`ml-${depth * 2}`}>
-									{renderNestedLinks(link.children, depth + 1)}
+									{renderNestedLinks(link.children!, depth + 1)}
 								</SidebarMenuSub>
 							</CollapsibleContent>
 						</SidebarMenuSubItem>
