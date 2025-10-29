@@ -6,7 +6,7 @@ export async function middleware(req: NextRequest) {
 	const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 	console.log("THIS IS TOKEN:", token)
 
-	const isAuthPage = req.nextUrl.pathname.startsWith("/auth/login");
+	const isAuthPage = req.nextUrl.pathname.startsWith("/auth");
 
 	if (!token && !isAuthPage) {
 		const loginUrl = new URL("/auth/login", req.url);

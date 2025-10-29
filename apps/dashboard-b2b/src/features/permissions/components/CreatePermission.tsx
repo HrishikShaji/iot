@@ -37,7 +37,7 @@ export default function CreatePermission({ fetchPermissions, context }: Props) {
 
 		setLoading(true);
 		try {
-			const response = await fetch('/api/permissions', {
+			const response = await fetch('/api/permissions?context=B2C', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(permissionForm),

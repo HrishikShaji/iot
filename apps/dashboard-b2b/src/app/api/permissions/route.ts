@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
 		const { actions, resource, scope = 'all', description, context } = body;
 
 		if (!actions || !Array.isArray(actions) || actions.length === 0 || !resource) {
+			console.log("Actions:", actions, resource)
 			return NextResponse.json(
 				{ error: 'Actions (array) and resource are required' },
 				{ status: 400 }
