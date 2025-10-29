@@ -218,8 +218,19 @@ export function getSidebarLinks(id: string) {
 				},
 				{
 					title: "climate",
-					href: "/controls/climate",
 					icon: "Settings",
+					children: [
+						{
+							title: "control",
+							href: `/trailers/${id}/controls/climate`,
+							icon: "Settings",
+						},
+						{
+							title: "analytics",
+							href: `/trailers/${id}/controls/climate/analytics`,
+							icon: "Settings",
+						},
+					]
 				},
 				{
 					title: "security",
