@@ -186,6 +186,22 @@ export function getSidebarLinks(id: string) {
 				},
 				{
 					title: "energy",
+					icon: "Settings",
+					children: [
+						{
+							title: "control",
+							href: `/trailers/${id}/controls/energy`,
+							icon: "Settings",
+						},
+						{
+							title: "analytics",
+							href: `/trailers/${id}/controls/energy/analytics`,
+							icon: "Settings",
+						},
+					]
+				},
+				{
+					title: "energy",
 					href: "/controls/energy",
 					icon: "Settings",
 				},
