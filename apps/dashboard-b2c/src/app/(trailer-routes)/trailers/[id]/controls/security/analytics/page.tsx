@@ -1,12 +1,15 @@
 import TrailerBreadCrumbs from "@/components/common/TrailerBreadCrumbs";
-import ClimateHome from "@/features/climate/components/ClimateHome";
 
 export default async function Page({ params }: { params: Promise<{ id: string; }> }) {
 	const { id } = await params
+
+	const links = [
+		{ label: "security", href: `/trailers/${id}/controls/security` }
+	]
+
 	return (
 		<div>
-			<TrailerBreadCrumbs id={id} links={[]} currentPage="climate" />
-			<ClimateHome trailerId={id} />
+			<TrailerBreadCrumbs id={id} links={links} currentPage="analytics" />
 		</div>
 	)
 }

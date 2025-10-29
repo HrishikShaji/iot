@@ -234,8 +234,19 @@ export function getSidebarLinks(id: string) {
 				},
 				{
 					title: "security",
-					href: "/controls/security",
 					icon: "Settings",
+					children: [
+						{
+							title: "control",
+							href: `/trailers/${id}/controls/security`,
+							icon: "Settings",
+						},
+						{
+							title: "analytics",
+							href: `/trailers/${id}/controls/climate/security`,
+							icon: "Settings",
+						},
+					]
 				},
 				{
 					title: "scenes",
