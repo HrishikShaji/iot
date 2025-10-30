@@ -2,7 +2,9 @@ import { prisma } from "@repo/db";
 
 export default async function fetchTrailerAccesses(id: string) {
 	const accesses = await prisma.trailerAccess.findMany({
-		where: { trailerId: id },
+		where: {
+			trailerId: id,
+		},
 		include: {
 			user: {
 				select: {

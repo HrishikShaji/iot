@@ -2,8 +2,10 @@ import { Card, CardContent, CardHeader } from "@repo/ui/components/ui/card";
 import { auth } from "../../../../auth";
 import { prisma } from "@repo/db";
 import { Badge } from "@repo/ui/components/ui/badge";
-import { ArrowUpRightIcon } from "@repo/ui/icons";
+import { ArrowUpRightIcon, TrashIcon } from "@repo/ui/icons";
 import Link from "next/link";
+import { revalidatePath } from "next/cache";
+import { DeleteTrailerButton } from "./DeleteTrailerButton";
 
 async function fetchTrailers() {
 	const session = await auth()
@@ -12,11 +14,9 @@ async function fetchTrailers() {
 		throw new Error("No session")
 	}
 	const user = session.user;
-
 	if (!user) {
 		throw new Error("Unauthorized")
 	}
-
 	const trailers = await prisma.trailer.findMany({
 		where: {
 			userId: user.id
@@ -29,9 +29,32 @@ async function fetchTrailers() {
 			}
 		}
 	})
-
 	return trailers;
+}
 
+async function deleteTrailer(trailerId: string) {
+	"use server"
+
+	const session = await auth()
+	if (!session?.user) {
+		throw new Error("Unauthorized")
+	}
+
+	// Verify the trailer belongs to the user
+	const trailer = await prisma.trailer.findUnique({
+		where: { id: trailerId },
+		select: { userId: true }
+	})
+
+	if (!trailer || trailer.userId !== session.user.id) {
+		throw new Error("Unauthorized to delete this trailer")
+	}
+
+	await prisma.trailer.delete({
+		where: { id: trailerId }
+	})
+
+	revalidatePath("/")
 }
 
 export default async function UserTrailers() {
@@ -48,17 +71,22 @@ export default async function UserTrailers() {
 						<Card key={trailer.id}>
 							<CardHeader>{trailer.name}</CardHeader>
 							<CardContent>
-								<div className="flex w-full justify-between">
+								<div className="flex w-full justify-between items-center">
 									<Badge>
 										{new Date(trailer.createdAt).toLocaleDateString()}
 									</Badge>
-									<Link href={`trailers/${trailer.id}`}>
-										<ArrowUpRightIcon className="hover:scale-125" />
-									</Link>
+									<div className="flex gap-2">
+										<Link href={`trailers/${trailer.id}`}>
+											<ArrowUpRightIcon className="hover:scale-125 transition-transform" />
+										</Link>
+										<DeleteTrailerButton
+											trailerId={trailer.id}
+											deleteTrailer={deleteTrailer}
+										/>
+									</div>
 								</div>
 							</CardContent>
 						</Card>
-
 					))}
 				</div>
 			}

@@ -70,7 +70,7 @@ model Invitation {
   token         String           @unique
   status        InvitationStatus @default(PENDING)
   roleId        String           @db.ObjectId
-  role          Role             @relation(fields: [roleId], references: [id])
+  role          Role             @relation(fields: [roleId], references: [id], onDelete: Cascade)
   expiresAt     DateTime
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
@@ -89,7 +89,7 @@ model TrailerAccess {
   grantedBy   String     @db.ObjectId
   granter     User       @relation("GrantedAccesses", fields: [grantedBy], references: [id], onDelete: Cascade)
   roleId      String     @db.ObjectId
-  role        Role       @relation(fields: [roleId], references: [id])
+  role        Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
   
   @@unique([userId, trailerId])
 }

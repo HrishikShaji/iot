@@ -41,3 +41,42 @@ export async function GET(
 		);
 	}
 }
+
+export async function DELETE(
+	request: NextRequest,
+	{ params }: { params: Promise<{ id: string }> }
+) {
+	try {
+		const { id } = await params
+		const session = await auth()
+		if (!session) {
+			return NextResponse.json(
+				{ error: 'Unauthorized' },
+				{ status: 401 }
+			);
+		}
+
+		const user = session.user;
+
+		if (!user) {
+			return NextResponse.json(
+				{ error: 'Unauthorized' },
+				{ status: 401 }
+			);
+		}
+
+		// Check if user owns this trailer
+		const trailer = await prisma.trailer.delete({
+			where: { id },
+		});
+
+
+		return NextResponse.json({ trailer });
+	} catch (error) {
+		console.error('Error deleting trailer :', error);
+		return NextResponse.json(
+			{ error: 'Failed to deleting trailer' },
+			{ status: 500 }
+		);
+	}
+}
