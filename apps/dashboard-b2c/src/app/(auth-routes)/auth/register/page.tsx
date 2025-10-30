@@ -1,7 +1,22 @@
 import RegisterForm from "@/features/auth/components/RegisterForm"
+import { validateInvitation } from "@/features/auth/lib/validateInvitation";
+import { prisma } from "@repo/db";
 import { Suspense } from "react"
 
-export default function Page() {
+
+export default async function Page({ searchParams }: { searchParams: Promise<{ token: string }> }) {
+
+	const { token } = await searchParams
+
+	if (!token) {
+		<div>
+			<RegisterForm />
+		</div>
+	}
+	console.log("Token in server side", token)
+
+	const invitation = await validateInvitation(token)
+
 	return (
 		<div>
 			<Suspense fallback={
@@ -12,7 +27,10 @@ export default function Page() {
 					</div>
 				</div>
 			}>
-				<RegisterForm />
+				<RegisterForm
+					invitation={invitation}
+					invitationToken={token}
+				/>
 			</Suspense>
 
 		</div>
