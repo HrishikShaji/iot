@@ -1,13 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
-import { Button } from '@repo/ui/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/ui/select';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@repo/ui/components/ui/alert-dialog';
 import { Loader2, Users, Calendar, ShieldCheck, Eye, Edit, Shield } from 'lucide-react';
-import { Role } from '@repo/db';
-import { DeleteTrailerButton } from '@/features/permissions/components/DeleteTrailerButton';
 import { RolesWithPermissions, TrailerAccessesWithRole } from '@/features/users/types/user-types';
+import RevokeTrailerAccess from './RevokeTrailerAccess';
 
 
 interface TrailerAccessManagerProps {
@@ -37,18 +33,6 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 			});
 		} catch (error) {
 			console.error('Error updating access:', error);
-		} finally {
-			setUpdatingId(null);
-		}
-	};
-	const handleRevokeAccess = async (accessId: string) => {
-		setUpdatingId(accessId);
-		try {
-			const response = await fetch(`/api/trailers/access/${accessId}`, {
-				method: 'DELETE',
-			});
-		} catch (error) {
-			console.error('Error revoking access:', error);
 		} finally {
 			setUpdatingId(null);
 		}
@@ -89,7 +73,7 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 			</div>
 
 			<div className="flex items-center gap-3">
-				<DeleteTrailerButton trailerId={access.trailerId} />
+				{/* <DeleteTrailerButton trailerId={access.trailerId} /> */}
 				{/* <Select */}
 				{/* 	value={access.accessType} */}
 				{/* 	onValueChange={(value) => handleUpdateAccess(access.id, value)} */}
@@ -119,37 +103,7 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 				{/* 		</SelectItem> */}
 				{/* 	</SelectContent> */}
 				{/* </Select> */}
-
-				<AlertDialog>
-					<AlertDialogTrigger asChild>
-						<Button
-							variant="destructive"
-							size="sm"
-							disabled={updatingId === access.id}
-						>
-							{updatingId === access.id ? (
-								<Loader2 className="h-4 w-4 animate-spin" />
-							) : (
-								'Revoke'
-							)}
-						</Button>
-					</AlertDialogTrigger>
-					<AlertDialogContent>
-						<AlertDialogHeader>
-							<AlertDialogTitle>Revoke Access</AlertDialogTitle>
-							<AlertDialogDescription>
-								Are you sure you want to revoke access for {access.user.email}?
-								They will no longer be able to access this trailer.
-							</AlertDialogDescription>
-						</AlertDialogHeader>
-						<AlertDialogFooter>
-							<AlertDialogCancel>Cancel</AlertDialogCancel>
-							<AlertDialogAction onClick={() => handleRevokeAccess(access.id)}>
-								Revoke
-							</AlertDialogAction>
-						</AlertDialogFooter>
-					</AlertDialogContent>
-				</AlertDialog>
+				<RevokeTrailerAccess access={access} />
 			</div>
 		</div>
 	);
