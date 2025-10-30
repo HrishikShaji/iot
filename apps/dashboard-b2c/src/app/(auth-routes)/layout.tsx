@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "../globals.css";
+import { Toaster } from "@repo/ui/components/ui/sonner";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -36,6 +37,7 @@ export default function AuthLayout({
 				<div className="h-screen flex flex-col [--header-height:100px]">
 					{children}
 				</div>
+				<Toaster />
 			</body>
 		</html>
 	);

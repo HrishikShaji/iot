@@ -17,6 +17,11 @@ export const homeSidebarLinks = [
 	// 	icon: "Caravan",
 	// },
 	{
+		title: "Add Trailer",
+		href: "/create-trailer",
+		icon: "Caravan",
+	},
+	{
 		title: "inbox",
 		href: "/inbox",
 		icon: "Caravan",
