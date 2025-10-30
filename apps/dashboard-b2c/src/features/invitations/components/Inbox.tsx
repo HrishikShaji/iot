@@ -6,30 +6,18 @@ import { Button } from '@repo/ui/components/ui/button';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@repo/ui/components/ui/alert-dialog';
 import { Loader2, Mail, Calendar, Clock } from 'lucide-react';
 import { Invitation } from '@repo/db';
+import { InboxInvitations } from '../lib/fetchInbox';
+import { Truck } from "@repo/ui/icons"
 
+interface Props {
+	invitations: InboxInvitations
+}
 
-export default function Inbox() {
-	const [invitations, setInvitations] = useState<Invitation[]>([]);
-	const [loading, setLoading] = useState(true);
+export default function Inbox({ invitations }: Props) {
 	const [acceptLoading, setAcceptLoading] = useState(false);
 	const [rejectLoading, setRejectLoading] = useState(false);
 	const [revoking, setRevoking] = useState<string | null>(null);
 
-	useEffect(() => {
-		fetchInvitations();
-	}, []);
-
-	const fetchInvitations = async () => {
-		try {
-			const response = await fetch('/api/inbox');
-			const data = await response.json();
-			setInvitations(data.invitations || []);
-		} catch (error) {
-			console.error('Error fetching invitations:', error);
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	const handleAccept = async (invitationToken: string, roleId: string) => {
 		try {
@@ -84,25 +72,27 @@ export default function Inbox() {
 		);
 	};
 
-	if (loading) {
-		return (
-			<Card>
-				<CardContent className="flex items-center justify-center py-8">
-					<Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-					<span className="ml-2 text-muted-foreground">Loading invitations...</span>
-				</CardContent>
-			</Card>
-		);
-	}
-
-	console.log("invitations:", invitations)
 
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle>Invitations</CardTitle>
-			</CardHeader>
-			<CardContent>
+		<div>
+			<div className="border-b border-border ">
+				<div className="mx-auto max-w-5xl px-6 py-6 ">
+					<div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+						<div className="flex items-start gap-4">
+							<div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary">
+								<Truck className="h-7 w-7 text-primary-foreground" />
+							</div>
+							<div className="space-y-2">
+								<h1 className="text-2xl  font-medium tracking-tight text-foreground ">
+									Trailer Invitations
+								</h1>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div className="mx-auto max-w-5xl px-6 py-8 lg:px-8 lg:py-16">
 				{invitations.length === 0 ? (
 					<div className="text-center py-8">
 						<Mail className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
@@ -154,7 +144,7 @@ export default function Inbox() {
 						))}
 					</div>
 				)}
-			</CardContent>
-		</Card>
+			</div>
+		</div>
 	);
 }

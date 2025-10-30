@@ -76,6 +76,7 @@ export default {
 				token.id = user.id as string
 				token.role = user.role
 				token.trailers = user.trailers
+				token.email = user.email
 			}
 			return token
 		},
@@ -84,6 +85,7 @@ export default {
 				session.user.id = token.id as string
 				session.user.role = token.role as any
 				session.user.trailers = token.trailers as any
+				session.user.email = token.email as any
 			}
 			return session
 		},
