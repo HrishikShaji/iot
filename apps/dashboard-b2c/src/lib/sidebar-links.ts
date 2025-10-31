@@ -167,6 +167,11 @@ export function getSidebarLinks(id: string) {
 					href: "/trailer",
 					icon: "UserPlus",
 				},
+				{
+					title: "permissions",
+					href: `/trailers/${id}/permissions`,
+					icon: "UserPlus",
+				},
 			],
 		},
 		{

@@ -39,6 +39,27 @@ export async function createTrailer(name: string) {
 			}
 		})
 
+		const role = await prisma.role.findFirst({
+			where: { name: "owner-admin" }
+		})
+
+		if (!role) {
+			return {
+				success: false,
+				error: "Role is required"
+			}
+		}
+
+
+		const trailerAccess = await prisma.trailerAccess.create({
+			data: {
+				userId: session.user.id,
+				roleId: role.id,
+				trailerId: trailer.id,
+				grantedBy: session.user.id
+			}
+		})
+
 		// Revalidate the trailers page
 		revalidatePath("/")
 

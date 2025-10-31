@@ -18,7 +18,7 @@ async function fetchTrailers() {
 	}
 
 	const trailers = await prisma.trailerAccess.findMany({
-		where: { userId: user.id },
+		where: { userId: user.id, grantedBy: { not: user.id } },
 		include: {
 			trailer: {
 				include: {
