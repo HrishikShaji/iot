@@ -11,11 +11,6 @@ export default async function fetchRoles(context: "B2B" | "B2C") {
 					permission: true,
 				},
 			},
-			_count: {
-				select: {
-					users: true,
-				},
-			},
 		},
 		orderBy: {
 			createdAt: 'desc',

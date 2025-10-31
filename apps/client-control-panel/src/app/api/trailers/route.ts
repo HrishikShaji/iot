@@ -25,11 +25,7 @@ export async function GET(request: NextRequest) {
 				userId: user.id
 			},
 			include: {
-				user: {
-					include: {
-						role: true
-					}
-				}
+				user: true
 			}
 		})
 

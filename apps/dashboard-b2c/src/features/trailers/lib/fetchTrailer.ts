@@ -5,11 +5,7 @@ export async function fetchTrailer({ trailerId, userId }: { trailerId: string; u
 	const trailer = await prisma.trailer.findUnique({
 		where: { id: trailerId },
 		include: {
-			user: {
-				include: {
-					role: true
-				}
-			},
+			user: true,
 			sharedWith: {
 				where: { userId },
 				include: {

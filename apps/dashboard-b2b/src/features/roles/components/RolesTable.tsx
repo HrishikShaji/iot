@@ -16,7 +16,6 @@ export default function RolesTable({ permissions, roles, fetchRoles }: Props) {
 						<tr className="border-b">
 							<th className="px-4 py-3 text-left text-sm font-medium ">Role Name</th>
 							<th className="px-4 py-3 text-left text-sm font-medium ">Description</th>
-							<th className="px-4 py-3 text-left text-sm font-medium ">Users</th>
 							<th className="px-4 py-3 text-left text-sm font-medium ">Permissions</th>
 							<th className="px-4 py-3 text-right text-sm font-medium ">Actions</th>
 						</tr>

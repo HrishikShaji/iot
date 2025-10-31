@@ -58,7 +58,7 @@ export default function RegisterForm({ invitation, invitationToken }: Props) {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ email, password, invitationToken }),
+				body: JSON.stringify({ email, password, invitationToken, roleId: invitation?.roleId }),
 			})
 
 			const data = await res.json()

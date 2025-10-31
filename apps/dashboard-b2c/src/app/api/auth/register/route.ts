@@ -5,7 +5,7 @@ import { prisma } from "@repo/db"
 
 export async function POST(req: Request) {
 	try {
-		const { email, password, invitationToken } = await req.json()
+		const { email, password, invitationToken, roleId } = await req.json()
 
 		if (!email || !password) {
 			return NextResponse.json(
@@ -19,6 +19,7 @@ export async function POST(req: Request) {
 			where: { email },
 		})
 
+
 		if (existingUser) {
 			return NextResponse.json(
 				{ error: "User already exists" },
@@ -29,16 +30,17 @@ export async function POST(req: Request) {
 		// Hash password
 		const hashedPassword = await bcrypt.hash(password, 10)
 
-		const role = await prisma.role.findFirst({ where: { name: "sample" } })
-
-		console.log("this is role", role)
-		if (!role) {
-			throw new Error("No Role")
-		}
-
-
 
 		if (invitationToken) {
+
+			if (!roleId) {
+				return NextResponse.json(
+					{ error: 'roleId is required' },
+					{ status: 400 }
+				);
+
+			}
+
 			const invitation = await prisma.invitation.findUnique({
 				where: { token: invitationToken },
 			});
@@ -62,13 +64,12 @@ export async function POST(req: Request) {
 					data: {
 						email,
 						password: hashedPassword,
-						roleId: role.id,
 					},
 				});
 
 				await tx.trailerAccess.create({
 					data: {
-						roleId: role.id,
+						roleId,
 						userId: user.id,
 						trailerId: invitation.trailerId,
 						grantedBy: invitation.inviterId,
@@ -96,7 +97,6 @@ export async function POST(req: Request) {
 			data: {
 				email,
 				password: hashedPassword,
-				roleId: role.id
 			},
 		})
 

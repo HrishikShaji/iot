@@ -3,7 +3,6 @@ export interface Role {
 	id: string;
 	name: string;
 	description: string;
-	userCount: number;
 	context: string;
 	permissionCount: number;
 	permissions?: Permission[];

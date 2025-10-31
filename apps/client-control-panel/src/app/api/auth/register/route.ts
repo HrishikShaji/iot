@@ -5,9 +5,9 @@ import { prisma } from "@repo/db"
 
 export async function POST(req: Request) {
 	try {
-		const { email, password, roleId, trailerName } = await req.json()
+		const { email, password } = await req.json()
 
-		if (!email || !password || !trailerName) {
+		if (!email || !password) {
 			return NextResponse.json(
 				{ error: "Missing required fields" },
 				{ status: 400 }
@@ -29,32 +29,13 @@ export async function POST(req: Request) {
 		// Hash password
 		const hashedPassword = await bcrypt.hash(password, 10)
 
-		// const role = await prisma.role.findFirst({ where: { name: "user" } })
-		// Create user
-
-		// console.log("this is role", role)
-		// if (!role) {
-		// 	throw new Error("No Role")
-		// }
 		const user = await prisma.user.create({
 			data: {
 				email,
 				password: hashedPassword,
-				roleId
 			},
 		})
 
-		const role = await prisma.role.findUnique({ where: { id: roleId } })
-
-		if (role?.name === "Owner Admin") {
-			const trailer = await prisma.trailer.create({
-				data: {
-					name: trailerName,
-					userId: user.id
-				}
-			})
-			console.log("TRAILER CREATED", trailer)
-		}
 
 		return NextResponse.json(
 			{ message: "User created successfully", userId: user.id },

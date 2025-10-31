@@ -17,31 +17,6 @@ export default {
 
 			const user = await prisma.user.findUnique({
 				where: { email: credentials.email as string },
-				include: {
-					role:
-					{
-						select:
-						{
-							id: true,
-							name: true,
-							permissions: {
-								select: {
-									id: true,
-									permission: {
-										select: {
-											description: true,
-											scope: true,
-											id: true,
-											actions: true,
-											context: true,
-										}
-									}
-								}
-							}
-						}
-					},
-					trailers: true
-				}
 			})
 
 			console.log("THIS IS AUTHENTICATED USER", user)
@@ -62,8 +37,7 @@ export default {
 			return {
 				id: user.id,
 				email: user.email,
-				role: user.role as any,
-				trailers: user.trailers as any
+				role: user.userRole as any,
 			}
 		},
 	}),],
@@ -75,7 +49,6 @@ export default {
 			if (user) {
 				token.id = user.id as string
 				token.role = user.role
-				token.trailers = user.trailers
 				token.email = user.email
 			}
 			return token
@@ -84,7 +57,6 @@ export default {
 			if (session.user) {
 				session.user.id = token.id as string
 				session.user.role = token.role as any
-				session.user.trailers = token.trailers as any
 				session.user.email = token.email as any
 			}
 			return session

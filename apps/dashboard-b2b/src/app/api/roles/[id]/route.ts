@@ -16,11 +16,6 @@ export async function GET(
 						permission: true,
 					},
 				},
-				_count: {
-					select: {
-						users: true,
-					},
-				},
 			},
 		});
 
@@ -98,11 +93,6 @@ export async function PUT(
 						permission: true,
 					},
 				},
-				_count: {
-					select: {
-						users: true,
-					},
-				},
 			},
 		});
 
@@ -126,13 +116,6 @@ export async function DELETE(
 		// Check if role exists
 		const role = await prisma.role.findUnique({
 			where: { id },
-			include: {
-				_count: {
-					select: {
-						users: true,
-					},
-				},
-			},
 		});
 
 		if (!role) {
@@ -143,12 +126,12 @@ export async function DELETE(
 		}
 
 		// Prevent deletion if role has users
-		if (role._count.users > 0) {
-			return NextResponse.json(
-				{ error: 'Cannot delete role with assigned users' },
-				{ status: 400 }
-			);
-		}
+		// if (role._count.users > 0) {
+		// 	return NextResponse.json(
+		// 		{ error: 'Cannot delete role with assigned users' },
+		// 		{ status: 400 }
+		// 	);
+		// }
 
 		// Delete role (permissions will cascade delete)
 		await prisma.role.delete({

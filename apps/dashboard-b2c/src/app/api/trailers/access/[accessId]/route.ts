@@ -56,17 +56,9 @@ export async function PATCH(
 			data: { roleId },
 		});
 
-		const updatedUser = await prisma.user.update({
-			where: { id: access.userId },
-			data: {
-				roleId
-			}
-		})
-
-		console.log("updating user:", updatedUser.email)
 
 
-		return NextResponse.json({ access: updatedAccess, updatedUser });
+		return NextResponse.json({ access: updatedAccess });
 	} catch (error) {
 		console.error('Error updating access:', error);
 		return NextResponse.json(

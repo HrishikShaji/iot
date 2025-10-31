@@ -24,31 +24,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
 				const user = await prisma.user.findUnique({
 					where: { email: credentials.email as string },
-					include: {
-						role:
-						{
-							select:
-							{
-								id: true,
-								name: true,
-								permissions: {
-									select: {
-										id: true,
-										permission: {
-											select: {
-												description: true,
-												scope: true,
-												id: true,
-												actions: true,
-												context: true,
-											}
-										}
-									}
-								}
-							}
-						},
-						trailers: true
-					}
 				})
 
 				console.log("THIS IS AUTHENTICATED USER", user)
@@ -69,8 +44,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				return {
 					id: user.id,
 					email: user.email,
-					role: user.role as any,
-					trailers: user.trailers as any
+					role: user.userRole as any,
 				}
 			},
 		}),
@@ -83,7 +57,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			if (user) {
 				token.id = user.id
 				token.role = user.role
-				token.trailers = user.trailers
 			}
 			return token
 		},
@@ -91,7 +64,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			if (session.user) {
 				session.user.id = token.id as string
 				session.user.role = token.role as any
-				session.user.trailers = token.trailers as any
 			}
 			return session
 		},

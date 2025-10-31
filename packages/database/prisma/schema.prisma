@@ -23,7 +23,7 @@ model User {
   updatedAt         DateTime              @updatedAt
   accounts          Account[]
   sessions          Session[]
-  
+  userRole          String                @default("user")
   trailers           Trailer[]              @relation("UserTrailer")
   
   // Trailers this user has access to (shared)
@@ -34,10 +34,6 @@ model User {
   
   // Access grants made by this user
   grantedAccesses   TrailerAccess[]       @relation("GrantedAccesses")
-  
-  // B2C role
-  roleId            String                @db.ObjectId
-  role              Role                  @relation(fields: [roleId], references: [id])
   
   // B2B memberships
   organizations     OrganizationMember[]
@@ -176,7 +172,6 @@ model Role {
   updatedAt      DateTime            @updatedAt
   
   organization   Organization?       @relation(fields: [organizationId], references: [id])
-  users          User[]
   invitations    Invitation[]
   trailerAccesses TrailerAccess[]
   members        OrganizationMember[]

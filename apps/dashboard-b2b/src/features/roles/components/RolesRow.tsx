@@ -17,9 +17,6 @@ export default function RolesRow({ role, permissions, fetchRoles }: Props) {
 			<td className="px-4 py-3 font-medium">{role.name}</td>
 			<td className="px-4 py-3 text-gray-600">{role.description}</td>
 			<td className="px-4 py-3">
-				<Badge variant="secondary">{role.userCount} users</Badge>
-			</td>
-			<td className="px-4 py-3">
 				<Badge variant="outline">{role.permissionCount} permissions</Badge>
 			</td>
 			<td className="px-4 py-3 text-right">

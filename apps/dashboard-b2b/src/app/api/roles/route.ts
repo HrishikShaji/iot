@@ -24,11 +24,6 @@ export async function GET(request: NextRequest) {
 						permission: true,
 					},
 				},
-				_count: {
-					select: {
-						users: true,
-					},
-				},
 			},
 			orderBy: {
 				createdAt: 'desc',
@@ -40,7 +35,6 @@ export async function GET(request: NextRequest) {
 			id: role.id,
 			name: role.name,
 			description: role.description,
-			userCount: role._count.users,
 			permissionCount: role.permissions.length,
 			permissions: role.permissions.map((rp) => rp.permission),
 			createdAt: role.createdAt,
@@ -100,11 +94,6 @@ export async function POST(request: NextRequest) {
 				permissions: {
 					include: {
 						permission: true,
-					},
-				},
-				_count: {
-					select: {
-						users: true,
 					},
 				},
 			},

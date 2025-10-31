@@ -33,8 +33,7 @@ export default function UserManagement({ users }: Props) {
 
 	const filteredUsers = useMemo(() => {
 		return users.filter(user =>
-			user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			user.role?.name.toLowerCase().includes(searchTerm.toLowerCase())
+			user.email.toLowerCase().includes(searchTerm.toLowerCase())
 		)
 	}, [users, searchTerm])
 
@@ -92,8 +91,6 @@ export default function UserManagement({ users }: Props) {
 					<TableHeader>
 						<TableRow>
 							<TableHead>Email</TableHead>
-							<TableHead>Role</TableHead>
-							<TableHead>Context</TableHead>
 							<TableHead>Verified</TableHead>
 							<TableHead>Created At</TableHead>
 							<TableHead className="text-right">Actions</TableHead>
@@ -110,16 +107,6 @@ export default function UserManagement({ users }: Props) {
 							paginatedUsers.map((user) => (
 								<TableRow key={user.id}>
 									<TableCell className="font-medium">{user.email}</TableCell>
-									<TableCell>
-										<Badge variant={user.role?.name === "Owner" ? "default" : "secondary"}>
-											{user.role?.name || "N/A"}
-										</Badge>
-									</TableCell>
-									<TableCell>
-										<span className="text-sm text-muted-foreground">
-											{user.role?.context || "N/A"}
-										</span>
-									</TableCell>
 									<TableCell>
 										<Badge variant={user.emailVerified ? "default" : "outline"}>
 											{user.emailVerified ? "Verified" : "Unverified"}

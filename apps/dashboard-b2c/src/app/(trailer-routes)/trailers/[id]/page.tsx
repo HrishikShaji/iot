@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 		return notFound();
 	}
 
-	const role = isOwner ? trailer.user.role.name : trailer.sharedWith[0].role.name
+	const role = isOwner ? "Owner" : trailer.sharedWith[0].role.name
 	console.log(trailer)
 
 	return (

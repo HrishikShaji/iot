@@ -24,30 +24,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
 				const user = await prisma.user.findUnique({
 					where: { email: credentials.email as string },
-					include: {
-						role:
-						{
-							select:
-							{
-								id: true,
-								name: true,
-								permissions: {
-									select: {
-										id: true,
-										permission: {
-											select: {
-												description: true,
-												scope: true,
-												id: true,
-												actions: true,
-												context: true,
-											}
-										}
-									}
-								}
-							}
-						}
-					}
 				})
 
 				console.log("THIS IS AUTHENTICATED USER", user)
@@ -68,7 +44,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				return {
 					id: user.id,
 					email: user.email,
-					role: user.role as any
+					role: user.userRole as any
 				}
 			},
 		}),
