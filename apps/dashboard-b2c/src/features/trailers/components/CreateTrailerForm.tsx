@@ -17,6 +17,7 @@ export default function CreateTrailerForm() {
 
 		const formData = new FormData(e.currentTarget)
 		const name = formData.get("name") as string
+		const vin = formData.get("vin") as string
 
 		// Validation
 		if (!name || name.trim().length === 0) {
@@ -24,9 +25,14 @@ export default function CreateTrailerForm() {
 			return
 		}
 
+		if (!vin) {
+			toast.error("vin number is required")
+			return
+		}
+
 		startTransition(async () => {
 			try {
-				const result = await createTrailer(name)
+				const result = await createTrailer({ name, vin })
 
 				if (result.success) {
 					toast.success("Trailer created successfully!", {
@@ -78,6 +84,20 @@ export default function CreateTrailerForm() {
 							name="name"
 							type="text"
 							placeholder="your trailer"
+							required
+							disabled={isPending}
+							className="h-11"
+						/>
+					</div>
+					<div className="space-y-2">
+						<Label htmlFor="vin" className="text-sm font-medium">
+							Vin Number
+						</Label>
+						<Input
+							id="vin"
+							name="vin"
+							type="text"
+							placeholder="vin number"
 							required
 							disabled={isPending}
 							className="h-11"

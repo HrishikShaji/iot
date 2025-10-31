@@ -164,7 +164,7 @@ export function getSidebarLinks(id: string) {
 				},
 				{
 					title: "transfer trailer",
-					href: "/trailer",
+					href: `/trailers/${id}/transfer-trailer`,
 					icon: "UserPlus",
 				},
 				{

@@ -4,7 +4,7 @@ import { auth } from "../../../../auth"
 import { prisma } from "@repo/db"
 import { revalidatePath } from "next/cache"
 
-export async function createTrailer(name: string) {
+export async function createTrailer({ name, vin }: { name: string; vin: string }) {
 	try {
 		// Get session
 		const session = await auth()
@@ -31,11 +31,19 @@ export async function createTrailer(name: string) {
 			}
 		}
 
+		if (!vin) {
+			return {
+				success: false,
+				error: "Vin is required"
+			}
+		}
+
 		// Create trailer
 		const trailer = await prisma.trailer.create({
 			data: {
 				name: name.trim(),
-				userId: session.user.id
+				userId: session.user.id,
+				vin
 			}
 		})
 
