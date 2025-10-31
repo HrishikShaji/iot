@@ -159,7 +159,7 @@ export function getSidebarLinks(id: string) {
 				},
 				{
 					title: "guest passes",
-					href: "/guest-passes",
+					href: `/trailers/${id}/guest-passes`,
 					icon: "UserPlus",
 				},
 				{
