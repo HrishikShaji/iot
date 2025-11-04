@@ -154,12 +154,12 @@ export async function DELETE(
 		}
 
 		// Optionally prevent deletion if permission is assigned to roles
-		if (permission._count.roles > 0) {
-			return NextResponse.json(
-				{ error: 'Cannot delete permission assigned to roles' },
-				{ status: 400 }
-			);
-		}
+		// if (permission._count.roles > 0) {
+		// 	return NextResponse.json(
+		// 		{ error: 'Cannot delete permission assigned to roles' },
+		// 		{ status: 400 }
+		// 	);
+		// }
 
 		// Delete permission
 		await prisma.permission.delete({
