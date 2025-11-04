@@ -72,17 +72,18 @@ export async function POST(request: NextRequest) {
 				resource_scope_context: {
 					resource,
 					scope,
-					context
+					context,
 				},
 			},
 		});
 
-		if (existingPermission) {
-			return NextResponse.json(
-				{ error: 'Permission with this combination already exists' },
-				{ status: 400 }
-			);
-		}
+		// if (existingPermission) {
+		// 	console.log("Permission with combination")
+		// 	return NextResponse.json(
+		// 		{ error: 'Permission with this combination already exists' },
+		// 		{ status: 400 }
+		// 	);
+		// }
 
 		// Create permission
 		const permission = await prisma.permission.create({
