@@ -3,6 +3,7 @@
 import { prisma } from '@repo/db';
 import { revalidatePath } from 'next/cache';
 import { auth } from '../../../../auth';
+import { checkPermission } from '@/features/permissions/lib/checkPermissions';
 
 export async function transferTrailer(formData: FormData) {
 	try {
@@ -17,11 +18,25 @@ export async function transferTrailer(formData: FormData) {
 
 		const email = formData.get('email') as string;
 		const trailerId = formData.get('trailerId') as string;
+		const trailerAccessRoleId = formData.get("trailerAccessRoleId") as string;
 
-		if (!email || !trailerId) {
+		if (!email || !trailerId || !trailerAccessRoleId) {
 			return {
 				success: false,
 				message: 'Email and trailer ID are required'
+			};
+		}
+		const { hasPermission } = await checkPermission({
+			scope: "trailer",
+			resource: "trailers",
+			action: "update",
+			roleId: trailerAccessRoleId
+		})
+
+		if (!hasPermission) {
+			return {
+				success: false,
+				message: 'Only owner can tranfer trailer'
 			};
 		}
 

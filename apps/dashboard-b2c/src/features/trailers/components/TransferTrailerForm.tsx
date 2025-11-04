@@ -3,48 +3,45 @@ import { useState, useTransition } from 'react';
 import { Button } from '@repo/ui/components/ui/button';
 import { Input } from '@repo/ui/components/ui/input';
 import { Label } from '@repo/ui/components/ui/label';
-import { Alert, AlertDescription } from '@repo/ui/components/ui/alert';
-import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Truck } from "@repo/ui/icons";
+import { toast } from 'sonner';
 import { transferTrailer } from '../actions/transferTrailer';
 
 interface Props {
 	trailerId: string;
 	trailerName: string;
+	trailerAccessRoleId: string;
 }
 
-export default function TransferTrailerForm({ trailerId, trailerName }: Props) {
+export default function TransferTrailerForm({ trailerAccessRoleId, trailerId, trailerName }: Props) {
 	const [email, setEmail] = useState('');
-	const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 	const [isPending, startTransition] = useTransition();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		setMessage(null);
 
 		const formData = new FormData(e.currentTarget);
 		formData.append('trailerId', trailerId);
+		formData.append('trailerAccessRoleId', trailerAccessRoleId);
 
 		startTransition(async () => {
 			try {
 				const result = await transferTrailer(formData);
 
 				if (result.success) {
-					setMessage({
-						type: 'success',
-						text: result.message
+					toast.success('Trailer transferred successfully!', {
+						description: result.message
 					});
 					setEmail('');
 				} else {
-					setMessage({
-						type: 'error',
-						text: result.message
+					toast.error('Failed to transfer trailer', {
+						description: result.message
 					});
 				}
 			} catch (error) {
-				setMessage({
-					type: 'error',
-					text: error instanceof Error ? error.message : 'Failed to transfer trailer',
+				toast.error('An unexpected error occurred', {
+					description: error instanceof Error ? error.message : 'Failed to transfer trailer'
 				});
 			}
 		});
@@ -61,7 +58,7 @@ export default function TransferTrailerForm({ trailerId, trailerName }: Props) {
 							</div>
 							<div className="space-y-2">
 								<h1 className="text-2xl font-medium tracking-tight text-foreground">
-									{`Transfer Trailer: ${trailerName}`}
+									Transfer Trailer: {trailerName}
 								</h1>
 								<p className="text-base text-muted-foreground">ID: {trailerId}</p>
 							</div>
@@ -69,7 +66,6 @@ export default function TransferTrailerForm({ trailerId, trailerName }: Props) {
 					</div>
 				</div>
 			</div>
-
 			<div className="mx-auto max-w-5xl px-6 py-8 lg:px-8 lg:py-16">
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div className="space-y-2">
@@ -89,21 +85,10 @@ export default function TransferTrailerForm({ trailerId, trailerName }: Props) {
 						/>
 					</div>
 
-					{message && (
-						<Alert variant={message.type === 'success' ? 'default' : 'destructive'}>
-							{message.type === 'success' ? (
-								<CheckCircle2 className="h-4 w-4" />
-							) : (
-								<AlertCircle className="h-4 w-4" />
-							)}
-							<AlertDescription>{message.text}</AlertDescription>
-						</Alert>
-					)}
-
 					<Button
 						type="submit"
 						disabled={isPending || !email}
-						className="w-full"
+						className="w-full h-11 text-base font-medium"
 					>
 						{isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
 						{isPending ? 'Processing...' : 'Transfer'}
