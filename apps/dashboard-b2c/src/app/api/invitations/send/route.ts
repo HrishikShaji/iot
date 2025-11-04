@@ -3,10 +3,12 @@ import { generateInvitationToken, getInvitationExpiry } from '@/lib/invitation-u
 import { sendInvitationEmail } from '@/lib/email';
 import { prisma } from '@repo/db';
 import { auth } from '../../../../../auth';
+import { checkPermission } from '@/features/permissions/lib/checkPermissions';
 
 export async function POST(request: NextRequest) {
 	try {
 		console.log("its here")
+		const { email, roleId, trailerId, trailerAccessRoleId } = await request.json();
 		const session = await auth()
 
 		if (!session) {
@@ -28,7 +30,24 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const { email, roleId, trailerId } = await request.json();
+		const { hasPermission } = await checkPermission({
+			scope: "trailer",
+			resource: "trailers",
+			action: "create",
+			roleId: trailerAccessRoleId
+		})
+
+		console.log("Has Permission", hasPermission)
+
+		if (!hasPermission) {
+			console.log("no permission===>>>>>", hasPermission)
+			return NextResponse.json(
+				{ error: 'Only owner and co-owner can send invites' },
+				{ status: 401 }
+			);
+
+		}
+
 		console.log("TRAILER ID:", trailerId)
 
 		const existingUser = await prisma.user.findFirst({

@@ -12,15 +12,18 @@ import { RolesForInvitation } from '../lib/fetchRolesForInvitation';
 import { UsersForInvitation } from '../lib/fetchUsersForInvitation';
 import CustomEmailInput from './CustomEmailInput';
 import { Truck } from "@repo/ui/icons"
+import { Toaster } from '@repo/ui/components/ui/sonner';
+import { toast } from "sonner"
 
 interface Props {
 	trailerId: string;
 	trailerName: string;
+	trailerAccessRoleId: string;
 	roles: RolesForInvitation;
 	users: UsersForInvitation;
 }
 
-export default function InviteUserForm({ roles, users, trailerId, trailerName }: Props) {
+export default function InviteUserForm({ trailerAccessRoleId, roles, users, trailerId, trailerName }: Props) {
 	const [email, setEmail] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -37,7 +40,6 @@ export default function InviteUserForm({ roles, users, trailerId, trailerName }:
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
-		setMessage(null);
 
 		try {
 			const response = await fetch('/api/invitations/send', {
@@ -48,30 +50,42 @@ export default function InviteUserForm({ roles, users, trailerId, trailerName }:
 					roleId,
 					trailerId,
 					existingUser: !!selectedUser,
-					userId: selectedUser?.id
+					userId: selectedUser?.id,
+					trailerAccessRoleId
 				}),
 			});
 
 			const data = await response.json();
 
 			if (!response.ok) {
-				throw new Error(data.error || 'Failed to send invitation');
+				// Show error toast
+				toast.error(data.error || 'Failed to send invitation', {
+					description: 'Please try again or contact support if the problem persists.',
+				});
+				return;
 			}
 
-			setMessage({
-				type: 'success',
-				text: selectedUser
-					? 'Access granted to existing user!'
-					: 'Invitation sent successfully!'
-			});
+			// Show success toast
+			toast.success(
+				selectedUser
+					? 'Access granted successfully!'
+					: 'Invitation sent successfully!',
+				{
+					description: selectedUser
+						? `${email} now has access to ${trailerName}`
+						: `An invitation email has been sent to ${email}`,
+				}
+			);
+
+			// Reset form
 			setEmail('');
 			setSelectedUser(null);
 			setRoleId('');
+
 		} catch (error) {
-			console.log("ERROR", error);
-			setMessage({
-				type: 'error',
-				text: error instanceof Error ? error.message : 'Failed to send invitation',
+			console.error("ERROR", error);
+			toast.error('Something went wrong', {
+				description: error instanceof Error ? error.message : 'Failed to send invitation',
 			});
 		} finally {
 			setLoading(false);
