@@ -2,37 +2,56 @@
 import { useState, useEffect } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@repo/ui/components/ui/select';
 import { Loader2, Users, Calendar, ShieldCheck, Eye, Edit, Shield } from 'lucide-react';
+import { toast } from 'sonner';
 import { RolesWithPermissions, TrailerAccessesWithRole } from '@/features/users/types/user-types';
 import RevokeTrailerAccess from './RevokeTrailerAccess';
-
 
 interface TrailerAccessManagerProps {
 	access: TrailerAccessesWithRole[number];
 	roles: RolesWithPermissions;
+	trailerAccessRoleId: string;
 }
 
-export default function TrailerAccessRow({ access, roles }: TrailerAccessManagerProps) {
+export default function TrailerAccessRow({ access, roles, trailerAccessRoleId }: TrailerAccessManagerProps) {
 	const [updatingId, setUpdatingId] = useState<string | null>(null);
-	const [roleId, setRoleId] = useState("")
+	const [roleId, setRoleId] = useState("");
 
 	useEffect(() => {
 		if (access.role.id) {
-			setRoleId(access.role.id)
+			setRoleId(access.role.id);
 		}
-	}, [access])
+	}, [access]);
 
-
-	const handleUpdateAccessRole = async (accessId: string, roleId: string) => {
+	const handleUpdateAccessRole = async (accessId: string, newRoleId: string) => {
 		setUpdatingId(accessId);
-		setRoleId(roleId)
+		setRoleId(newRoleId);
+
 		try {
 			const response = await fetch(`/api/trailers/access/${accessId}`, {
 				method: 'PATCH',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ roleId }),
+				body: JSON.stringify({ roleId: newRoleId, trailerAccessRoleId }),
+			});
+			const data = await response.json();
+
+			if (!response.ok) {
+				toast.error(data.error || 'Failed to update role', {
+					description: 'Please try again or contact support if the problem persists.',
+				});
+				return;
+			}
+
+			const roleName = roles.find(role => role.id === newRoleId)?.name || 'role';
+			toast.success('Access updated', {
+				description: `Successfully updated ${access.user.email}'s role to ${roleName}`,
 			});
 		} catch (error) {
 			console.error('Error updating access:', error);
+			toast.error('Failed to update access', {
+				description: error instanceof Error ? error.message : 'An unexpected error occurred',
+			});
+			// Revert role selection on error
+			setRoleId(access.role.id);
 		} finally {
 			setUpdatingId(null);
 		}
@@ -58,9 +77,17 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 				<Select
 					value={roleId}
 					onValueChange={(value) => handleUpdateAccessRole(access.id, value)}
+					disabled={updatingId === access.id}
 				>
-					<SelectTrigger id="role">
-						<SelectValue placeholder="Select role" />
+					<SelectTrigger id="role" className="w-[160px]">
+						{updatingId === access.id ? (
+							<div className="flex items-center gap-2">
+								<Loader2 className="h-4 w-4 animate-spin" />
+								<span>Updating...</span>
+							</div>
+						) : (
+							<SelectValue placeholder="Select role" />
+						)}
 					</SelectTrigger>
 					<SelectContent>
 						{roles.map((role) => (
@@ -71,39 +98,8 @@ export default function TrailerAccessRow({ access, roles }: TrailerAccessManager
 					</SelectContent>
 				</Select>
 			</div>
-
 			<div className="flex items-center gap-3">
-				{/* <DeleteTrailerButton trailerId={access.trailerId} /> */}
-				{/* <Select */}
-				{/* 	value={access.accessType} */}
-				{/* 	onValueChange={(value) => handleUpdateAccess(access.id, value)} */}
-				{/* 	disabled={updatingId === access.id} */}
-				{/* > */}
-				{/* 	<SelectTrigger className="w-[130px]"> */}
-				{/* 		<SelectValue /> */}
-				{/* 	</SelectTrigger> */}
-				{/* 	<SelectContent> */}
-				{/* 		<SelectItem value="VIEW"> */}
-				{/* 			<span className="flex items-center gap-2"> */}
-				{/* 				<Eye className="h-4 w-4" /> */}
-				{/* 				View */}
-				{/* 			</span> */}
-				{/* 		</SelectItem> */}
-				{/* 		<SelectItem value="EDIT"> */}
-				{/* 			<span className="flex items-center gap-2"> */}
-				{/* 				<Edit className="h-4 w-4" /> */}
-				{/* 				Edit */}
-				{/* 			</span> */}
-				{/* 		</SelectItem> */}
-				{/* 		<SelectItem value="ADMIN"> */}
-				{/* 			<span className="flex items-center gap-2"> */}
-				{/* 				<Shield className="h-4 w-4" /> */}
-				{/* 				Admin */}
-				{/* 			</span> */}
-				{/* 		</SelectItem> */}
-				{/* 	</SelectContent> */}
-				{/* </Select> */}
-				<RevokeTrailerAccess access={access} />
+				{/* <RevokeTrailerAccess access={access} /> */}
 			</div>
 		</div>
 	);

@@ -15,6 +15,7 @@ import { Truck } from "@repo/ui/icons"
 interface TrailerAccessManagerProps {
 	trailerId: string;
 	trailerName: string;
+	trailerAccessRoleId: string;
 }
 
 async function fetchData(id: string) {
@@ -39,14 +40,15 @@ async function fetchData(id: string) {
 	}
 
 	const accesses = await fetchTrailerAccesses(id)
+	const modifiedAccesses = accesses.filter((acc) => acc.userId !== user.id)
 
 	const roles = await fetchRoles("B2C");
 
-	return { accesses, roles }
+	return { accesses: modifiedAccesses, roles }
 
 }
 
-export default async function TrailerUsers({ trailerId, trailerName }: TrailerAccessManagerProps) {
+export default async function TrailerUsers({ trailerId, trailerName, trailerAccessRoleId }: TrailerAccessManagerProps) {
 	const { accesses, roles } = await fetchData(trailerId)
 
 	return (
@@ -77,7 +79,7 @@ export default async function TrailerUsers({ trailerId, trailerName }: TrailerAc
 				) : (
 					<div className="space-y-3">
 						{accesses.map((access) => (
-							<TrailerAccessRow key={access.id} access={access} roles={roles} />
+							<TrailerAccessRow trailerAccessRoleId={trailerAccessRoleId} key={access.id} access={access} roles={roles} />
 						))}
 					</div>
 				)}

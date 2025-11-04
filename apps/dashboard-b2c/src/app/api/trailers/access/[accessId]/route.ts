@@ -2,6 +2,7 @@
 import { prisma } from '@repo/db';
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '../../../../../../auth';
+import { checkPermission } from '@/features/permissions/lib/checkPermissions';
 
 // Update access type
 export async function PATCH(
@@ -10,6 +11,7 @@ export async function PATCH(
 ) {
 	try {
 		const { accessId } = await params
+		const { accessType, roleId, trailerAccessRoleId } = await request.json();
 		console.log("this is access id:", accessId)
 		const session = await auth()
 		if (!session) {
@@ -27,9 +29,20 @@ export async function PATCH(
 				{ status: 401 }
 			);
 		}
+		const { hasPermission } = await checkPermission({
+			scope: "trailer",
+			resource: "trailers",
+			action: "update",
+			roleId: trailerAccessRoleId
+		})
 
 		console.log("CURRENT USER:", user)
-		const { accessType, roleId } = await request.json();
+		if (!hasPermission) {
+			return NextResponse.json(
+				{ error: 'Only owner or co-owner can update role' },
+				{ status: 401 }
+			);
+		}
 
 		if (!roleId) {
 			return NextResponse.json(
@@ -43,13 +56,13 @@ export async function PATCH(
 			include: { trailer: true, user: true },
 		});
 
-		if (!access || access.trailer.userId !== user.id) {
-			console.log('access not found', access)
-			return NextResponse.json(
-				{ error: 'Access not found or unauthorized' },
-				{ status: 404 }
-			);
-		}
+		// if (!access || access.trailer.userId !== user.id) {
+		// 	console.log('access not found', access)
+		// 	return NextResponse.json(
+		// 		{ error: 'Access not found or unauthorized' },
+		// 		{ status: 404 }
+		// 	);
+		// }
 
 		const updatedAccess = await prisma.trailerAccess.update({
 			where: { id: accessId },
