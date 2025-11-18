@@ -162,11 +162,11 @@ export function getSidebarLinks(id: string) {
 					href: `/trailers/${id}/guest-passes`,
 					icon: "UserPlus",
 				},
-				{
-					title: "transfer trailer",
-					href: `/trailers/${id}/transfer-trailer`,
-					icon: "UserPlus",
-				},
+				// {
+				// 	title: "transfer trailer",
+				// 	href: `/trailers/${id}/transfer-trailer`,
+				// 	icon: "UserPlus",
+				// },
 				{
 					title: "permissions",
 					href: `/trailers/${id}/permissions`,
