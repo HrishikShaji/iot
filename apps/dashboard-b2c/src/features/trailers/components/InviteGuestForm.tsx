@@ -15,9 +15,10 @@ interface Props {
 	trailerName: string;
 	role: Role;
 	users: UsersForInvitation;
+	trailerAccessRoleId: string;
 }
 
-export default function InviteGuestForm({ role, users, trailerId, trailerName }: Props) {
+export default function InviteGuestForm({ trailerAccessRoleId, role, users, trailerId, trailerName }: Props) {
 	const [email, setEmail] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -37,6 +38,7 @@ export default function InviteGuestForm({ role, users, trailerId, trailerName }:
 		setMessage(null);
 
 		try {
+			console.log("This is role id", role.id)
 			const response = await fetch('/api/invitations/send', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -45,7 +47,8 @@ export default function InviteGuestForm({ role, users, trailerId, trailerName }:
 					roleId: role.id,
 					trailerId,
 					existingUser: !!selectedUser,
-					userId: selectedUser?.id
+					userId: selectedUser?.id,
+					trailerAccessRoleId
 				}),
 			});
 

@@ -7,9 +7,9 @@ import { checkPermission } from '@/features/permissions/lib/checkPermissions';
 
 export async function POST(request: NextRequest) {
 	try {
-		console.log("its here")
 		const { email, roleId, trailerId, trailerAccessRoleId } = await request.json();
 		const session = await auth()
+		console.log("its here", trailerAccessRoleId)
 
 		if (!session) {
 			console.log('no session')
